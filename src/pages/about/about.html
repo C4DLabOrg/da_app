@@ -1,0 +1,136 @@
+<ion-header>
+  <ion-navbar color="primary">
+    <ion-title>Take Attendance</ion-title>
+  </ion-navbar>
+</ion-header>
+
+
+<ion-content>
+
+  <ion-card>
+  <img src="img/unicef-child.png"/>
+</ion-card>
+
+<div class="spacer" style="height: 10px;"></div>
+
+<ion-card *ngIf="user" color="primary">
+
+  <ion-card-header >
+    Hello, {{user.name}}
+  </ion-card-header>
+
+  <ion-card-content>
+    <!-- Add card content here! -->
+  </ion-card-content>
+
+</ion-card>
+
+<div class="spacer" style="height: 20px;"></div>
+
+ <ion-item>
+      <ion-label>Select Class</ion-label>
+      <ion-select [(ngModel)]="music" [selectOptions]="musicAlertOpts">
+        <ion-option>3 West</ion-option>
+        <ion-option>5 South</ion-option>
+        <ion-option (select)="stpSelect()">8 East</ion-option>
+      </ion-select>
+</ion-item>
+
+
+</ion-content>
+
+
+
+
+<!--<ion-header>
+  <ion-navbar color="primary">
+    <ion-title>Promote Student</ion-title>
+  </ion-navbar>
+</ion-header>
+
+    <ion-content color="primary" padding>
+
+
+<ion-list>
+        <ion-item-divider color="primary">Promote to Grade 4</ion-item-divider>
+        <div class="spacer" style="height: 20px;"></div>
+        <ion-item>
+             <ion-label>Daenerys Targaryen
+             <div class="spacer" style="height: 4px;"></div>
+             <p style="font-size: 13px;">201439001</p></ion-label>
+
+             <ion-checkbox item-right color="primary" checked="true"></ion-checkbox>
+       </ion-item>
+
+         <ion-item>
+             <ion-label>Daenerys Targaryen
+             <div class="spacer" style="height: 4px;"></div>
+             <p style="font-size: 13px;">201439001</p></ion-label>
+
+             <ion-checkbox item-right color="primary" checked="true"></ion-checkbox>
+       </ion-item>
+
+        <ion-item>
+             <ion-label>Daenerys Targaryen
+             <div class="spacer" style="height: 4px;"></div>
+             <p style="font-size: 13px;">201439001</p></ion-label>
+
+             <ion-checkbox item-right color="primary" checked="true"></ion-checkbox>
+       </ion-item>
+
+        <ion-item>
+             <ion-label>Daenerys Targaryen
+             <div class="spacer" style="height: 4px;"></div>
+             <p style="font-size: 13px;">201439001</p></ion-label>
+
+             <ion-checkbox item-right color="primary" checked="true"></ion-checkbox>
+       </ion-item>
+
+        <ion-item>
+             <ion-label>Daenerys Targaryen
+             <div class="spacer" style="height: 4px;"></div>
+             <p style="font-size: 13px;">201439001</p></ion-label>
+
+             <ion-checkbox item-right color="primary" checked="true"></ion-checkbox>
+       </ion-item>
+
+        <ion-item>
+             <ion-label>Daenerys Targaryen
+             <div class="spacer" style="height: 4px;"></div>
+             <p style="font-size: 13px;">201439001</p></ion-label>
+
+             <ion-checkbox item-right color="primary" checked="true"></ion-checkbox>
+       </ion-item>
+
+        <ion-item>
+             <ion-label>Daenerys Targaryen
+             <div class="spacer" style="height: 4px;"></div>
+             <p style="font-size: 13px;">201439001</p></ion-label>
+
+             <ion-checkbox item-right color="primary" checked="true"></ion-checkbox>
+       </ion-item>
+
+        <ion-item>
+             <ion-label>Daenerys Targaryen
+             <div class="spacer" style="height: 4px;"></div>
+             <p style="font-size: 13px;">201439001</p></ion-label>
+
+             <ion-checkbox item-right color="primary" checked="true"></ion-checkbox>
+       </ion-item>
+
+        <ion-item>
+             <ion-label>Daenerys Targaryen
+             <div class="spacer" style="height: 4px;"></div>
+             <p style="font-size: 13px;">201439001</p></ion-label>
+
+             <ion-checkbox item-right color="primary" checked="true"></ion-checkbox>
+       </ion-item>
+
+
+
+</ion-list>
+
+          <button ion-button default style="margin-left: 65%">Submit</button>
+          <div class="spacer" style="height: 20px;"></div>
+
+</ion-content>-->

@@ -1,0 +1,96 @@
+<ion-header>
+      <ion-navbar color="primary">
+            <ion-title>Take Attendance <small *ngIf="classes">(Class {{classes[index].class_name}})</small> </ion-title>
+            <ion-buttons end>
+                  <button ion-button (click)="presentPopover($event)">
+                  <ion-icon name="more"></ion-icon>
+                  </button>
+            </ion-buttons>
+      </ion-navbar>
+</ion-header>
+
+<ion-content color="primary">
+      
+      <div class="spacer" style="height: 2px;"></div>
+      <ion-list *ngIf="classes">
+            <ion-item-divider color="primary">Student Details </ion-item-divider>
+            <div class="spacer" style="height: 20px;"></div>
+            <ion-item *ngFor="let stud of classes[index].students">
+                  <ion-label>{{stud.student_name}}
+                        <div class="spacer" style="height: 4px;"></div>
+                        <p style="font-size: 13px;">{{stud.emis_code}}</p>
+                  </ion-label>
+                  <ion-checkbox item-right color="primary" checked="true"></ion-checkbox>
+</ion-item>
+            <!--<ion-item>
+             <ion-label>Daenerys Targaryen
+             <div class="spacer" style="height: 4px;"></div>
+             <p style="font-size: 13px;">201439001</p></ion-label>
+
+             <ion-checkbox item-right color="primary" checked="true"></ion-checkbox>
+       </ion-item>
+
+        <ion-item>
+             <ion-label>Daenerys Targaryen
+             <div class="spacer" style="height: 4px;"></div>
+             <p style="font-size: 13px;">201439001</p></ion-label>
+
+             <ion-checkbox item-right color="primary" checked="true"></ion-checkbox>
+       </ion-item>
+
+        <ion-item>
+             <ion-label>Daenerys Targaryen
+             <div class="spacer" style="height: 4px;"></div>
+             <p style="font-size: 13px;">201439001</p></ion-label>
+
+             <ion-checkbox item-right color="primary" checked="true"></ion-checkbox>
+       </ion-item>
+
+        <ion-item>
+             <ion-label>Daenerys Targaryen
+             <div class="spacer" style="height: 4px;"></div>
+             <p style="font-size: 13px;">201439001</p></ion-label>
+
+             <ion-checkbox item-right color="primary" checked="true"></ion-checkbox>
+       </ion-item>
+
+        <ion-item>
+             <ion-label>Daenerys Targaryen
+             <div class="spacer" style="height: 4px;"></div>
+             <p style="font-size: 13px;">201439001</p></ion-label>
+
+             <ion-checkbox item-right color="primary" checked="true"></ion-checkbox>
+       </ion-item>
+
+        <ion-item>
+             <ion-label>Daenerys Targaryen
+             <div class="spacer" style="height: 4px;"></div>
+             <p style="font-size: 13px;">201439001</p></ion-label>
+
+             <ion-checkbox item-right color="primary" checked="true"></ion-checkbox>
+       </ion-item>
+
+        <ion-item>
+             <ion-label>Daenerys Targaryen
+             <div class="spacer" style="height: 4px;"></div>
+             <p style="font-size: 13px;">201439001</p></ion-label>
+
+             <ion-checkbox item-right color="primary" checked="true"></ion-checkbox>
+       </ion-item>
+
+        <ion-item>
+             <ion-label>Daenerys Targaryen
+             <div class="spacer" style="height: 4px;"></div>
+             <p style="font-size: 13px;">201439001</p></ion-label>
+
+             <ion-checkbox item-right color="primary" checked="true"></ion-checkbox>
+       </ion-item>-->
+
+
+
+      </ion-list>
+
+      <button ion-button default style="margin-left: 65%">Submit</button>
+      <div class="spacer" style="height: 20px;"></div>
+
+</ion-content>

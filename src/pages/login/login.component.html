@@ -1,0 +1,40 @@
+<ion-header>
+  <ion-navbar color="primary">
+    <ion-title>Login</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content color="primary" padding>
+  <!--style="background: url('img/unicef-child3.png'); background-repeat: no-repeat; background-size: 100% 100%;"-->
+
+  <div class="spacer" style="height: 140px;"></div>
+  <ion-list>
+
+    <ion-item>
+      <ion-label stacked>Username</ion-label>
+      <ion-input [(ngModel)]="username" type="text"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label stacked>Password</ion-label>
+      <ion-input [(ngModel)]="password" type="password"></ion-input>
+    </ion-item>
+  </ion-list>
+
+  <button [disabled]="(password ==undefined || password == '')||(username ==undefined || username == '')" (click)="login()"
+    ion-button block>Login</button>
+  <!--<button ion-button (click)="gotoPage()">Dashboard</button>-->
+  <ion-card color="danger" *ngIf="error">
+
+    <ion-card-header>
+      {{eheader}}
+    </ion-card-header>
+
+    <ion-card-content>
+      <!-- Add card content here! -->
+      {{error}}
+    </ion-card-content>
+
+  </ion-card>
+
+</ion-content>

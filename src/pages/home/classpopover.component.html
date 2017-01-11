@@ -1,0 +1,5 @@
+<ion-item *ngIf="!classes">You are not assigned any classes</ion-item>
+<ion-list *ngIf="classes">
+    <ion-list-header>Your Classes</ion-list-header>
+    <button *ngFor="let cls of classes;let i=index" ion-item (click)="close(i)">{{cls.class_name}}</button>
+</ion-list>
