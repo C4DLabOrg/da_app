@@ -9,8 +9,9 @@
 
   <ion-card>
     <img src="img/unicef-child2.png"/>
-    <div class="card-title">Miss Kiwanuka</div>
-    <div class="card-subtitle">Kawangware Primary School</div>
+    <div class="card-title"><span *ngIf="user"> {{user.name}} </span> </div>
+    <br><br><br>
+    <div class="card-subtitle"> <span *ngIf="user"> {{user.school_name}} </span> </div>
   </ion-card>
 
 
@@ -32,10 +33,6 @@
         Claim Reward
         <ion-icon name="pricetag" item-left></ion-icon>
       </ion-item>
-<<<<<<< HEAD
-
-=======
->>>>>>> 528b9863b5b881483f1127f469a55a6aac34ef5e
   <ion-item-divider color="primary">Application</ion-item-divider>
 
     <ion-item>
@@ -49,18 +46,12 @@
         <ion-icon name="help-circle" item-left></ion-icon>
       </ion-item>
 
-<<<<<<< HEAD
      <button (click)="logout()" ion-item>
         Logout
         <ion-icon name="power" item-left></ion-icon>
       </button>
 
-=======
-      <button ion-item (click)="logout()"  >
-        Logout
-        <ion-icon name="power" item-left></ion-icon>
-      </button>
->>>>>>> 528b9863b5b881483f1127f469a55a6aac34ef5e
+
 </ion-list>
 
 </ion-content>
