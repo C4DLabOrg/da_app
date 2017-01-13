@@ -6,6 +6,7 @@ import { Classes } from './classes'
 import { ClassPopoverPage } from './classpopover.component'
 import {TakeAttendance} from './takeattendance'
 import {AccountService} from '../login/account.services'
+import {ResultPage} from '../result/result.component'
 @Component({
   selector: 'page-home',
   templateUrl: 'home.html'
@@ -65,6 +66,7 @@ export class AttendancePage implements OnInit {
       console.log(this.takeattendance)
       this.account.takeattendance(this.takeattendance).then((response)=>{
           console.log(response)
+          this.navCtrl.push(ResultPage)
       }).catch((er)=>{
           console.log(er)
       })
