@@ -18,7 +18,7 @@ export class ResultPage implements AfterViewInit {
     
     this.options = {
       chart: { type: 'pie' },
-      title: { text: 'dynamic data example' },
+      title: { text: '' },
       series: [{ data: [{name:"one",y:2},{name:"two",y:3}] }],
     };
   }

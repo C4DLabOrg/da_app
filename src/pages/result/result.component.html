@@ -1,12 +1,44 @@
 <ion-header>
-      <ion-navbar color="primary">
-            <ion-title>Results</ion-title>
-            
-      </ion-navbar>
+  <ion-navbar>
+    <ion-title>Daily Attendance Report</ion-title>
+  </ion-navbar>
 </ion-header>
 
-<ion-content color="primary">
-       <chart style="width:90%;height:50%" [options]="options"></chart>
- 
+
+<ion-content>
+
+  <ion-card>
+
+      <ion-card-header>
+      <b>Thank you, Miss Kiwanuka</b>
+      </ion-card-header>    
+
+  <chart style="width:90%;height:20%" [options]="options"></chart>
+
+    <ion-card-content>
+     
+    </ion-card-content>
+
+    <ion-item>
+      <ion-icon name='checkmark-circle' item-left style="color: #55acee"></ion-icon>
+      Students Present
+      <ion-badge item-right>140</ion-badge>
+    </ion-item>
+
+    <ion-item>
+      <ion-icon name='close-circle' item-left style="color: #d03e84"></ion-icon>
+      Students Absent
+      <ion-badge item-right>20</ion-badge>
+    </ion-item>
+
+  </ion-card>
+
+   <div class="spacer" style="height: 7px;"></div>
+
+   <button ion-button color="primary" outline icon-left style="margin-left: 20%">
+      <ion-icon name='create' is-active="false"></ion-icon>
+      Reason For Absence
+    </button>
+
 
 </ion-content>
