@@ -4,6 +4,7 @@ import { Link } from '../../app/link'
 import { Token } from '../../app/token'
 import 'rxjs'
 import { Storage } from '@ionic/storage'
+import {TakeAttendance} from '../home/takeattendance'
 @Injectable()
 export class AccountService {
     link: string
@@ -45,6 +46,11 @@ export class AccountService {
         //this.jheaders = new Headers({ "Content-Type": "application/json", "Authorization": "Bearer " + token })
         return this.http.get(this.link + "api/teachers", { headers: this.jheaders }).toPromise()
             .then(response => response.json() as any)
+            .catch(this.error)
+    }
+    takeattendance(data:TakeAttendance):Promise<any>{
+        return this.http.post(this.link+"api/attendance",data,this.jheaders).toPromise()
+            .then(respose=>respose.json())
             .catch(this.error)
     }
 
