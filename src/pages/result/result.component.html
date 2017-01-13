@@ -10,7 +10,7 @@
   <ion-card>
 
       <ion-card-header>
-      <b>Thank you, Miss Kiwanuka</b>
+      <b *ngIf="teacher">Thank you, {{teacher.name}}</b>
       </ion-card-header>    
 
   <chart style="width:90%;height:20%" [options]="options"></chart>
@@ -22,13 +22,13 @@
     <ion-item>
       <ion-icon name='checkmark-circle' item-left style="color: #55acee"></ion-icon>
       Students Present
-      <ion-badge item-right>140</ion-badge>
+      <ion-badge *ngIf="attendance" item-right>{{attendance.present.length}}</ion-badge>
     </ion-item>
 
     <ion-item>
       <ion-icon name='close-circle' item-left style="color: #d03e84"></ion-icon>
       Students Absent
-      <ion-badge item-right>20</ion-badge>
+      <ion-badge *ngIf="attendance" item-right>{{attendance.absent.length}}</ion-badge>
     </ion-item>
 
   </ion-card>

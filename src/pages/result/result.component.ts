@@ -2,7 +2,7 @@ import { Component, OnInit, AfterViewInit } from '@angular/core';
 
 import { NavController,NavParams } from 'ionic-angular';
 import { Storage } from '@ionic/storage'
-
+import {TakeAttendance} from '../home/takeattendance'
 @Component({
   selector: 'page-result',
   templateUrl: 'result.component.html'
@@ -10,16 +10,28 @@ import { Storage } from '@ionic/storage'
 export class ResultPage implements AfterViewInit {
   user: any
   options: any
+  attendance:TakeAttendance
+  teacher:any
   constructor(public navCtrl: NavController,
    private storage: Storage,private navparams:NavParams) {
 
   }
+  getuser(){
+    this.storage.get("profile").then((data)=>{
+      this.teacher=data
+    })
+  }
   ngAfterViewInit() {
-    
+    this.getuser()
+    this.attendance=this.navparams.get("attendance");
+    let data=[]
+    data.push({name:"Present",y:this.attendance.present.length})
+    data.push({name:"Absent",y:this.attendance.absent.length})
+    console.log(data)
     this.options = {
       chart: { type: 'pie' },
       title: { text: '' },
-      series: [{ data: [{name:"one",y:2},{name:"two",y:3}] }],
+      series:[{data:data}],
     };
   }
 

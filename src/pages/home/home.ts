@@ -93,7 +93,7 @@ export class AttendancePage implements OnInit {
       console.log(this.takeattendance)
       this.account.takeattendance(this.takeattendance).then((response) => {
         console.log(response)
-        this.navCtrl.push(ResultPage)
+        this.navCtrl.push(ResultPage,{"attendance":this.takeattendance})
       }).catch((er) => {
         console.log(er)
       })
