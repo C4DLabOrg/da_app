@@ -11,7 +11,8 @@ import {ResultPage} from '../pages/result/result.component';
 import {Storage} from '@ionic/storage';
 import {AccountService} from '../pages/login/account.services';
 import {Link} from './link';
-import {ClassPopoverPage} from '../pages/home/classpopover.component'
+import {ClassPopoverPage} from '../pages/home/classpopover.component';
+import { ChartModule } from 'angular2-highcharts';
 
 @NgModule({
   declarations: [
@@ -25,7 +26,7 @@ import {ClassPopoverPage} from '../pages/home/classpopover.component'
     ClassPopoverPage,
     ResultPage
   ],
-  imports: [
+  imports: [ ChartModule,
     IonicModule.forRoot(MyApp)
   ],
   bootstrap: [IonicApp],

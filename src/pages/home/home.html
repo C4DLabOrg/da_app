@@ -20,7 +20,7 @@
                         <div class="spacer" style="height: 4px;"></div>
                         <p style="font-size: 13px;">{{stud.emis_code}}</p>
                   </ion-label>
-                  <ion-checkbox item-right color="primary" [(ngModel)]="stud.status" ></ion-checkbox>
+                  <ion-checkbox (ngModelChange)="onchange($event,stud.student_name)" item-right color="primary" [(ngModel)]="stud.status" ></ion-checkbox>
 </ion-item>
             <!--<ion-item>
              <ion-label>Daenerys Targaryen
