@@ -7,6 +7,7 @@ import { AttendancePage } from '../pages/home/home';
 import { TabsPage } from '../pages/tabs/tabs';
 import {LoginPage} from '../pages/login/login.component';
 import {PasswordPage} from '../pages/password/password.component';
+import {ResultPage} from '../pages/result/result.component';
 import {Storage} from '@ionic/storage';
 import {AccountService} from '../pages/login/account.services';
 import {Link} from './link';
@@ -21,7 +22,8 @@ import {ClassPopoverPage} from '../pages/home/classpopover.component'
     TabsPage,
     LoginPage,
     PasswordPage,
-    ClassPopoverPage
+    ClassPopoverPage,
+    ResultPage
   ],
   imports: [
     IonicModule.forRoot(MyApp)
@@ -35,7 +37,8 @@ import {ClassPopoverPage} from '../pages/home/classpopover.component'
     TabsPage,
     LoginPage,
     PasswordPage,
-    ClassPopoverPage
+    ClassPopoverPage,
+    ResultPage
   ],
   providers: [{provide: ErrorHandler, useClass: IonicErrorHandler},Storage,AccountService,Link]
 })
