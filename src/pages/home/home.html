@@ -20,7 +20,7 @@
                         <div class="spacer" style="height: 4px;"></div>
                         <p style="font-size: 13px;">{{stud.emis_code}}</p>
                   </ion-label>
-                  <ion-checkbox item-right color="primary" checked="true"></ion-checkbox>
+                  <ion-checkbox item-right color="primary" [(ngModel)]="stud.status" ></ion-checkbox>
 </ion-item>
             <!--<ion-item>
              <ion-label>Daenerys Targaryen
@@ -90,7 +90,7 @@
 
       </ion-list>
 
-      <button ion-button default style="margin-left: 65%">Submit</button>
+      <button ion-button default style="margin-left: 65%" (click)="attendance()" >Submit</button>
       <div class="spacer" style="height: 20px;"></div>
 
 </ion-content>

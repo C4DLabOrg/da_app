@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component,OnInit } from '@angular/core';
 import { App } from 'ionic-angular';
 import { NavController } from 'ionic-angular';
 import { Storage} from '@ionic/storage'
@@ -10,8 +10,8 @@ import {PasswordPage} from '../password/password.component'
   selector: 'page-contact',
   templateUrl: 'contact.html'
 })
-export class ContactPage {
-
+export class ContactPage implements OnInit {
+  user:any
   constructor(public navCtrl: NavController,
   private app:App,private storage:Storage) {
 
@@ -33,5 +33,14 @@ export class ContactPage {
   gotopassword(){
 
       this.navCtrl.push(PasswordPage);
+  }
+   ngOnInit(){
+    this.getprofile()
+  }
+  getprofile(){
+    this.storage.get("profile").then((data)=>{
+      console.log(data)
+      this.user=data
+    })
   }
 }
