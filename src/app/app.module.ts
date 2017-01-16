@@ -8,6 +8,7 @@ import { TabsPage } from '../pages/tabs/tabs';
 import {LoginPage} from '../pages/login/login.component';
 import {PasswordPage} from '../pages/password/password.component';
 import {ResultPage} from '../pages/result/result.component';
+import {AbsencePage} from '../pages/absence/absence.component';
 import {Storage} from '@ionic/storage';
 import {AccountService} from '../pages/login/account.services';
 import {Link} from './link';
@@ -24,7 +25,8 @@ import { ChartModule } from 'angular2-highcharts';
     LoginPage,
     PasswordPage,
     ClassPopoverPage,
-    ResultPage
+    ResultPage,
+    AbsencePage
   ],
   imports: [ ChartModule,
     IonicModule.forRoot(MyApp)
@@ -39,7 +41,8 @@ import { ChartModule } from 'angular2-highcharts';
     LoginPage,
     PasswordPage,
     ClassPopoverPage,
-    ResultPage
+    ResultPage,
+    AbsencePage
   ],
   providers: [{provide: ErrorHandler, useClass: IonicErrorHandler},Storage,AccountService,Link]
 })

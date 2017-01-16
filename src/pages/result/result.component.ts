@@ -3,6 +3,8 @@ import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { NavController,NavParams } from 'ionic-angular';
 import { Storage } from '@ionic/storage'
 import {TakeAttendance} from '../home/takeattendance'
+import {AbsencePage} from '../absence/absence.component'
+
 @Component({
   selector: 'page-result',
   templateUrl: 'result.component.html'
@@ -21,6 +23,11 @@ export class ResultPage implements AfterViewInit {
       this.teacher=data
     })
   }
+
+  absence(){
+    this.navCtrl.push(AbsencePage)   
+  }
+
   ngAfterViewInit() {
     this.getuser()
     this.attendance=this.navparams.get("attendance");
