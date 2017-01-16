@@ -32,12 +32,15 @@ export class ResultPage implements AfterViewInit {
       chart: { type: 'pie' },
       title: { text: '' },
       series:[{name:"Attendance",data:data}],
+      tooltip: {
+            pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+        },
       plotOptions: {
             pie: {
                 allowPointSelect: true,
                 cursor: 'pointer',
                 dataLabels: {
-                    enabled: true,
+                    enabled: false,
                     format: '<b>{point.name}</b>: {point.percentage:.1f} %',
                   
                 }
