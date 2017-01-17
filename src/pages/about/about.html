@@ -1,44 +1,29 @@
 <ion-header>
   <ion-navbar color="primary">
-    <ion-title>Take Attendance</ion-title>
+    <ion-title>Rows/Columns/Flex</ion-title>
   </ion-navbar>
 </ion-header>
 
 
-<ion-content>
-
-  <ion-card>
-  <!--<img src="/android_asset/www/img/unicef-child.png"/>-->
-</ion-card>
-
-<div class="spacer" style="height: 10px;"></div>
-
-<ion-card *ngIf="user" color="primary">
-
-  <ion-card-header >
-    Hello, {{user.name}}
-  </ion-card-header>
-
-  <ion-card-content>
-    <!-- Add card content here! -->
-  </ion-card-content>
-
-</ion-card>
-
-<div class="spacer" style="height: 20px;"></div>
-
- <ion-item>
-      <ion-label>Select Class</ion-label>
-      <ion-select [(ngModel)]="music" [selectOptions]="musicAlertOpts">
-        <ion-option>3 West</ion-option>
-        <ion-option>5 South</ion-option>
-        <ion-option (select)="stpSelect()">8 East</ion-option>
-      </ion-select>
-</ion-item>
-
-
+<ion-content class="home">
+ 
+    <ion-grid>
+ 
+      <ion-row style="background-color: #e74c3c;">
+        <ion-col>Alizarin!</ion-col>
+      </ion-row>
+ 
+      <ion-row style="background-color: #f1c40f;">
+        <ion-col>Sunflower!</ion-col>
+      </ion-row>
+ 
+      <ion-row style="background-color: #9b59b6;">
+        <ion-col>Amethyst!</ion-col>
+      </ion-row>
+ 
+    </ion-grid>
+ 
 </ion-content>
-
 
 
 
