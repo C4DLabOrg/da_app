@@ -1,23 +1,21 @@
 <ion-header>
-  <ion-toolbar>
+  <ion-navbar>
     <ion-buttons start>
        <button ion-button icon-right color="royal">
         Next Student
         <ion-icon name="arrow-dropright"></ion-icon>
       </button>
     </ion-buttons>
-    <ion-title>Kevin Micha</ion-title>
     <ion-buttons end>
     </ion-buttons>
-  </ion-toolbar>
+  </ion-navbar>
 </ion-header>
 <ion-content>
 
-<ion-card>
+<ion-card *ngIf="selected_student">
   <ion-card-header>
-    <b style="color:#3f51b5">Student Details</b>
+    <b style="color:#3f51b5">{{selected_student.student.student_name}}</b>
   </ion-card-header>
-
   <ion-list>
     <button ion-item>
       <ion-icon style ="font-size:22px; color:#3f51b5" name="person" item-left></ion-icon>

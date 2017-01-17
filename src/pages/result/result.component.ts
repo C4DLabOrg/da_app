@@ -3,6 +3,7 @@ import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { NavController,NavParams } from 'ionic-angular';
 import { Storage } from '@ionic/storage'
 import {TakeAttendance} from '../home/takeattendance'
+import {Student} from '../home/classes'
 import {AbsencePage} from '../absence/absence.component'
 
 @Component({
@@ -14,6 +15,8 @@ export class ResultPage implements AfterViewInit {
   options: any
   attendance:TakeAttendance
   teacher:any
+  
+  absent_students:Student[]
   constructor(public navCtrl: NavController,
    private storage: Storage,private navparams:NavParams) {
 
@@ -25,16 +28,17 @@ export class ResultPage implements AfterViewInit {
   }
 
   absence(){
-    this.navCtrl.push(AbsencePage)   
+    this.navCtrl.push(AbsencePage,{"absent_students":this.absent_students})   
   }
 
   ngAfterViewInit() {
     this.getuser()
     this.attendance=this.navparams.get("attendance");
+    this.absent_students=this.navparams.get("response")
     let data=[]
     data.push({name:"Present",y:this.attendance.present.length})
     data.push({name:"Absent",y:this.attendance.absent.length})
-    console.log(data)
+    //console.log(data)
     this.options = {
       chart: { type: 'pie' },
       title: { text: '' },

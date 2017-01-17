@@ -34,11 +34,12 @@
   </ion-card>
 
    <div class="spacer" style="height: 7px;"></div>
-
-   <button ion-button color="primary" outline icon-left style="margin-left: 15%" (click)="absence()">
+   <div *ngIf="absent_students">
+   <button [disabled]="absent_students.length==0" ion-button color="primary" outline icon-left style="margin-left: 15%" (click)="absence()">
       <ion-icon name='create' is-active="false"></ion-icon>
-      Reason For Absence (5)
+      Reason For Absence &nbsp; <ion-badge *ngIf="absent_students" item-right>{{absent_students.length}}</ion-badge>
     </button>
+   </div>
 
 
 </ion-content>

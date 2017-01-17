@@ -15,6 +15,7 @@ export class AttendancePage implements OnInit {
   content: any
   text: any
   classes: Classes[]
+  load:boolean=false
   index: number = 0
   takeattendance = new TakeAttendance()
   selectedclass: Classes
@@ -79,6 +80,7 @@ export class AttendancePage implements OnInit {
   }
   attendance() {
     if (this.selectedclass) {
+      this.load=true
       this.takeattendance.absent = []
       this.takeattendance.present = []
       let students = this.selectedclass.students
@@ -90,12 +92,14 @@ export class AttendancePage implements OnInit {
           this.takeattendance.absent.push(stud.id)
         }
       }
-      console.log(this.takeattendance)
+    //  console.log(this.takeattendance)
       this.account.takeattendance(this.takeattendance).then((response) => {
-        console.log(response)
-        this.navCtrl.push(ResultPage,{"attendance":this.takeattendance})
+        this.load=false
+     //   console.log(response)
+        this.navCtrl.push(ResultPage,{"attendance":this.takeattendance,"response":response})
       }).catch((er) => {
-        console.log(er)
+        this.load=false
+     //   console.log(er)
       })
     }
     else {

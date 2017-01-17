@@ -90,7 +90,7 @@
 
       </ion-list>
 
-      <button ion-button default style="margin-left: 65%" (click)="attendance()" >Submit</button>
+      <button [disabled]="load" ion-button default style="margin-left: 55%" (click)="attendance()" >{{  load==false ? 'Submit' : 'Submitting ...' }}</button>
       <div class="spacer" style="height: 20px;"></div>
 
 </ion-content>
