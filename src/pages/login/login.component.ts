@@ -85,6 +85,7 @@ export class LoginPage {
         let us: any = {}
         this.storage.set("profile",data.profile)
         this.storage.set("subjects",data.subjects)
+        this.storage.set("reasons",data.reasons)
         this.storage.set("classes",data.classes).then(()=>{
           this.loader.dismiss();
          this.navCtrl.setRoot(TabsPage)

@@ -1,8 +1,8 @@
 <ion-header>
   <ion-navbar>
-    <ion-buttons start>
-       <button ion-button icon-right color="royal" (click)="showConfirm()">
-        Next Student
+    <ion-buttons *ngIf="absent_students" start>
+       <button ion-button icon-right color="royal" [disabled]="load" (click)="showConfirm()">
+        {{ index==(absent_students.length-1) ?  'Done':'Next Student'}}
         <ion-icon name="arrow-dropright"></ion-icon>
       </button>
     </ion-buttons>
@@ -24,24 +24,24 @@
 
     <button ion-item>
       <ion-icon style ="font-size:22px; color:#3f51b5" name="close-circle" item-left></ion-icon>
-      <h4 style="font-size:14px;"><b>Total Days Absent - 6</b></h4>
+      <h4 style="font-size:14px;"><b>Total Days Absent - {{selected_student.days}}</b></h4>
     </button>
 
   </ion-list>
 </ion-card>
 
-<ion-card>
+<ion-card *ngIf="reasons">
     <ion-card-header>
         <b style="color:#3f51b5">Reason For Absence</b>
         <p style="color: dimgray">(Please select one or more)</p>
     </ion-card-header>
 
-    <ion-item>
-        <ion-label>Pregnancy</ion-label>
-        <ion-checkbox color="dark" checked="false" item-right></ion-checkbox>
+    <ion-item *ngFor="let re of reasons;let ind=index">
+        <ion-label>{{re.name}}</ion-label>
+        <ion-checkbox color="dark"  (ngModelChange)="onchange($event,re.id,ind)" [(ngModel)]="re.status" item-right></ion-checkbox>
     </ion-item>
 
-    <ion-item>
+    <!--<ion-item>
         <ion-label>Distance From School</ion-label>
         <ion-checkbox color="dark" checked="false" item-right></ion-checkbox>
     </ion-item>
@@ -64,6 +64,6 @@
     <ion-item>
         <ion-label>Sick</ion-label>
         <ion-checkbox color="dark" checked="false" item-right></ion-checkbox>
-    </ion-item>
+    </ion-item>-->
     
 </ion-card>

@@ -4,24 +4,24 @@ import { Link } from '../../app/link'
 import { Token } from '../../app/token'
 import 'rxjs'
 import { Storage } from '@ionic/storage'
-import {TakeAttendance} from '../home/takeattendance'
+import { TakeAttendance } from '../home/takeattendance'
 @Injectable()
 export class AccountService {
     link: string
     token: Token
-    client_id:string
+    client_id: string
     private headers = new Headers({ "Content-Type": "application/x-www-form-urlencoded" })
     jheaders: Headers
     constructor(private http: Http, private url: Link, private storage: Storage) {
         this.link = url.uri
-        this.client_id=url.client_id
+        this.client_id = url.client_id
         this.getauth()
 
     }
     login(username: string, password: string): Promise<Token> {
-        return this.http.post(this.link + "o/token/", 
-        "username=" + username + "&password=" + password + "&grant_type=password&client_id="+this.client_id, 
-        { headers: this.headers })
+        return this.http.post(this.link + "o/token/",
+            "username=" + username + "&password=" + password + "&grant_type=password&client_id=" + this.client_id,
+            { headers: this.headers })
             .toPromise()
             .then(response => response.json() as Token)
             .catch(this.error)
@@ -33,9 +33,8 @@ export class AccountService {
                 this.token = data
                 this.jheaders = new Headers({ "Content-Type": "application/json", "Authorization": "Bearer " + data.access_token })
             }
-            else
-            {
-              this.jheaders = new Headers({ "Content-Type": "application/json"})   
+            else {
+                this.jheaders = new Headers({ "Content-Type": "application/json" })
             }
         });
     }
@@ -44,14 +43,22 @@ export class AccountService {
     }
     profile(): Promise<any> {
         //this.jheaders = new Headers({ "Content-Type": "application/json", "Authorization": "Bearer " + token })
-        return this.http.get(this.link + "api/teachers", { headers: this.jheaders }).toPromise()
+        return this.http.get(this.link + "api/teacher", { headers: this.jheaders }).toPromise()
             .then(response => response.json() as any)
             .catch(this.error)
     }
-    takeattendance(data:TakeAttendance):Promise<any>{
-        return this.http.post(this.link+"api/attendance",data,this.jheaders).toPromise()
-            .then(respose=>respose.json())
+    takeattendance(data: TakeAttendance): Promise<any> {
+        return this.http.post(this.link + "api/attendance", data, this.jheaders).toPromise()
+            .then(respose => respose.json())
             .catch(this.error)
+    }
+
+    //Update reason for absent
+
+    updateabsence(id, data: any): Promise<any> {
+        return this.http.patch(this.link + "api/absent/" + id, data, this.jheaders).toPromise()
+            .then(response => response.json())
+            .catch(this.error);
     }
 
 }
