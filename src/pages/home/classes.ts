@@ -13,5 +13,6 @@ export class Student{
     student_name:string
     student_id:number
     status:boolean=false
+    
 
 }
