@@ -28,8 +28,8 @@ export class AbsencePage implements OnInit{
   showConfirm(){
 
       let confirm = this.alertCtrl.create({
-      title: 'Use this lightsaber?',
-      message: 'Do you agree to use this lightsaber to do good across the intergalactic galaxy?',
+      title: 'Mark attendance',
+      message: 'You have not submitted a reason for absence for this student, are you sure you want to go to the next student?',
       buttons: [
         {
           text: 'Disagree',
