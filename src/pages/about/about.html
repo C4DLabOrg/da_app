@@ -1,121 +1,28 @@
 <ion-header>
-  <ion-navbar color="primary">
-    <ion-title>Rows/Columns/Flex</ion-title>
+  <ion-navbar>
+    <ion-title>Promotion</ion-title>
   </ion-navbar>
 </ion-header>
 
+<ion-content class="tutorial-page">
 
-<ion-content class="home">
- 
-    <ion-grid>
- 
-      <ion-row style="background-color: #e74c3c;">
-        <ion-col>Alizarin!</ion-col>
-      </ion-row>
- 
-      <ion-row style="background-color: #f1c40f;">
-        <ion-col>Sunflower!</ion-col>
-      </ion-row>
- 
-      <ion-row style="background-color: #9b59b6;">
-        <ion-col>Amethyst!</ion-col>
-      </ion-row>
- 
-    </ion-grid>
- 
+  <ion-slides pager>
+    <ion-slide *ngFor="let slide of slides">
+      <ion-toolbar>
+        <ion-buttons end>
+          <button ion-button color="primary">Skip</button>
+        </ion-buttons>
+      </ion-toolbar>
+      <img [src]="slide.image" class="slide-image"/>
+      <h2 class="slide-title" [innerHTML]="slide.title"></h2>
+      <p [innerHTML]="slide.description"></p>
+    </ion-slide>
+    <ion-slide>
+      <ion-toolbar>
+      </ion-toolbar>
+      <img src="img/ica-slidebox-img-1.png" class="slide-image"/>
+      <h2 class="slide-title">Promote Student</h2>
+      <p>This page is currently inactive.Please check at the end of the term or contact your school admin in case of activation issues</p>
+    </ion-slide>
+  </ion-slides>
 </ion-content>
-
-
-
-<!--<ion-header>
-  <ion-navbar color="primary">
-    <ion-title>Promote Student</ion-title>
-  </ion-navbar>
-</ion-header>
-
-    <ion-content color="primary" padding>
-
-
-<ion-list>
-        <ion-item-divider color="primary">Promote to Grade 4</ion-item-divider>
-        <div class="spacer" style="height: 20px;"></div>
-        <ion-item>
-             <ion-label>Daenerys Targaryen
-             <div class="spacer" style="height: 4px;"></div>
-             <p style="font-size: 13px;">201439001</p></ion-label>
-
-             <ion-checkbox item-right color="primary" checked="true"></ion-checkbox>
-       </ion-item>
-
-         <ion-item>
-             <ion-label>Daenerys Targaryen
-             <div class="spacer" style="height: 4px;"></div>
-             <p style="font-size: 13px;">201439001</p></ion-label>
-
-             <ion-checkbox item-right color="primary" checked="true"></ion-checkbox>
-       </ion-item>
-
-        <ion-item>
-             <ion-label>Daenerys Targaryen
-             <div class="spacer" style="height: 4px;"></div>
-             <p style="font-size: 13px;">201439001</p></ion-label>
-
-             <ion-checkbox item-right color="primary" checked="true"></ion-checkbox>
-       </ion-item>
-
-        <ion-item>
-             <ion-label>Daenerys Targaryen
-             <div class="spacer" style="height: 4px;"></div>
-             <p style="font-size: 13px;">201439001</p></ion-label>
-
-             <ion-checkbox item-right color="primary" checked="true"></ion-checkbox>
-       </ion-item>
-
-        <ion-item>
-             <ion-label>Daenerys Targaryen
-             <div class="spacer" style="height: 4px;"></div>
-             <p style="font-size: 13px;">201439001</p></ion-label>
-
-             <ion-checkbox item-right color="primary" checked="true"></ion-checkbox>
-       </ion-item>
-
-        <ion-item>
-             <ion-label>Daenerys Targaryen
-             <div class="spacer" style="height: 4px;"></div>
-             <p style="font-size: 13px;">201439001</p></ion-label>
-
-             <ion-checkbox item-right color="primary" checked="true"></ion-checkbox>
-       </ion-item>
-
-        <ion-item>
-             <ion-label>Daenerys Targaryen
-             <div class="spacer" style="height: 4px;"></div>
-             <p style="font-size: 13px;">201439001</p></ion-label>
-
-             <ion-checkbox item-right color="primary" checked="true"></ion-checkbox>
-       </ion-item>
-
-        <ion-item>
-             <ion-label>Daenerys Targaryen
-             <div class="spacer" style="height: 4px;"></div>
-             <p style="font-size: 13px;">201439001</p></ion-label>
-
-             <ion-checkbox item-right color="primary" checked="true"></ion-checkbox>
-       </ion-item>
-
-        <ion-item>
-             <ion-label>Daenerys Targaryen
-             <div class="spacer" style="height: 4px;"></div>
-             <p style="font-size: 13px;">201439001</p></ion-label>
-
-             <ion-checkbox item-right color="primary" checked="true"></ion-checkbox>
-       </ion-item>
-
-
-
-</ion-list>
-
-          <button ion-button default style="margin-left: 65%">Submit</button>
-          <div class="spacer" style="height: 20px;"></div>
-
-</ion-content>-->
