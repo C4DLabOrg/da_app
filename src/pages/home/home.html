@@ -1,6 +1,6 @@
 <ion-header>
       <ion-navbar color="primary">
-            <ion-title>Mark Attendance <small *ngIf="classes">(Class {{classes[index].class_name}})</small> </ion-title>
+            <ion-title>Mark Attendance <small *ngIf="classes">({{classes[index].class_name}})</small> </ion-title>
             <ion-buttons end>
                   <button ion-button (click)="presentPopover($event)">
                   <ion-icon name="more"></ion-icon>
@@ -14,11 +14,15 @@
       <div class="spacer" style="height: 2px;"></div>
       <ion-list *ngIf="classes">
             <ion-item-divider color="primary">Student Details </ion-item-divider>
-            <div class="spacer" style="height: 20px;"></div>
+            <div class="spacer" style="height: 10px;"></div>
+            <button ion-button clear>
+                  <ion-icon name='calendar' style="color: #d03e84"></ion-icon>
+                         <p style="color:#d03e84 ">&nbsp; &nbsp; 30th January 2017</p>
+            </button>
             <ion-item *ngFor="let stud of classes[index].students">
-                  <ion-label>{{stud.student_name}}
+                  <ion-label><ion-badge item-right>1</ion-badge>{{stud.student_name}}
                         <div class="spacer" style="height: 4px;"></div>
-                        <p style="font-size: 13px;">{{stud.emis_code}}</p>
+                        <p style="font-size: 13px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {{stud.emis_code}}</p>
                   </ion-label>
                   <ion-checkbox (ngModelChange)="onchange($event,stud.student_name)" item-right color="primary" [(ngModel)]="stud.status" ></ion-checkbox>
 </ion-item>
@@ -90,7 +94,7 @@
 
       </ion-list>
 
-      <button [disabled]="load" ion-button default style="margin-left: 55%" (click)="attendance()" >{{  load==false ? 'Submit' : 'Submitting ...' }}</button>
+      <button [disabled]="load" ion-button block (click)="attendance()" >{{  load==false ? 'Submit' : 'Submitting ...' }}</button>
       <div class="spacer" style="height: 20px;"></div>
 
 </ion-content>
