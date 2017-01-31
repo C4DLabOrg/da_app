@@ -1,6 +1,6 @@
 <ion-header>
       <ion-navbar color="primary">
-            <ion-title>Mark Attendance <small *ngIf="classes">(Class {{classes[index].class_name}})</small> </ion-title>
+            <ion-title>Mark Attendance <small *ngIf="classes">( {{classes[index].class_name}})</small> </ion-title>
             <ion-buttons end>
                   <button ion-button (click)="presentPopover($event)">
                   <ion-icon name="more"></ion-icon>
@@ -18,7 +18,7 @@
             <ion-item *ngFor="let stud of classes[index].students">
                   <ion-label>{{stud.student_name}}
                         <div class="spacer" style="height: 4px;"></div>
-                        <p style="font-size: 13px;">{{stud.emis_code}}</p>
+                        <p style="font-size: 13px;">{{stud.student_id}}</p>
                   </ion-label>
                   <ion-checkbox (ngModelChange)="onchange($event,stud.student_name)" item-right color="primary" [(ngModel)]="stud.status" ></ion-checkbox>
 </ion-item>
