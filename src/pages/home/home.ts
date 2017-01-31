@@ -7,6 +7,7 @@ import { ClassPopoverPage } from './classpopover.component'
 import { TakeAttendance } from './takeattendance'
 import { AccountService } from '../login/account.services'
 import { ResultPage } from '../result/result.component'
+import {DatePipe} from '@angular/common'
 @Component({
   selector: 'page-home',
   templateUrl: 'home.html'
@@ -17,6 +18,7 @@ export class AttendancePage implements OnInit {
   classes: Classes[]
   load:boolean=false
   index: number = 0
+  event:string
   takeattendance = new TakeAttendance()
   selectedclass: Classes
   toast: any
@@ -27,6 +29,10 @@ export class AttendancePage implements OnInit {
   }
   ngOnInit() {
     this.getclasses()
+    this.event=new Date().toISOString()
+  }
+  datechange(value){
+    console.log(value)
   }
   showtoast(name: string, status: boolean) {
     if (this.toast) {
