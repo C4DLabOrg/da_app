@@ -6,7 +6,7 @@
 
 <ion-content color="primary" padding>
 
-<!--style="background: url('img/unicef-cover.jpg'); background-repeat: no-repeat; background-size:cover;"-->
+  <!--style="background: url('img/unicef-cover.jpg'); background-repeat: no-repeat; background-size:cover;"-->
 
   <div class="spacer" style="height: 140px;"></div>
   <ion-list>
@@ -23,7 +23,7 @@
   </ion-list>
 
   <button [disabled]="(password ==undefined || password == '')||(username ==undefined || username == '')" (click)="login()"
-    ion-button block>Login</button>
+    ion-button block>Change Password</button>
   <!--<button ion-button (click)="gotoPage()">Dashboard</button>-->
   <ion-card color="danger" *ngIf="error">
 
@@ -37,5 +37,3 @@
     </ion-card-content>
 
   </ion-card>
-
-</ion-content>

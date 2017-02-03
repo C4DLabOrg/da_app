@@ -5,6 +5,7 @@ import { Token } from '../../app/token'
 import 'rxjs'
 import { Storage } from '@ionic/storage'
 import { TakeAttendance } from '../home/takeattendance'
+import {ChangePassword} from '../password/changepassword'
 @Injectable()
 export class AccountService {
     link: string
@@ -41,6 +42,7 @@ export class AccountService {
     private error(error: any): Promise<any> {
         return Promise.reject(error.message || error)
     }
+    
     profile(): Promise<any> {
         //this.jheaders = new Headers({ "Content-Type": "application/json", "Authorization": "Bearer " + token })
         return this.http.get(this.link + "api/teacher", { headers: this.jheaders }).toPromise()
@@ -48,7 +50,7 @@ export class AccountService {
             .catch(this.error)
     }
     takeattendance(data: TakeAttendance): Promise<any> {
-        return this.http.post(this.link + "api/attendance", data, this.jheaders).toPromise()
+        return this.http.post(this.link + "api/attendance", data, {headers:this.jheaders}).toPromise()
             .then(respose => respose.json())
             .catch(this.error)
     }
@@ -56,9 +58,16 @@ export class AccountService {
     //Update reason for absent
 
     updateabsence(id, data: any): Promise<any> {
-        return this.http.patch(this.link + "api/absent/" + id, data, this.jheaders).toPromise()
+        return this.http.patch(this.link + "api/absent/" + id, data,{headers:this.jheaders} ).toPromise()
             .then(response => response.json())
             .catch(this.error);
+    }
+    //Change password
+    changepassword(data:ChangePassword):Promise<any>{
+     //   console.log(this.jheaders)
+        return this.http.put(this.link+"api/change-password",data,{headers:this.jheaders}).toPromise()
+        .then(response=>response.json())
+        .catch(this.error)
     }
 
 }

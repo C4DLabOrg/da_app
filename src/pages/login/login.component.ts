@@ -41,9 +41,33 @@ export class LoginPage {
           })
           // console.log(response)
           this.loader.dismiss();
+        }, (error) => {
+          console.log(error)
+          this.loader.dismiss();
+          if (error.url != null) {
+            if (error.json().error_description) {
+              this.error = error.json().error_description
+            } else {
+              this.error = error.json().error.replace("_", " ")
+            }
+
+            this.eheader = error.statusText
+            if (error.url == null) {
+              this.error = "Check your internet connection"
+            }
+            else if (error.status == 400) {
+              this.error = "Confirm email and password"
+            }
+          }
+          else {
+            this.eheader = "No Internet Connection"
+            this.error = "Turn on mobile data or wifi"
+          }
+
+          console.log("haha", error)
         })
         .catch((error) => {
-            this.loader.dismiss();
+          this.loader.dismiss();
           if (error != null) {
             if (error.json().error_description) {
               this.error = error.json().error_description
@@ -65,7 +89,7 @@ export class LoginPage {
           }
 
           console.log("haha", error)
-        
+
         })
     }
     else {
@@ -79,20 +103,18 @@ export class LoginPage {
     this.account.getauth()
     this.storage.get("user").then((data) => {
       this.account.profile().then((data) => {
-        console.log("dumm",data);
-        
-       
+        console.log("dumm", data);
         let us: any = {}
-        this.storage.set("profile",data.profile)
-        this.storage.set("subjects",data.subjects)
-        this.storage.set("reasons",data.reasons)
-        this.storage.set("classes",data.classes).then(()=>{
+        this.storage.set("profile", data.profile)
+        this.storage.set("subjects", data.subjects)
+        this.storage.set("reasons", data.reasons)
+        this.storage.set("classes", data.classes).then(() => {
           this.loader.dismiss();
-         this.navCtrl.setRoot(TabsPage)
+          this.navCtrl.setRoot(TabsPage)
         })
       }).catch((error) => {
         this.loader.dismiss();
-        console.log("this ***",error)
+        console.log("this ***", error)
         if (error != null) {
           if (error.json().error_description) {
             this.error = error.json().error_description
@@ -109,7 +131,7 @@ export class LoginPage {
           this.eheader = "No Connection"
           this.error = "Make sure you have a working internet connection"
         }
-        
+
 
         this.storage.remove("user");
       });

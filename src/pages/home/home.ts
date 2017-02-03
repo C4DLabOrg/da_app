@@ -1,13 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 
-import { NavController, PopoverController, ToastController } from 'ionic-angular';
+import { NavController, PopoverController, ToastController, AlertController } from 'ionic-angular';
 import { Storage } from '@ionic/storage'
 import { Classes } from './classes'
 import { ClassPopoverPage } from './classpopover.component'
 import { TakeAttendance } from './takeattendance'
 import { AccountService } from '../login/account.services'
 import { ResultPage } from '../result/result.component'
-import {DatePipe} from '@angular/common'
+import { DatePipe } from '@angular/common'
 @Component({
   selector: 'page-home',
   templateUrl: 'home.html'
@@ -16,23 +16,25 @@ export class AttendancePage implements OnInit {
   content: any
   text: any
   classes: Classes[]
-  load:boolean=false
+  load: boolean = false
   index: number = 0
-  event:string
+  event: string
   takeattendance = new TakeAttendance()
   selectedclass: Classes
   toast: any
+  confirm: any
   constructor(public navCtrl: NavController,
     private popoverCtrl: PopoverController,
-    private storage: Storage, private account: AccountService, private toastctrl: ToastController) {
+    private storage: Storage, private account: AccountService,
+    private toastctrl: ToastController, private alertctrl: AlertController) {
 
   }
   ngOnInit() {
     this.getclasses()
-    this.event=new Date().toISOString()
+    this.event = new Date().toISOString()
   }
-  datechange(value){
-    console.log(value)
+  datechange(value) {
+    console.log(this.event)
   }
   showtoast(name: string, status: boolean) {
     if (this.toast) {
@@ -84,9 +86,9 @@ export class AttendancePage implements OnInit {
       }
     })
   }
-  attendance() {
+  confirmattendance() {
+    let mm=""
     if (this.selectedclass) {
-      this.load=true
       this.takeattendance.absent = []
       this.takeattendance.present = []
       let students = this.selectedclass.students
@@ -98,14 +100,65 @@ export class AttendancePage implements OnInit {
           this.takeattendance.absent.push(stud.id)
         }
       }
-    //  console.log(this.takeattendance)
+    }
+    if(this.takeattendance.absent.length==0){
+      mm="None"
+    }
+    else if(this.takeattendance.absent.length==this.selectedclass.students.length)
+    {
+      mm="All"
+    }
+    else{
+      mm=this.takeattendance.absent.length.toString()
+    }
+    console.log(this.selectclass.name)
+    let confirm = this.alertctrl.create({
+      title: 'Take attendance ?',
+      message: 'Take <b>' + this.selectedclass.class_name + "</b> attendance "+
+      "<br> with <b>"+mm+"  students absent </b> <br>"+
+      " <b>" + new Date(this.event).toDateString() + "</b>",
+      buttons: [
+        {
+          text: 'Disagree',
+          handler: () => {
+            console.log('Disagree clicked');
+          }
+        },
+        {
+          text: 'Agree',
+          handler: () => {
+            this.attendance()
+            console.log('Agree clicked');
+          }
+        }
+      ]
+    });
+    confirm.present();
+  }
+  attendance() {
+    if (this.selectedclass) {
+      this.load = true
+      this.takeattendance.absent = []
+      this.takeattendance.present = []
+      let students = this.selectedclass.students
+      for (let i = 0; i < students.length; i++) {
+        let stud = students[i]
+        if (stud.status) {
+          this.takeattendance.present.push(stud.id)
+        } else {
+          this.takeattendance.absent.push(stud.id)
+        }
+      }
+      //  console.log(this.takeattendance)
+      this.takeattendance.date = this.event.split("T")[0]
       this.account.takeattendance(this.takeattendance).then((response) => {
-        this.load=false
-     //   console.log(response)
-        this.navCtrl.push(ResultPage,{"attendance":this.takeattendance,"response":response})
+
+        this.load = false
+        //   console.log(response)
+        this.navCtrl.push(ResultPage, { "attendance": this.takeattendance, "response": response })
       }).catch((er) => {
-        this.load=false
-     //   console.log(er)
+        this.load = false
+        //   console.log(er)
       })
     }
     else {
