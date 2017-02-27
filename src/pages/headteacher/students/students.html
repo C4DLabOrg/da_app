@@ -16,14 +16,6 @@
       <ion-list *ngIf="classes">
             <ion-item-divider color="primary">Student Details </ion-item-divider>
             <div class="spacer" style="height: 10px;"></div>
-            <button ion-button clear>
-                  <ion-icon name='calendar' style="color: #d03e84"></ion-icon>
-
-                         <!--<p style="color:#d03e84 ">&nbsp; &nbsp; 30th January 2017</p>-->
-                           <ion-datetime  style="color:#d03e84 " displayFormat="  DD MMMM YYYY" (ionChange)="datechange(event)" pickerFormat="DD MMM  YYYY" [(ngModel)]="event"></ion-datetime>
-
-            </button>
-            
             <ion-item *ngFor="let stud of classes[index].students;let i=index">
                   <ion-label>
                         <ion-badge item-right>{{i+1}}</ion-badge>{{stud.student_name}}

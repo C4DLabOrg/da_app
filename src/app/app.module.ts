@@ -15,7 +15,7 @@ import {Link} from './link';
 import {ClassPopoverPage} from '../pages/home/classpopover.component';
 import { ChartModule } from 'angular2-highcharts';
 import { HDTabsPage } from '../pages/headteacher/tabs/tabs';
-import { HDAboutPage } from '../pages/headteacher/about/about';
+import { HDReportPage } from '../pages/headteacher/reports/reports';
 import { HDSchoolPage} from '../pages/headteacher/school/school';
 import { HDStudentPage} from '../pages/headteacher/students/students'
 
@@ -32,7 +32,7 @@ import { HDStudentPage} from '../pages/headteacher/students/students'
     ResultPage,
     AbsencePage,
     HDTabsPage,
-    HDAboutPage,
+    HDReportPage,
     HDSchoolPage,
     HDStudentPage
 
@@ -53,7 +53,7 @@ import { HDStudentPage} from '../pages/headteacher/students/students'
     ResultPage,
     AbsencePage,
     HDTabsPage,
-    HDAboutPage,
+    HDReportPage,
     HDSchoolPage,
     HDStudentPage
 

@@ -5,9 +5,9 @@ import {Storage} from '@ionic/storage'
 
 @Component({
   selector: 'page-about',
-  templateUrl: 'about.html'
+  templateUrl: 'reports.html'
 })
-export class HDAboutPage implements OnInit {
+export class HDReportPage implements OnInit {
   user:any
   constructor(public navCtrl: NavController,private storage:Storage) {
 
