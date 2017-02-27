@@ -1,0 +1,50 @@
+<ion-header>
+      <ion-navbar color="primary">
+            <ion-title>My School <small *ngIf="classes">( {{classes[index].class_name}})</small> </ion-title>
+
+            <ion-buttons end>
+                  <button ion-button (click)="presentPopover($event)">
+                  <ion-icon name="more"></ion-icon>
+                  </button>
+            </ion-buttons>
+      </ion-navbar>
+</ion-header>
+
+<ion-content color="primary">
+
+      <div class="spacer" style="height: 2px;"></div>
+      <ion-list *ngIf="classes">
+            <ion-item-divider color="primary">Student Details </ion-item-divider>
+            <div class="spacer" style="height: 10px;"></div>
+            <button ion-button clear>
+                  <ion-icon name='calendar' style="color: #d03e84"></ion-icon>
+
+                         <!--<p style="color:#d03e84 ">&nbsp; &nbsp; 30th January 2017</p>-->
+                           <ion-datetime  style="color:#d03e84 " displayFormat="  DD MMMM YYYY" (ionChange)="datechange(event)" pickerFormat="DD MMM  YYYY" [(ngModel)]="event"></ion-datetime>
+
+            </button>
+            
+            <ion-item *ngFor="let stud of classes[index].students;let i=index">
+                  <ion-label>
+                        <ion-badge item-right>{{i+1}}</ion-badge>{{stud.student_name}}
+                        <div class="spacer" style="height: 4px;"></div>
+
+                        <p style="font-size: 13px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {{stud.emis_code}}</p>
+
+                  </ion-label>
+
+                  <a ion-button small item-right>Edit</a>
+
+                  <a ion-button small item-right color="danger">Delete</a>
+                  
+              
+          </ion-item>
+  
+      </ion-list>
+
+      <ion-fab right bottom>
+        <button ion-fab mini color="dark"><ion-icon name="add"></ion-icon></button>
+      </ion-fab>
+      <div class="spacer" style="height: 20px;"></div>
+
+</ion-content>
