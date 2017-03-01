@@ -18,6 +18,7 @@ import { HDTabsPage } from '../pages/headteacher/tabs/tabs';
 import { HDReportPage } from '../pages/headteacher/reports/reports';
 import { HDSchoolPage} from '../pages/headteacher/school/school';
 import { HDStudentPage} from '../pages/headteacher/students/students'
+import {AddStudentModal} from '../pages/headteacher/students/addstudent'
 
 @NgModule({
   declarations: [
@@ -34,7 +35,8 @@ import { HDStudentPage} from '../pages/headteacher/students/students'
     HDTabsPage,
     HDReportPage,
     HDSchoolPage,
-    HDStudentPage
+    HDStudentPage,
+    AddStudentModal
 
   ],
   imports: [ ChartModule,
@@ -55,7 +57,8 @@ import { HDStudentPage} from '../pages/headteacher/students/students'
     HDTabsPage,
     HDReportPage,
     HDSchoolPage,
-    HDStudentPage
+    HDStudentPage,
+    AddStudentModal
 
   ],
   providers: [{provide: ErrorHandler, useClass: IonicErrorHandler},Storage,AccountService,Link]

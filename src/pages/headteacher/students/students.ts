@@ -1,19 +1,19 @@
-import { Component,OnInit } from '@angular/core';
-import{AccountService} from '../../login/account.services'
-import {TakeAttendance} from '../../home/takeattendance'
-import {Classes} from '../../home/classes'
-import {ClassPopoverPage} from '../../home/classpopover.component'
-
-import { NavController ,ToastController,AlertController,PopoverController} from 'ionic-angular';
-import {Storage} from '@ionic/storage'
+import { Component, OnInit } from '@angular/core';
+import { AccountService } from '../../login/account.services'
+import { TakeAttendance } from '../../home/takeattendance'
+import { Classes } from '../../home/classes'
+import { ClassPopoverPage } from '../../home/classpopover.component'
+import { AddStudentModal } from './addstudent'
+import { NavController, ToastController, AlertController, PopoverController, ModalController } from 'ionic-angular';
+import { Storage } from '@ionic/storage'
 
 @Component({
   selector: 'page-students',
   templateUrl: 'students.html'
 })
 export class HDStudentPage implements OnInit {
-  
-content: any
+
+  content: any
   text: any
   classes: Classes[]
   load: boolean = false
@@ -24,7 +24,7 @@ content: any
   toast: any
   confirm: any
   constructor(public navCtrl: NavController,
-    private popoverCtrl: PopoverController,
+    private popoverCtrl: PopoverController, private modalctrl: ModalController,
     private storage: Storage, private account: AccountService,
     private toastctrl: ToastController, private alertctrl: AlertController) {
 
@@ -35,6 +35,16 @@ content: any
   }
   datechange(value) {
     console.log(this.event)
+  }
+  presentModal(student, type) {
+    if (student == 'a') {
+      let modal = this.modalctrl.create(AddStudentModal, { type: type,class:this.selectedclass.id });
+       modal.present();
+    } else {
+      let modal = this.modalctrl.create(AddStudentModal, { student: student, type: type,class:this.selectedclass.id });
+       modal.present();
+    }
+   
   }
   showtoast(name: string, status: boolean) {
     if (this.toast) {
@@ -87,7 +97,7 @@ content: any
     })
   }
   confirmattendance() {
-    let mm=""
+    let mm = ""
     if (this.selectedclass) {
       this.takeattendance.absent = []
       this.takeattendance.present = []
@@ -101,21 +111,20 @@ content: any
         }
       }
     }
-    if(this.takeattendance.absent.length==0){
-      mm="None"
+    if (this.takeattendance.absent.length == 0) {
+      mm = "None"
     }
-    else if(this.takeattendance.absent.length==this.selectedclass.students.length)
-    {
-      mm="All"
+    else if (this.takeattendance.absent.length == this.selectedclass.students.length) {
+      mm = "All"
     }
-    else{
-      mm=this.takeattendance.absent.length.toString()
+    else {
+      mm = this.takeattendance.absent.length.toString()
     }
     console.log(this.selectclass.name)
     let confirm = this.alertctrl.create({
       title: 'Take attendance ?',
-      message: 'Take <b>' + this.selectedclass.class_name + "</b> attendance "+
-      "<br> with <b>"+mm+"  students absent </b> <br>"+
+      message: 'Take <b>' + this.selectedclass.class_name + "</b> attendance " +
+      "<br> with <b>" + mm + "  students absent </b> <br>" +
       " <b>" + new Date(this.event).toDateString() + "</b>",
       buttons: [
         {
@@ -136,7 +145,7 @@ content: any
     confirm.present();
   }
   attendance() {
-  
+
   }
 
 }
