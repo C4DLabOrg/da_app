@@ -14,6 +14,10 @@ import {AccountService} from '../pages/login/account.services';
 import {Link} from './link';
 import {ClassPopoverPage} from '../pages/home/classpopover.component';
 import { ChartModule } from 'angular2-highcharts';
+import { HDTabsPage } from '../pages/headteacher/tabs/tabs';
+import { HDReportPage } from '../pages/headteacher/reports/reports';
+import { HDSchoolPage} from '../pages/headteacher/school/school';
+import { HDStudentPage} from '../pages/headteacher/students/students'
 
 @NgModule({
   declarations: [
@@ -26,7 +30,12 @@ import { ChartModule } from 'angular2-highcharts';
     PasswordPage,
     ClassPopoverPage,
     ResultPage,
-    AbsencePage
+    AbsencePage,
+    HDTabsPage,
+    HDReportPage,
+    HDSchoolPage,
+    HDStudentPage
+
   ],
   imports: [ ChartModule,
     IonicModule.forRoot(MyApp)
@@ -42,7 +51,12 @@ import { ChartModule } from 'angular2-highcharts';
     PasswordPage,
     ClassPopoverPage,
     ResultPage,
-    AbsencePage
+    AbsencePage,
+    HDTabsPage,
+    HDReportPage,
+    HDSchoolPage,
+    HDStudentPage
+
   ],
   providers: [{provide: ErrorHandler, useClass: IonicErrorHandler},Storage,AccountService,Link]
 })

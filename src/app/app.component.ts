@@ -1,8 +1,9 @@
 import { Component,OnInit } from '@angular/core';
 import { Platform } from 'ionic-angular';
 import { StatusBar, Splashscreen } from 'ionic-native';
-import { LoginPage } from '../pages/login/login.component'
+import { LoginPage } from '../pages/login/login.component';
 import { TabsPage } from '../pages/tabs/tabs';
+import { HDTabsPage } from '../pages/headteacher/tabs/tabs';
 import {Storage}  from '@ionic/storage'
 
 
@@ -28,7 +29,7 @@ export class MyApp implements OnInit {
     this.storage.get("user").then((val) => {
       console.log(val)
       if (val) {
-        this.rootPage=TabsPage
+        this.rootPage=HDTabsPage
       }
       else {
         this.rootPage=LoginPage
