@@ -3,6 +3,7 @@ import { Component,OnInit } from '@angular/core';
 import { NavController } from 'ionic-angular';
 import {Storage} from '@ionic/storage';
 import { HDStudentPage} from '../students/students'
+import {HDTeachersPage} from '../teachers/teachers'
 
 @Component({
   selector: 'page-about',
@@ -24,6 +25,9 @@ export class HDSchoolPage implements OnInit {
 
    students(){
     this.navCtrl.push(HDStudentPage)
+  }
+   teachers(){
+    this.navCtrl.push(HDTeachersPage)
   }
 
 
