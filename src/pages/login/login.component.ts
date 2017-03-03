@@ -4,6 +4,7 @@ import { NavController, LoadingController } from 'ionic-angular';
 import { TabsPage } from '../tabs/tabs'
 import { AccountService } from './account.services'
 import { Storage } from '@ionic/storage'
+import { HDTabsPage } from '../headteacher/tabs/tabs';
 @Component({
   selector: 'page-login',
   templateUrl: 'login.component.html'
@@ -27,7 +28,7 @@ export class LoginPage {
     this.loader.present();
   }
   gotoPage() {
-    this.navCtrl.setRoot(TabsPage)
+    this.navCtrl.setRoot(HDTabsPage)
   }
   login() {
     this.error = null;
@@ -110,7 +111,7 @@ export class LoginPage {
         this.storage.set("reasons", data.reasons)
         this.storage.set("classes", data.classes).then(() => {
           this.loader.dismiss();
-          this.navCtrl.setRoot(TabsPage)
+          this.navCtrl.setRoot(HDTabsPage)
         })
       }).catch((error) => {
         this.loader.dismiss();

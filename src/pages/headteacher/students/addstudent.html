@@ -1,11 +1,16 @@
 <ion-header>
   <ion-navbar>
     <ion-title>Add Student</ion-title>
+    <ion-buttons end>
+      <button ion-button outline  (click)="dismiss()">
+         Back
+      </button>
+    </ion-buttons>
   </ion-navbar>
+
 </ion-header>
 
 <ion-content class="tutorial-page">
-  <span *ngIf="student"> Student:{{student.fstname}}</span>
   <form [formGroup]="studform" (ngSubmit)="addstud()">
     <ion-item>
       <ion-label floating>Firts Name</ion-label>
@@ -30,9 +35,10 @@
       <ion-label floating>Class</ion-label>
       <ion-input formControlName="class_id"></ion-input>
     </ion-item>
-    <button ion-button type="submit" [disabled]="!studform.valid"> <span *ngIf="type">{{type}}</span></button>
+   
+    <button ion-button type="submit" [disabled]="!studform.valid" (click)="dismiss()" large> <span *ngIf="type">{{type}}</span></button>
   </form>
-  <button ion-button (click)="dismiss()">Close</button>
+
 
 
 </ion-content>
