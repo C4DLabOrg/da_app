@@ -148,4 +148,27 @@ export class HDStudentPage implements OnInit {
 
   }
 
+   showConfirm() {
+    let confirm = this.alertctrl.create({
+      title: 'Delete Student',
+      message: 'Do you want to delete this student?',
+      buttons: [
+        {
+          text: 'Disagree',
+          handler: () => {
+            console.log('Disagree clicked');
+          }
+        },
+        {
+          text: 'Agree',
+          handler: () => {
+            console.log('Agree clicked');
+          }
+        }
+      ]
+    });
+    confirm.present();
+  }
 }
+
+

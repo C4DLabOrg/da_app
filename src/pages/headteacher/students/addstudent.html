@@ -35,8 +35,9 @@
       <ion-label floating>Class</ion-label>
       <ion-input formControlName="class_id"></ion-input>
     </ion-item>
-   
-    <button ion-button type="submit" [disabled]="!studform.valid" (click)="dismiss()" large> <span *ngIf="type">{{type}}</span></button>
+    
+    <div class="spacer" style="height: 7px;"></div>
+    <button ion-button full type="submit" [disabled]="!studform.valid" (click)="dismiss()" large> <span *ngIf="type">{{type}}</span></button>
   </form>
 
 
