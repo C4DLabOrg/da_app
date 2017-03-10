@@ -60,7 +60,6 @@ export class AttendancePage implements OnInit {
     if (val) {
       this.showtoast(name, val)
     }
-
   }
   getclasses() {
     this.storage.get("classes").then((data) => {
@@ -154,14 +153,10 @@ export class AttendancePage implements OnInit {
       this.account.takeattendance(this.takeattendance).then((response) => {
 
         this.load = false
-        if(response.length>0){
-          
-        }
         //   console.log(response)
         this.navCtrl.push(ResultPage, { "attendance": this.takeattendance, "response": response })
-      }).catch((er) => {
-        this.load = false
-        //   console.log(er)
+      },(error)=>{
+        console.log(error)
       })
     }
     else {
