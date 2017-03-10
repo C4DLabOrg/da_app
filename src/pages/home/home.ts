@@ -154,6 +154,9 @@ export class AttendancePage implements OnInit {
       this.account.takeattendance(this.takeattendance).then((response) => {
 
         this.load = false
+        if(response.length>0){
+          
+        }
         //   console.log(response)
         this.navCtrl.push(ResultPage, { "attendance": this.takeattendance, "response": response })
       }).catch((er) => {

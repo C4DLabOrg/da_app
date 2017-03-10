@@ -6,16 +6,20 @@ import 'rxjs'
 import { Storage } from '@ionic/storage'
 import { TakeAttendance } from '../home/takeattendance'
 import { ChangePassword } from '../password/changepassword'
-import {Classes  } from '../home/classes'
+import { Classes } from '../home/classes'
+import { Offline } from './offline'
+import {ToastController} from 'ionic-angular';
 @Injectable()
 export class AccountService {
     link: string
     token: Token
     client_id: string
-    classes:Classes[]
+    toast:any
+    classes: Classes[]
     private headers = new Headers({ "Content-Type": "application/x-www-form-urlencoded" })
     jheaders: Headers
-    constructor(private http: Http, private url: Link, private storage: Storage) {
+    constructor(private http: Http,private toastctrl:ToastController,
+     private url: Link, private storage: Storage) {
         this.link = url.uri
         this.client_id = url.client_id
         this.getauth()
@@ -53,8 +57,11 @@ export class AccountService {
     }
     takeattendance(data: TakeAttendance): Promise<any> {
         return this.http.post(this.link + "api/attendance", data, { headers: this.jheaders }).toPromise()
-            .then(respose => respose.json())
-            .catch(this.error)
+            .then((respose) => {
+
+                respose.json()
+            })
+            .catch((error) => this.handleattendance(error, data))
     }
 
     //Update reason for absent
@@ -79,8 +86,60 @@ export class AccountService {
     storageupdatestudent(dat) {
         this.storage.get("classes").then((data) => {
             this.classes = data
-            
+
         })
     }
+    private handleattendance(error: any, attendance: TakeAttendance): Promise<any> {
+        console.log(error)
+        if (error.url == null) {
+            console.log("No internet", attendance)
+            this.saveoffline(attendance)
+            return Promise.resolve([])
+        }
+        else {
+            return Promise.reject(error.message || error)
+        }
+
+    }
+    getreport(id, date: any): Promise<any> {
+        return this.http.get(this.link + "api/attendances/daily?_class=" + id + "&date=" + date).toPromise()
+            .then(resp => resp.json())
+            .catch(this.error)
+    }
+    showtoast(message: string) {
+        if (this.toast) {
+            this.toast.dismiss()
+        }
+        this.toast = this.toastctrl.create({
+            message: message,
+            duration: 3000,
+            position: 'bottom'
+        });
+        this.toast.onDidDismiss(() => {
+            this.toast = null
+        });
+
+        this.toast.present()
+    }
+    saveoffline(data: TakeAttendance) {
+        this.storage.get("offline").then((data) => {
+            console.log(data)
+            if (data == null) {
+                data = []
+            }
+            let offs: Offline[] = data as Offline[]
+            let off = new Offline()
+            off.date = new Date()
+            off.attendance = data
+            off.link = this.link + "api/attendance"
+            offs.push(off)
+            this.storage.set("offline", offs)
+            this.showtoast("No Internet. Saved Offline")
+            console.log(data)
+        }, (error) => {
+            console.log(error)
+        });
+    }
+
 
 }
