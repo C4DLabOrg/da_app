@@ -112,7 +112,7 @@ export class LoginPage {
         this.storage.set("reasons", data.reasons)
         this.storage.set("classes", data.classes).then(() => {
           this.loader.dismiss();
-          this.navCtrl.setRoot(HDTabsPage)
+          this.gotoPage()
         })
       }).catch((error) => {
         this.loader.dismiss();
