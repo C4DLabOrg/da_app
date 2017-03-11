@@ -1,0 +1,56 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>Sync Attendance</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content class="tutorial-page">
+
+  <!--<ion-card>
+    <ion-card-header>
+      Update
+    </ion-card-header>
+    <ion-card-content *ngIf="offlines">
+      {{offlines.length}}
+    </ion-card-content>
+    <ion-row no-padding>
+      <ion-col>
+        <button ion-button clear small color="danger" icon-left>
+          <ion-icon name='star'></ion-icon>
+          Favorite
+        </button>
+      </ion-col>
+    </ion-row>
+  </ion-card>-->
+  <ion-card *ngIf="offlines">
+    <ion-card-content *ngIf="offlines">
+      <h1>{{offlines.length}} Items To Sync</h1>
+    </ion-card-content>
+  </ion-card>
+  <button *ngIf="offlines" ion-button full clear (click)="sync()" [disabled]="offlines.length==0" color="primary" icon-left>
+          <ion-icon name='sync'> Update</ion-icon>
+    </button>
+  <!-- Card to display When syncing-->
+  <ion-card *ngIf="load">
+    <ion-card-content *ngIf="offlines">
+      <h1>Syncing {{comp/offlines.length|percent:'1.0-0'}} </h1>
+    </ion-card-content>
+  </ion-card>
+  <!--Card to dislay WHen Syncing is finished-->
+  <div *ngIf="offlines">
+    <ion-card *ngIf="!load && offlines.length==0">
+      <ion-card-content>
+        <h1>Done Sync</h1>
+
+      </ion-card-content>
+    </ion-card>
+  </div>
+</ion-content>
+
+
+
+<!--<ion-slide-page>
+                <div style="background-color: mediumseagreen; border-radius: 5px; height: 160px;">
+                <p style="color: #FFFFFF; font-size: 16px; font-size: calc(12px + 4px); font-weight: 500; display: block; text-align: center; line-height: 150px">Sense With Cents</p>    
+                </div>   
+              </ion-slide-page>-->

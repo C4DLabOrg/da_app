@@ -156,6 +156,7 @@ export class AttendancePage implements OnInit {
         //   console.log(response)
         this.navCtrl.push(ResultPage, { "attendance": this.takeattendance, "response": response })
       },(error)=>{
+        this.load = false
         console.log(error)
       })
     }

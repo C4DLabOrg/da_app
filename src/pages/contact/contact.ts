@@ -3,7 +3,7 @@ import { App } from 'ionic-angular';
 import { NavController } from 'ionic-angular';
 import { Storage} from '@ionic/storage'
 import {LoginPage} from '../login/login.component'
-
+import {HDSync} from '../headteacher/sync/sync'
 import {PasswordPage} from '../password/password.component'
 
 @Component({
@@ -20,6 +20,7 @@ export class ContactPage implements OnInit {
     this.storage.remove("profile");
     this.storage.remove("subjects")
     this.storage.remove("classes")
+    this.storage.remove("offline")
     this.storage.remove("user").then(() => {
       console.log("logged out")
       this.gotologin()
@@ -30,6 +31,9 @@ export class ContactPage implements OnInit {
     this.app.getRootNav().setRoot(LoginPage)
   }
 
+  gosync(){
+    this.navCtrl.push(HDSync)
+  }
   gotopassword(){
 
       this.navCtrl.push(PasswordPage);

@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core'
+import { Injectable,EventEmitter } from '@angular/core'
 import { Http, Headers } from '@angular/http'
 import { Link } from '../../app/link'
 import { Token } from '../../app/token'
@@ -8,18 +8,20 @@ import { TakeAttendance } from '../home/takeattendance'
 import { ChangePassword } from '../password/changepassword'
 import { Classes } from '../home/classes'
 import { Offline } from './offline'
-import {ToastController} from 'ionic-angular';
+import { ToastController } from 'ionic-angular';
 @Injectable()
 export class AccountService {
     link: string
     token: Token
     client_id: string
-    toast:any
+    toast: any
     classes: Classes[]
     private headers = new Headers({ "Content-Type": "application/x-www-form-urlencoded" })
     jheaders: Headers
-    constructor(private http: Http,private toastctrl:ToastController,
-     private url: Link, private storage: Storage) {
+    newofflineattendance$:EventEmitter<any>
+    constructor(private http: Http, private toastctrl: ToastController,
+        private url: Link, private storage: Storage) {
+        this.newofflineattendance$=new EventEmitter()
         this.link = url.uri
         this.client_id = url.client_id
         this.getauth()
@@ -118,26 +120,49 @@ export class AccountService {
         this.toast.onDidDismiss(() => {
             this.toast = null
         });
-
         this.toast.present()
     }
     saveoffline(data: TakeAttendance) {
-        this.storage.get("offline").then((data) => {
+        this.storage.get("offline").then((offlines) => {
             console.log(data)
-            if (data == null) {
-                data = []
+            if (offlines == null) {
+                offlines = []
             }
-            let offs: Offline[] = data as Offline[]
+            let offs: Offline[] = offlines as Offline[]
             let off = new Offline()
             off.date = new Date()
             off.attendance = data
             off.link = this.link + "api/attendance"
             offs.push(off)
-            this.storage.set("offline", offs)
+            this.storage.set("offline", offs).then((data)=>{
+                this.newofflineattendance$.emit("new")
+            })
             this.showtoast("No Internet. Saved Offline")
             console.log(data)
         }, (error) => {
             console.log(error)
+        });
+    }
+    sync(data: Offline,index:number): Promise<any> {
+        return this.http.post(data.link, data.attendance, this.jheaders).toPromise()
+            .then((response) => {
+                //this.deleteoffline(index)
+                response.json()
+            })
+            .catch(this.error)
+    }
+    private deleteoffline(index: number) {
+        this.storage.get("offline").then((offlines) => {
+            let offs = offlines as Offline[]
+            if (offs.length > 0) {
+                console.log("Deleting ...",index,offs.length)
+                offs.splice(index, 1)
+                console.log("Deleted ...",offs.length)
+                this.storage.set("offline", offs)
+            }
+            else{
+                console.log("Index not in range")
+            }
         });
     }
 
