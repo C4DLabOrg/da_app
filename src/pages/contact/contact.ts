@@ -3,7 +3,7 @@ import { App } from 'ionic-angular';
 import { NavController } from 'ionic-angular';
 import { Storage} from '@ionic/storage'
 import {LoginPage} from '../login/login.component'
-import {HDSync} from '../headteacher/sync/sync'
+import {HDSync} from '../sync/sync'
 import {PasswordPage} from '../password/password.component'
 
 @Component({

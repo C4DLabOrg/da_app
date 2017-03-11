@@ -1,10 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { AccountService } from '../../login/account.services'
+import { AccountService } from '../login/account.services'
 import { NavController, AlertController } from 'ionic-angular';
 import { Storage } from '@ionic/storage';
-import { HDStudentPage } from '../students/students'
-import { HDTeachersPage } from '../teachers/teachers'
-import { Offline } from '../../login/offline'
+import { Offline } from '../login/offline'
 
 @Component({
   selector: 'page-sync',

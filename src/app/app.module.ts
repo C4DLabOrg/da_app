@@ -21,7 +21,7 @@ import { HDStudentPage} from '../pages/headteacher/students/students'
 import {AddStudentModal} from '../pages/headteacher/students/addstudent'
 import {AddTeacherModal} from '../pages/headteacher/teachers/addteacher'
 import { HDTeachersPage} from '../pages/headteacher/teachers/teachers'
-import {HDSync} from '../pages/headteacher/sync/sync'
+import {HDSync} from '../pages/sync/sync'
 @NgModule({
   declarations: [
     MyApp,
