@@ -33,10 +33,13 @@
     </ion-item>
     <ion-item-divider color="primary">Application</ion-item-divider>
 
-    <ion-item>
-      <ion-label>Automate Updates</ion-label>
-      <ion-toggle checked="true"></ion-toggle>
-    </ion-item>
+    <div class="spacer" style="height:10px;"></div>
+
+    <ion-item-divider color="primary">
+       <ion-label>Automate Updates</ion-label>
+      <ion-toggle color = "secondary" checked="true"></ion-toggle>  
+      </ion-item-divider>
+      
     <button (click)="gosync()" ion-item>
         Update Attendance
         <ion-icon name="sync" style="color: #3f51b5" item-left></ion-icon>
