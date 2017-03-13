@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { AccountService } from '../login/account.services'
-import { NavController, AlertController } from 'ionic-angular';
+import { NavController, AlertController ,Alert} from 'ionic-angular';
 import { Storage } from '@ionic/storage';
 import { Offline } from '../login/offline'
+import { LocalNotifications } from 'ionic-native';
 
 @Component({
   selector: 'page-sync',
@@ -10,23 +11,23 @@ import { Offline } from '../login/offline'
 })
 export class HDSync implements OnInit {
   offlines: Offline[]
-  load: boolean=false
+  load: boolean = false
   alert: any
-  comp:number=0
+  comp: number = 0
   constructor(public navCtrl: NavController, private alertctrl: AlertController,
     private storage: Storage, private account: AccountService) {
-
+    
   }
   ngOnInit() {
     this.getoffline()
-    this.account.newofflineattendance$.subscribe((data)=>{
+    this.account.newofflineattendance$.subscribe((data) => {
       this.getoffline()
     })
   }
   getoffline() {
     this.storage.get("offline").then((data) => {
-      if(data==null){
-        data=[]
+      if (data == null) {
+        data = []
       }
       console.log(data)
       this.offlines = data
@@ -43,24 +44,29 @@ export class HDSync implements OnInit {
     });
     this.alert.present();
   }
+  cancellocalnot(){
+    LocalNotifications.cancelAll()
+  }
   sync() {
-    this.load=true
+    this.load = true
     let d = this.offlines.length
-    this.comp=0
+    this.comp = 0
     for (let i = 0; i < this.offlines.length; i++) {
-      console.log("Starting ...",i)
+      console.log("Starting ...", i)
       this.account.sync(this.offlines[i], i).then((data) => {
         //this.offlines.splice(i, 1)
         this.comp++;
-        if(d ==this.comp){
-          this.load=false
-          this.storage.set("offline",[])
-          this.offlines=[]
-          console.log("Done syncing..",i)
+        if (d == this.comp) {
+          this.load = false
+          this.storage.set("offline", null)
+          this.offlines = []
+          this.cancellocalnot()
+          console.log("Done syncing..", i)
         }
-       
-      }, (error) => {false
-         this.load=false
+
+      }, (error) => {
+        false
+        this.load = false
         if (error.url == null) {
           this.showalert("No Internet Connection", "Turn on wifi or data")
         }

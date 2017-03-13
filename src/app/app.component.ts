@@ -7,7 +7,6 @@ import { HDTabsPage } from '../pages/headteacher/tabs/tabs';
 import {Storage}  from '@ionic/storage'
 
 
-
 @Component({
   templateUrl: 'app.html'
 })
@@ -20,6 +19,7 @@ export class MyApp implements OnInit {
       StatusBar.styleDefault();
       Splashscreen.hide();
     });
+  
   }
   ngOnInit(){
     this.gotoApp()

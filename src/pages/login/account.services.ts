@@ -1,4 +1,4 @@
-import { Injectable,EventEmitter } from '@angular/core'
+import { Injectable, EventEmitter } from '@angular/core'
 import { Http, Headers } from '@angular/http'
 import { Link } from '../../app/link'
 import { Token } from '../../app/token'
@@ -9,6 +9,8 @@ import { ChangePassword } from '../password/changepassword'
 import { Classes } from '../home/classes'
 import { Offline } from './offline'
 import { ToastController } from 'ionic-angular';
+import { LocalNotifications } from 'ionic-native';
+
 @Injectable()
 export class AccountService {
     link: string
@@ -18,10 +20,10 @@ export class AccountService {
     classes: Classes[]
     private headers = new Headers({ "Content-Type": "application/x-www-form-urlencoded" })
     jheaders: Headers
-    newofflineattendance$:EventEmitter<any>
+    newofflineattendance$: EventEmitter<any>
     constructor(private http: Http, private toastctrl: ToastController,
         private url: Link, private storage: Storage) {
-        this.newofflineattendance$=new EventEmitter()
+        this.newofflineattendance$ = new EventEmitter()
         this.link = url.uri
         this.client_id = url.client_id
         this.getauth()
@@ -50,7 +52,14 @@ export class AccountService {
     private error(error: any): Promise<any> {
         return Promise.reject(error.message || error)
     }
-
+    setlocalnot() {
+        LocalNotifications.schedule({
+            title: "Digital Attendance",
+            text: "Please sync your attendance",
+            at: new Date(new Date().getTime() + 20 * 1000),
+            every:"minute"
+        });
+    }
     profile(): Promise<any> {
         //this.jheaders = new Headers({ "Content-Type": "application/json", "Authorization": "Bearer " + token })
         return this.http.get(this.link + "api/teacher", { headers: this.jheaders }).toPromise()
@@ -127,6 +136,8 @@ export class AccountService {
             console.log(data)
             if (offlines == null) {
                 offlines = []
+                this.setlocalnot()
+              
             }
             let offs: Offline[] = offlines as Offline[]
             let off = new Offline()
@@ -134,16 +145,19 @@ export class AccountService {
             off.attendance = data
             off.link = this.link + "api/attendance"
             offs.push(off)
-            this.storage.set("offline", offs).then((data)=>{
+             
+            this.storage.set("offline", offs).then((data) => {
                 this.newofflineattendance$.emit("new")
+               
             })
+              
             this.showtoast("No Internet. Saved Offline")
             console.log(data)
         }, (error) => {
             console.log(error)
         });
     }
-    sync(data: Offline,index:number): Promise<any> {
+    sync(data: Offline, index: number): Promise<any> {
         return this.http.post(data.link, data.attendance, this.jheaders).toPromise()
             .then((response) => {
                 //this.deleteoffline(index)
@@ -155,12 +169,12 @@ export class AccountService {
         this.storage.get("offline").then((offlines) => {
             let offs = offlines as Offline[]
             if (offs.length > 0) {
-                console.log("Deleting ...",index,offs.length)
+                console.log("Deleting ...", index, offs.length)
                 offs.splice(index, 1)
-                console.log("Deleted ...",offs.length)
+                console.log("Deleted ...", offs.length)
                 this.storage.set("offline", offs)
             }
-            else{
+            else {
                 console.log("Index not in range")
             }
         });

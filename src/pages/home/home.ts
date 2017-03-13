@@ -8,6 +8,8 @@ import { TakeAttendance } from './takeattendance'
 import { AccountService } from '../login/account.services'
 import { ResultPage } from '../result/result.component'
 import { DatePipe } from '@angular/common'
+
+
 @Component({
   selector: 'page-home',
   templateUrl: 'home.html'
@@ -61,6 +63,7 @@ export class AttendancePage implements OnInit {
       this.showtoast(name, val)
     }
   }
+
   getclasses() {
     this.storage.get("classes").then((data) => {
       this.classes = data
