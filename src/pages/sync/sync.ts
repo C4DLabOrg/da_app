@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { AccountService } from '../login/account.services'
-import { NavController, AlertController ,Alert} from 'ionic-angular';
+import { NavController, AlertController, Alert, Platform } from 'ionic-angular';
 import { Storage } from '@ionic/storage';
 import { Offline } from '../login/offline'
-import { LocalNotifications } from 'ionic-native';
+import { LocalNotifications, Network } from 'ionic-native';
 
 @Component({
   selector: 'page-sync',
@@ -14,17 +14,31 @@ export class HDSync implements OnInit {
   load: boolean = false
   alert: any
   comp: number = 0
+  lastsync: Date
+  connection: Boolean = false
+  network: string
+  navigator: any
   constructor(public navCtrl: NavController, private alertctrl: AlertController,
-    private storage: Storage, private account: AccountService) {
-    
+    private storage: Storage, private account: AccountService, private platform: Platform) {
+    this.checkNetwork("n")
   }
   ngOnInit() {
+
     this.getoffline()
     this.account.newofflineattendance$.subscribe((data) => {
       this.getoffline()
     })
+
   }
   getoffline() {
+    this.storage.get("lastsync").then((data) => {
+      if (data == null) {
+        this.lastsync = new Date()
+      }
+      else {
+        this.lastsync = data
+      }
+    })
     this.storage.get("offline").then((data) => {
       if (data == null) {
         data = []
@@ -44,8 +58,43 @@ export class HDSync implements OnInit {
     });
     this.alert.present();
   }
-  cancellocalnot(){
+  cancellocalnot() {
     LocalNotifications.cancelAll()
+  }
+  checkNetwork(refresher) {
+
+    this.connection = false
+    this.account.ping().then((data) => {
+      this.connection = true
+      if (refresher != "n") {
+        refresher.complete();
+      }
+    }, (error) => {
+      if (refresher != "n") {
+        refresher.complete();
+      }
+      this.connection = false
+    })
+  }
+  showAlert() {
+    this.storage.get("lastsyncdata").then((data) => {
+      if (data == null) {
+        data = []
+      }
+      console.log(data);
+      let d: Offline[] = data
+      let message = "<ion-list>"
+      for (var i = 0; i < d.length; i++) {
+        let cc = d[i] as Offline
+        message += cc.attendance.class_name + "<small> &nbsp;(" + cc.attendance.date + ")</small><br> <small>Present="
+        message += cc.attendance.present.length + " ,Absent="
+        message += cc.attendance.absent.length + " </small><br><br>"
+
+      }
+      message += "</ion-list>"
+      this.showalert("Last Sync", message);
+
+    });
   }
   sync() {
     this.load = true
@@ -59,6 +108,9 @@ export class HDSync implements OnInit {
         if (d == this.comp) {
           this.load = false
           this.storage.set("offline", null)
+          this.storage.set("lastsync", new Date())
+          this.storage.set("lastsyncdata", this.offlines)
+          this.lastsync = new Date()
           this.offlines = []
           this.cancellocalnot()
           console.log("Done syncing..", i)

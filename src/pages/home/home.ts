@@ -153,6 +153,7 @@ export class AttendancePage implements OnInit {
       }
       //  console.log(this.takeattendance)
       this.takeattendance.date = this.event.split("T")[0]
+      this.takeattendance.class_name=this.selectedclass.class_name
       this.account.takeattendance(this.takeattendance).then((response) => {
 
         this.load = false

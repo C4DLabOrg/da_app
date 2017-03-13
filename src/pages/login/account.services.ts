@@ -145,7 +145,6 @@ export class AccountService {
             off.attendance = data
             off.link = this.link + "api/attendance"
             offs.push(off)
-             
             this.storage.set("offline", offs).then((data) => {
                 this.newofflineattendance$.emit("new")
                
@@ -178,6 +177,11 @@ export class AccountService {
                 console.log("Index not in range")
             }
         });
+    }
+    ping():Promise<any>{
+        return this.http.options(this.link+"api/attendance").toPromise()
+        .then((resp)=>resp.json())
+        .catch(this.error)
     }
 
 

@@ -5,7 +5,9 @@
 </ion-header>
 
 <ion-content class="tutorial-page">
-
+<ion-refresher (ionRefresh)="checkNetwork($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
   <!--<ion-card>
     <ion-card-header>
       Update
@@ -29,39 +31,41 @@
   </ion-item>
   <div class="spacer" style="height: 10px;"></div>
 
-  <ion-item> 
+  <ion-item>
     <h4>Internet Status</h4>
-    <ion-badge item-right>Connected</ion-badge>
+    <ion-badge color="{{connection?'green':'secondary'}}" item-right>{{connection?'Connected ':'Disconnected '}}</ion-badge>
   </ion-item>
-  
+
   <div class="spacer" style="height: 10px;"></div>
 
-  <ion-item> 
+  <ion-item ng-if="lastsync">
     <h4><b>Last Sync On</b></h4>
     <br>
-     <h5>Mon,13 March 2017, 13.30 PM</h5>
+    <!--<h5>Mon,13 March 2017, 13.30 PM</h5>-->
+     <h5>{{lastsync|date:"EEE,d MMMM y , h.mm a"}}</h5>
   </ion-item>
 
   <div class="spacer" style="height: 10px;"></div>
 
-  <ion-item *ngIf="offlines"> 
-     <h4>Items To Sync</h4>
-     <ion-badge item-right>{{offlines.length}} </ion-badge>   
+  <ion-item *ngIf="offlines">
+    <h4>Items To Sync</h4>
+    <ion-badge item-right>{{offlines.length}} </ion-badge>
   </ion-item>
 
-<div class="spacer" style="height: 10px;"></div>
-   <ion-item *ngIf="offlines"> 
-     <h4>Items Failed To Sync</h4>
-     <ion-badge color = "secondary" item-right>{{offlines.length}} </ion-badge>   
+  <div class="spacer" style="height: 10px;"></div>
+  <ion-item *ngIf="offlines">
+    <h4>Items Failed To Sync</h4>
+    <ion-badge color="secondary" item-right>0 </ion-badge>
   </ion-item>
-  
-<div class="spacer" style="height: 10px;"></div>
 
-  <button *ngIf="offlines" ion-button full (click)="sync()" [disabled]="offlines.length==0" color="primary">
-   <ion-icon name='sync'> Update</ion-icon>
+  <div class="spacer" style="height: 10px;"></div>
+  <div *ngIf="offlines">
+    <button *ngIf="offlines.length>0" [disabled]="!connection" ion-button full (click)="sync()" color="primary">
+   <ion-icon *ngIf="!load" name='sync'> </ion-icon>&nbsp;  {{load?'Syncing '+(comp/offlines.length|percent:'1.0-0'):' Update'}}
   </button>
+  </div>
 
-    <!--<ion-card *ngIf="offlines">
+  <!--<ion-card *ngIf="offlines">
     <ion-card-content *ngIf="offlines">
       <h1>{{offlines.length}} Items To Sync</h1>
     </ion-card-content>
@@ -73,31 +77,35 @@
 
 
   <!-- Card to display When syncing-->
-  <ion-card *ngIf="load">
+  <!--<ion-card *ngIf="load">
     <ion-card-content *ngIf="offlines">
       <h1>Syncing {{comp/offlines.length|percent:'1.0-0'}} </h1>
     </ion-card-content>
-  </ion-card>
+  </ion-card>-->
 
-<div class="spacer" style="height: 5px;"></div>
-
-  <button *ngIf="offlines" ion-button full [disabled]="offlines.length==0" color="primary">
-   <ion-icon name='checkmark'> Done Sync</ion-icon>
+  <div class="spacer" style="height: 5px;"></div>
+  <div *ngIf="offlines">
+    <button *ngIf="!load && offlines.length==0" ion-button full style="background-color: green">
+   <ion-icon name='checkmark'> Attendance Up to Date</ion-icon>
   </button>
-  
+  </div>
+
   <!--Card to dislay WHen Syncing is finished-->
   <!--<div *ngIf="offlines">
-    <ion-card *ngIf="!load && offlines.length==0">
+    <ion-card *ngIf="">
       <ion-card-content>
         <h1>Done Sync</h1>
 
       </ion-card-content>
     </ion-card>
   </div>-->
-
-   <ion-item> 
-    <ion-badge item-left><ion-icon name='arrow-forward'></ion-icon></ion-badge>
-    <a href = "" style="text-decoration: none"><h4>View Last Sync Details</h4></a>
+  <ion-item>
+    <ion-badge item-left>
+      <ion-icon name='arrow-forward'></ion-icon>
+    </ion-badge>
+    <a (click)="showAlert()" style="text-decoration: none">
+      <h4>View Last Sync Details</h4>
+    </a>
   </ion-item>
 
 </ion-content>
