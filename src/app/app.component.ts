@@ -29,7 +29,7 @@ export class MyApp implements OnInit {
     this.storage.get("user").then((val) => {
       console.log(val)
       if (val) {
-        this.rootPage=TabsPage
+        this.rootPage=HDTabsPage
       }
       else {
         this.rootPage=LoginPage

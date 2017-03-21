@@ -13,11 +13,11 @@ export class Student{
     fstname:string
     lstname:string
     midname:string
-    class_id:string
+    class_id:number
     gender:string
     student_name:string
     student_id:number
     status:boolean=false
-    
+    date_enrolled:string    
 
 }

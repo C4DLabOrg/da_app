@@ -14,7 +14,7 @@
 
       <div class="spacer" style="height: 2px;"></div>
       <ion-list *ngIf="classes">
-            <ion-item-divider color="primary">Student Details </ion-item-divider>
+            <ion-item-divider color="primary">Student Details<ion-input [(ngModel)]="studname" placeholder="Enter Student Name" type="text"></ion-input> </ion-item-divider>
             <div class="spacer" style="height: 10px;"></div>
             <ion-item *ngFor="let stud of classes[index].students;let i=index">
                   <ion-label>
@@ -35,7 +35,7 @@
       </ion-list>
 
       <ion-fab right bottom>
-        <button (click)="presentModal('a','add')" ion-fab mini color="dark"><ion-icon name="add"></ion-icon></button>
+        <button (click)="presentModal('new','add')" ion-fab mini color="dark"><ion-icon name="add"></ion-icon></button>
       </ion-fab>
       <div class="spacer" style="height: 20px;"></div>
 

@@ -2,7 +2,7 @@
   <ion-navbar>
     <ion-title>Add Student</ion-title>
     <ion-buttons end>
-      <button ion-button outline  (click)="dismiss()">
+      <button ion-button outline (click)="dismiss()">
          Back
       </button>
     </ion-buttons>
@@ -31,15 +31,25 @@
         <ion-option value="M">Male</ion-option>
       </ion-select>
     </ion-item>
-    <ion-item>
+    <!--<ion-item>
       <ion-label floating>Class</ion-label>
       <ion-input formControlName="class_id"></ion-input>
+    </ion-item>-->
+    <ion-item>
+      <ion-label>Class</ion-label>
+      <ion-select *ngIf="classes" formControlName="class_id">
+        <ion-option *ngFor="let class of classes" value="{{class.id}}">{{class.class_name}}</ion-option>
+      </ion-select>
     </ion-item>
-    
+    <ion-item>
+      <ion-label>Enrolled   <ion-icon name='calendar' style="color: #d03e84"></ion-icon></ion-label>
+     
+      <ion-datetime  displayFormat="  DD MMMM YYYY"  pickerFormat="DD MMM  YYYY"
+        formControlName="date_enrolled"></ion-datetime>
+    </ion-item>
+
     <div class="spacer" style="height: 7px;"></div>
-    <button ion-button full type="submit" [disabled]="!studform.valid" (click)="dismiss()" large> <span *ngIf="type">{{type}}</span></button>
+    <button ion-button full type="submit" [disabled]="!studform.valid" large> <span *ngIf="type">{{type}}</span></button>
   </form>
-
-
 
 </ion-content>

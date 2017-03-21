@@ -6,7 +6,7 @@ import 'rxjs'
 import { Storage } from '@ionic/storage'
 import { TakeAttendance } from '../home/takeattendance'
 import { ChangePassword } from '../password/changepassword'
-import { Classes } from '../home/classes'
+import { Classes, Student } from '../home/classes'
 import { Offline } from './offline'
 import { ToastController } from 'ionic-angular';
 import { LocalNotifications } from 'ionic-native';
@@ -20,7 +20,8 @@ export class AccountService {
     classes: Classes[]
     private headers = new Headers({ "Content-Type": "application/x-www-form-urlencoded" })
     jheaders: Headers
-    newofflineattendance$: EventEmitter<any>
+    newofflineattendance$: EventEmitter<any> = new EventEmitter()
+    studentsChange$: EventEmitter<Student> = new EventEmitter<Student>()
     constructor(private http: Http, private toastctrl: ToastController,
         private url: Link, private storage: Storage) {
         this.newofflineattendance$ = new EventEmitter()
@@ -54,11 +55,13 @@ export class AccountService {
     }
     setlocalnot() {
         LocalNotifications.schedule({
+            id: 1,
             title: "Digital Attendance",
             text: "Please sync your attendance",
-            at: new Date(new Date().getTime() + 20 * 1000),
-            every:"minute"
-        });
+            at: new Date(new Date().getTime() + 1 * 1000 * 60 * 60 * 24 * 5),
+            every: "everyday"
+        })
+
     }
     profile(): Promise<any> {
         //this.jheaders = new Headers({ "Content-Type": "application/json", "Authorization": "Bearer " + token })
@@ -91,17 +94,54 @@ export class AccountService {
     }
     updatestudent(id, data: any): Promise<any> {
         return this.http.patch(this.link + "api/students/" + id, data, { headers: this.jheaders }).toPromise()
-            .then(response => response.json())
+            .then((response) => {
+                this.storageupdatestudent(response.json())
+                return response.json()
+            })
             .catch(this.error)
     }
-    storageupdatestudent(dat) {
+    createstudent(data: any): Promise<any> {
+        return this.http.post(this.link + "api/students", data, { headers: this.jheaders }).toPromise()
+            .then(resp => {
+                this.storageaddstudent(resp.json())
+                return resp.json()
+            })
+            .catch(this.error)
+    }
+    storageaddstudent(student: Student) {
         this.storage.get("classes").then((data) => {
-            this.classes = data
+            let classes = data as Classes[]
+            let clindex = classes.indexOf(classes.filter(cl => cl.id === student.class_id)[0])
+            let theclass = classes[clindex]
+            theclass.students.push(student)
+            classes[clindex] = theclass
+            // let thestud=classes.filter(cl=>cl.id == student.class_id)[0]
+            //                 .students.filter(stud=>stud.id==student.id)[0];
+            this.storage.set("classes", classes).then((data) => {
+                this.studentsChange$.emit(student);
+            });
 
         })
     }
+    storageupdatestudent(student: Student) {
+        this.storage.get("classes").then((data) => {
+            let classes = data as Classes[]
+            let clindex = classes.indexOf(classes.filter(cl => cl.id === student.class_id)[0])
+            let theclass = classes[clindex]
+            let studinedx = theclass.students.indexOf(theclass.students.filter(stud => stud.id === student.id)[0])
+            theclass.students[studinedx] = student
+            classes[clindex] = theclass
+            let thestud = theclass.students[studinedx]
+            // let thestud=classes.filter(cl=>cl.id == student.class_id)[0]
+            //                 .students.filter(stud=>stud.id==student.id)[0];
+            this.storage.set("classes", classes).then((data) => {
+                this.studentsChange$.emit(student);
+            });
+        })
+    }
+
     private handleattendance(error: any, attendance: TakeAttendance): Promise<any> {
-        console.log(error)
+        //console.log(error)
         if (error.url == null) {
             console.log("No internet", attendance)
             this.saveoffline(attendance)
@@ -137,7 +177,7 @@ export class AccountService {
             if (offlines == null) {
                 offlines = []
                 this.setlocalnot()
-              
+
             }
             let offs: Offline[] = offlines as Offline[]
             let off = new Offline()
@@ -147,9 +187,9 @@ export class AccountService {
             offs.push(off)
             this.storage.set("offline", offs).then((data) => {
                 this.newofflineattendance$.emit("new")
-               
+
             })
-              
+
             this.showtoast("No Internet. Saved Offline")
             console.log(data)
         }, (error) => {
@@ -178,10 +218,10 @@ export class AccountService {
             }
         });
     }
-    ping():Promise<any>{
-        return this.http.options(this.link+"api/attendance").toPromise()
-        .then((resp)=>resp.json())
-        .catch(this.error)
+    ping(): Promise<any> {
+        return this.http.options(this.link + "api/attendance").toPromise()
+            .then((resp) => resp.json())
+            .catch(this.error)
     }
 
 

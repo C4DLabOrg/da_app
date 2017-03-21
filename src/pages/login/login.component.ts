@@ -29,7 +29,7 @@ export class LoginPage {
     this.loader.present();
   }
   gotoPage() {
-    this.navCtrl.setRoot(TabsPage)
+    this.navCtrl.setRoot(HDTabsPage)
   }
   login() {
     this.error = null;

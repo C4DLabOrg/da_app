@@ -25,17 +25,40 @@ export class AttendancePage implements OnInit {
   selectedclass: Classes
   toast: any
   confirm: any
+  mindate: string = this.addDays(new Date(), 14)
+  maxdate: string = new Date().toISOString()
   constructor(public navCtrl: NavController,
     private popoverCtrl: PopoverController,
     private storage: Storage, private account: AccountService,
     private toastctrl: ToastController, private alertctrl: AlertController) {
 
   }
+  addDays(theDate, days) {
+    return new Date(theDate.getTime() - days * 24 * 60 * 60 * 1000).toISOString();
+  }
   ngOnInit() {
     this.getclasses()
     this.event = new Date().toISOString()
+    this.onStudentsChange()
+  }
+   onStudentsChange() {
+    this.account.studentsChange$.subscribe((student) => {
+      let clindex = this.classes.indexOf(this.classes.filter(cl => cl.id === student.class_id)[0])
+      let theclass = this.classes[clindex]
+      let studs = theclass.students.filter(stud => stud.id === student.id)
+      if (studs.length > 0) {
+        let studinedx = theclass.students.indexOf(studs[0])
+        theclass.students[studinedx] = student
+      }
+      else {
+        theclass.students.push(student)
+      }
+
+      this.classes[clindex] = theclass
+    });
   }
   datechange(value) {
+    this.clearattendance()
     console.log(this.event)
   }
   showtoast(name: string, status: boolean) {
@@ -76,6 +99,11 @@ export class AttendancePage implements OnInit {
       this.selectedclass.students[i].status = false
     }
   }
+  clearattendance() {
+    for (let i = 0; i < this.selectedclass.students.length; i++) {
+      this.selectedclass.students[i].status = false
+    }
+  }
   presentPopover(myEvent) {
     let popover = this.popoverCtrl.create(ClassPopoverPage, { "classes": this.classes });
     popover.present({
@@ -89,7 +117,7 @@ export class AttendancePage implements OnInit {
     })
   }
   confirmattendance() {
-    let mm=""
+    let mm = ""
     if (this.selectedclass) {
       this.takeattendance.absent = []
       this.takeattendance.present = []
@@ -103,21 +131,20 @@ export class AttendancePage implements OnInit {
         }
       }
     }
-    if(this.takeattendance.absent.length==0){
-      mm="None"
+    if (this.takeattendance.absent.length == 0) {
+      mm = "None"
     }
-    else if(this.takeattendance.absent.length==this.selectedclass.students.length)
-    {
-      mm="All"
+    else if (this.takeattendance.absent.length == this.selectedclass.students.length) {
+      mm = "All"
     }
-    else{
-      mm=this.takeattendance.absent.length.toString()
+    else {
+      mm = this.takeattendance.absent.length.toString()
     }
     console.log(this.selectclass.name)
     let confirm = this.alertctrl.create({
       title: 'Take attendance ?',
-      message: 'Take <b>' + this.selectedclass.class_name + "</b> attendance "+
-      "<br> with <b>"+mm+"  students absent </b> <br>"+
+      message: 'Take <b>' + this.selectedclass.class_name + "</b> attendance " +
+      "<br> with <b>" + mm + "  students absent </b> <br>" +
       " <b>" + new Date(this.event).toDateString() + "</b>",
       buttons: [
         {
@@ -153,13 +180,14 @@ export class AttendancePage implements OnInit {
       }
       //  console.log(this.takeattendance)
       this.takeattendance.date = this.event.split("T")[0]
-      this.takeattendance.class_name=this.selectedclass.class_name
+      this.takeattendance.class_name = this.selectedclass.class_name
       this.account.takeattendance(this.takeattendance).then((response) => {
 
         this.load = false
+        this.clearattendance()
         //   console.log(response)
         this.navCtrl.push(ResultPage, { "attendance": this.takeattendance, "response": response })
-      },(error)=>{
+      }, (error) => {
         this.load = false
         console.log(error)
       })

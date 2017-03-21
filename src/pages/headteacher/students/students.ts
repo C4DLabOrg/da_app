@@ -32,19 +32,36 @@ export class HDStudentPage implements OnInit {
   ngOnInit() {
     this.getclasses()
     this.event = new Date().toISOString()
+    this.onStudentsChange()
+  }
+  onStudentsChange() {
+    this.account.studentsChange$.subscribe((student) => {
+      let clindex = this.classes.indexOf(this.classes.filter(cl => cl.id === student.class_id)[0])
+      let theclass = this.classes[clindex]
+      let studs = theclass.students.filter(stud => stud.id === student.id)
+      if (studs.length > 0) {
+        let studinedx = theclass.students.indexOf(studs[0])
+        theclass.students[studinedx] = student
+      }
+      else {
+        theclass.students.push(student)
+      }
+
+      this.classes[clindex] = theclass
+    });
   }
   datechange(value) {
     console.log(this.event)
   }
   presentModal(student, type) {
-    if (student == 'a') {
-      let modal = this.modalctrl.create(AddStudentModal, { type: type,class:this.selectedclass.id });
-       modal.present();
+    if (student == 'new') {
+      let modal = this.modalctrl.create(AddStudentModal, { classes: this.classes, type: type, class: this.selectedclass.id });
+      modal.present();
     } else {
-      let modal = this.modalctrl.create(AddStudentModal, { student: student, type: type,class:this.selectedclass.id });
-       modal.present();
+      let modal = this.modalctrl.create(AddStudentModal, { classes: this.classes, student: student, type: type, class: this.selectedclass.id });
+      modal.present();
     }
-   
+
   }
   showtoast(name: string, status: boolean) {
     if (this.toast) {
@@ -148,7 +165,7 @@ export class HDStudentPage implements OnInit {
 
   }
 
-   showConfirm() {
+  showConfirm() {
     let confirm = this.alertctrl.create({
       title: 'Delete Student',
       message: 'Do you want to delete this student?',
