@@ -14,7 +14,12 @@
 
       <div class="spacer" style="height: 2px;"></div>
       <ion-list *ngIf="classes">
-            <ion-item-divider color="primary">Student Details<ion-input [(ngModel)]="studname" placeholder="Enter Student Name" type="text"></ion-input> </ion-item-divider>
+
+            <ion-item-divider color="primary">   
+                        <ion-input color = "primary" [(ngModel)]="studname" type="text" placeholder="Enter Student Name"></ion-input>
+                         <ion-icon name="search" item-left></ion-icon>
+            </ion-item-divider>
+
             <div class="spacer" style="height: 10px;"></div>
             <ion-item *ngFor="let stud of classes[index].students;let i=index">
                   <ion-label>
