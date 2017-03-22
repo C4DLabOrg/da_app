@@ -30,6 +30,7 @@ export class HDSync implements OnInit {
     })
 
   }
+
   getoffline() {
     this.storage.get("lastsync").then((data) => {
       if (data == null) {
@@ -113,6 +114,7 @@ export class HDSync implements OnInit {
           this.lastsync = new Date()
           this.offlines = []
           this.cancellocalnot()
+          this.account.updateStatus$.emit("Update Completed")
           console.log("Done syncing..", i)
         }
 

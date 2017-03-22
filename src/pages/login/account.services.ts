@@ -17,13 +17,17 @@ export class AccountService {
     token: Token
     client_id: string
     toast: any
+    offlines: Offline[]
     classes: Classes[]
+    clock: any
+    nonetnotification:boolean=true
     private headers = new Headers({ "Content-Type": "application/x-www-form-urlencoded" })
     jheaders: Headers
     newofflineattendance$: EventEmitter<any> = new EventEmitter()
     studentsChange$: EventEmitter<Student> = new EventEmitter<Student>()
-    studentDelete$:EventEmitter<Student>=new EventEmitter<Student>()
-    
+    studentDelete$: EventEmitter<Student> = new EventEmitter<Student>()
+    updateStatus$: EventEmitter<string> = new EventEmitter<string>()
+
     constructor(private http: Http, private toastctrl: ToastController,
         private url: Link, private storage: Storage) {
         this.newofflineattendance$ = new EventEmitter()
@@ -111,7 +115,7 @@ export class AccountService {
             .catch(this.error)
     }
     deletestudent(student: Student): Promise<any> {
-        return this.http.delete(this.link + "api/students/"+ student.id, { headers: this.jheaders }).toPromise()
+        return this.http.delete(this.link + "api/students/" + student.id, { headers: this.jheaders }).toPromise()
             .then(resp => {
                 this.storageaddstudent(resp.json())
                 return resp.json()
@@ -138,8 +142,8 @@ export class AccountService {
             let classes = data as Classes[]
             let clindex = classes.indexOf(classes.filter(cl => cl.id === student.id)[0])
             let theclass = classes[clindex]
-            let studentindex=theclass.students.indexOf(student)
-            theclass.students.splice(studentindex,1)
+            let studentindex = theclass.students.indexOf(student)
+            theclass.students.splice(studentindex, 1)
             classes[clindex] = theclass
             // let thestud=classes.filter(cl=>cl.id == student.class_id)[0]
             //                 .students.filter(stud=>stud.id==student.id)[0];
@@ -203,6 +207,8 @@ export class AccountService {
             if (offlines == null) {
                 offlines = []
                 this.setlocalnot()
+                //Inititate Watchout for internet Connection
+                this.initiatesync()
 
             }
             let offs: Offline[] = offlines as Offline[]
@@ -248,6 +254,64 @@ export class AccountService {
         return this.http.options(this.link + "api/attendance").toPromise()
             .then((resp) => resp.json())
             .catch(this.error)
+    }
+    initiatesync() {
+       // this.nonetnotification=true
+        this.ping().then((data) => {
+            this.dosync()
+        }, (error) => {
+            if (error.url == null) {
+                setTimeout(() => {
+                   this.initiatesync()
+                   console.log("retrying to connect ..")
+                }, 2000);
+                if(this.nonetnotification){
+                     this.updateStatus$.emit("No Internet Connection");
+                     this.nonetnotification=false
+                 }
+               
+                
+            }
+        })
+    }
+    dosync() {
+        this.storage.get("offline").then((data) => {
+            if (data == null) {
+                data = []
+            }
+            else{
+                 this.updateStatus$.emit("Attendance Sync Started ...");
+            }
+            console.log(data)
+            this.offlines = data
+
+            let d = this.offlines.length
+            let comp = 0
+            for (let i = 0; i < this.offlines.length; i++) {
+                console.log("Starting ...", i)
+                this.sync(this.offlines[i], i).then((data) => {
+                    //this.offlines.splice(i, 1)
+                    comp++;
+                    if (d == comp) {
+                         this.storage.set("offline", null)
+                        this.storage.set("lastsync", new Date())
+                        this.storage.set("lastsyncdata", this.offlines)
+                        this.offlines = []
+                        this.updateStatus$.emit("Attendance sync Completed");
+                        console.log("Done syncing..", i)
+                    }
+
+                }, (error) => {
+                    false
+
+                    if (error.url == null) {
+                        this.updateStatus$.emit("No Internet Connection");
+                    }
+                    console.log(error)
+                });
+            }
+            //Close
+        });
     }
 
 

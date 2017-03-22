@@ -1,16 +1,17 @@
 import { Component, OnInit } from '@angular/core';
 
-import { NavController,AlertController , PopoverController } from 'ionic-angular';
+import { NavController, AlertController, PopoverController } from 'ionic-angular';
 import { Storage } from '@ionic/storage'
 import { AccountService } from '../login/account.services'
 import { TakeAttendance } from '../home/takeattendance'
 import { Classes, Student } from '../home/classes'
 import { ClassPopoverPage } from "../home/classpopover.component"
-import {CallNumber} from '@ionic-native/call-number';
+import { CallNumber } from '@ionic-native/call-number';
 
 @Component({
   selector: 'page-about',
-  templateUrl: 'about.html'
+  templateUrl: 'about.html',
+  providers: [CallNumber]
 })
 export class AboutPage implements OnInit {
   user: any
@@ -20,7 +21,7 @@ export class AboutPage implements OnInit {
   index: number = 0
   constructor(public navCtrl: NavController, private account: AccountService,
     private popoverCtrl: PopoverController,
-    private storage: Storage,private alertctrl:AlertController,private callNumber: CallNumber) {
+    private storage: Storage, private alertctrl: AlertController, private call: CallNumber) {
 
   }
   ngOnInit() {
@@ -81,10 +82,10 @@ export class AboutPage implements OnInit {
       }
     })
   }
-   callConfirm(student:Student) {
+  callConfirm(student: Student) {
     let confirm = this.alertctrl.create({
       title: 'Call  Guardian',
-      message: 'Do you want Call to '+student.student_name,
+      message: 'Do you want Call to ' + student.student_name,
       buttons: [
         {
           text: 'Disagree',
@@ -103,11 +104,10 @@ export class AboutPage implements OnInit {
     });
     confirm.present();
   }
-  makecall(phone:string){
-
-    this.callNumber.callNumber('0727290364', true)
-  .then(() => console.log('Launched dialer!'))
-  .catch(() => console.log('Error launching dialer'));
+  makecall(phone: string) {
+    this.call.callNumber('0727290364', true)
+      .then(() => console.log('Launched dialer!'))
+      .catch(() => console.log('Error launching dialer'));
 
   }
 

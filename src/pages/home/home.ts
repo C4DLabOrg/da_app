@@ -40,8 +40,20 @@ export class AttendancePage implements OnInit {
     this.getclasses()
     this.event = new Date().toISOString()
     this.onStudentsChange()
+    this.initiatesync()
   }
-   onStudentsChange() {
+  initiatesync() {
+    this.account.initiatesync()
+    this.account.updateStatus$.subscribe((message) => {
+      console.log(message);
+      this.showtoast(message,false,"top")
+    })
+  }
+  simupdate(){
+    this.account.initiatesync()
+  }
+
+  onStudentsChange() {
     this.account.studentsChange$.subscribe((student) => {
       let clindex = this.classes.indexOf(this.classes.filter(cl => cl.id === student.class_id)[0])
       let theclass = this.classes[clindex]
@@ -57,30 +69,36 @@ export class AttendancePage implements OnInit {
       this.classes[clindex] = theclass
     });
 
-    this.account.studentDelete$.subscribe((student)=>{
-       let clindex = this.classes.indexOf(this.classes.filter(cl => cl.id === student.class_id)[0])
+    this.account.studentDelete$.subscribe((student) => {
+      let clindex = this.classes.indexOf(this.classes.filter(cl => cl.id === student.class_id)[0])
       let theclass = this.classes[clindex]
       let studindex = theclass.students.indexOf(theclass.students.filter(stud => stud.id === student.id)[0])
-      theclass.students.splice(studindex,1)
-      this.classes[clindex]=theclass
+      theclass.students.splice(studindex, 1)
+      this.classes[clindex] = theclass
     })
   }
   datechange(value) {
     this.clearattendance()
     console.log(this.event)
   }
-  showtoast(name: string, status: boolean) {
+  showtoast(name: string, status: boolean,position:string) {
     if (this.toast) {
-      this.toast.dismiss()
+      if(this.toast.position==position){
+        this.toast.dismiss()
+      }
+      
     }
     let message = ""
     if (status) {
       message = name + "  is Present";
     }
+    else{
+      message=name
+    }
     this.toast = this.toastctrl.create({
       message: message,
       duration: 3000,
-      position: 'bottom'
+      position: position
     });
     this.toast.onDidDismiss(() => {
       this.toast = null
@@ -91,7 +109,7 @@ export class AttendancePage implements OnInit {
   onchange(val, name) {
     console.log(val)
     if (val) {
-      this.showtoast(name, val)
+      this.showtoast(name, val,"bottom")
     }
   }
 
