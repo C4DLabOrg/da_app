@@ -7,11 +7,11 @@ import {Student} from '../pages/home/classes'
   Angular 2 Pipes.
 */
 @Pipe({
-  name: 'app-search',
+  name: 'student',
   pure:true
 })
 @Injectable()
-export class AppSearch {
+export class StudentSearch {
   /*
     Takes a value and makes it lowercase.
    */
@@ -19,7 +19,7 @@ export class AppSearch {
      if (searchTerm) {
         searchTerm = searchTerm.toUpperCase();
         return list.filter(item => {
-          return item.lstname //.toUpperCase().indexOf(searchTerm) !== -1 
+          return item.student_name.toLowerCase().includes(searchTerm.toLowerCase())  //.toUpperCase().indexOf(searchTerm) !== -1 
         });
       } else {
         return list;

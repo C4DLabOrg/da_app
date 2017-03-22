@@ -21,7 +21,7 @@
             </ion-item-divider>
 
             <div class="spacer" style="height: 10px;"></div>
-            <ion-item *ngFor="let stud of classes[index].students;let i=index">
+            <ion-item *ngFor="let stud of classes[index].students|student:studname;let i=index">
                   <ion-label>
                         <ion-badge item-right>{{i+1}}</ion-badge>{{stud.student_name}}
                         <div class="spacer" style="height: 4px;"></div>
@@ -32,7 +32,7 @@
 
                   <a ion-button (click)="presentModal(stud,'update')" small item-right>Edit</a>
 
-                  <a ion-button small item-right color="danger" (click)="showConfirm()">Delete</a>
+                  <a ion-button small item-right color="danger" (click)="deleteConfirm(stud)">Delete</a>
                   
               
           </ion-item>

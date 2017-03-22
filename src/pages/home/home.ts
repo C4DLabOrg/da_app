@@ -56,6 +56,14 @@ export class AttendancePage implements OnInit {
 
       this.classes[clindex] = theclass
     });
+
+    this.account.studentDelete$.subscribe((student)=>{
+       let clindex = this.classes.indexOf(this.classes.filter(cl => cl.id === student.class_id)[0])
+      let theclass = this.classes[clindex]
+      let studindex = theclass.students.indexOf(theclass.students.filter(stud => stud.id === student.id)[0])
+      theclass.students.splice(studindex,1)
+      this.classes[clindex]=theclass
+    })
   }
   datechange(value) {
     this.clearattendance()

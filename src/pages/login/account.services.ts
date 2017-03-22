@@ -22,6 +22,8 @@ export class AccountService {
     jheaders: Headers
     newofflineattendance$: EventEmitter<any> = new EventEmitter()
     studentsChange$: EventEmitter<Student> = new EventEmitter<Student>()
+    studentDelete$:EventEmitter<Student>=new EventEmitter<Student>()
+    
     constructor(private http: Http, private toastctrl: ToastController,
         private url: Link, private storage: Storage) {
         this.newofflineattendance$ = new EventEmitter()
@@ -108,6 +110,14 @@ export class AccountService {
             })
             .catch(this.error)
     }
+    deletestudent(student: Student): Promise<any> {
+        return this.http.delete(this.link + "api/students/"+ student.id, { headers: this.jheaders }).toPromise()
+            .then(resp => {
+                this.storageaddstudent(resp.json())
+                return resp.json()
+            })
+            .catch(this.error)
+    }
     storageaddstudent(student: Student) {
         this.storage.get("classes").then((data) => {
             let classes = data as Classes[]
@@ -119,6 +129,22 @@ export class AccountService {
             //                 .students.filter(stud=>stud.id==student.id)[0];
             this.storage.set("classes", classes).then((data) => {
                 this.studentsChange$.emit(student);
+            });
+
+        })
+    }
+    storagedeletestudent(student: Student) {
+        this.storage.get("classes").then((data) => {
+            let classes = data as Classes[]
+            let clindex = classes.indexOf(classes.filter(cl => cl.id === student.id)[0])
+            let theclass = classes[clindex]
+            let studentindex=theclass.students.indexOf(student)
+            theclass.students.splice(studentindex,1)
+            classes[clindex] = theclass
+            // let thestud=classes.filter(cl=>cl.id == student.class_id)[0]
+            //                 .students.filter(stud=>stud.id==student.id)[0];
+            this.storage.set("classes", classes).then((data) => {
+                this.studentDelete$.emit(student);
             });
 
         })

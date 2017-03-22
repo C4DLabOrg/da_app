@@ -22,6 +22,7 @@ import {AddStudentModal} from '../pages/headteacher/students/addstudent'
 import {AddTeacherModal} from '../pages/headteacher/teachers/addteacher'
 import { HDTeachersPage} from '../pages/headteacher/teachers/teachers'
 import {HDSync} from '../pages/sync/sync'
+import {StudentSearch} from '../pipes/student-search'
 @NgModule({
   declarations: [
     MyApp,
@@ -41,7 +42,7 @@ import {HDSync} from '../pages/sync/sync'
     AddStudentModal,
     AddTeacherModal,
     HDTeachersPage,
-    HDSync
+    HDSync,StudentSearch
 
   ],
   imports: [ ChartModule,

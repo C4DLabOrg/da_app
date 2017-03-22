@@ -1,15 +1,17 @@
 import { Component, OnInit } from '@angular/core';
 import { AccountService } from '../../login/account.services'
 import { TakeAttendance } from '../../home/takeattendance'
-import { Classes } from '../../home/classes'
+import { Classes,Student } from '../../home/classes'
 import { ClassPopoverPage } from '../../home/classpopover.component'
 import { AddStudentModal } from './addstudent'
+
 import { NavController, ToastController, AlertController, PopoverController, ModalController } from 'ionic-angular';
 import { Storage } from '@ionic/storage'
 
 @Component({
   selector: 'page-students',
-  templateUrl: 'students.html'
+  templateUrl: 'students.html',
+
 })
 export class HDStudentPage implements OnInit {
 
@@ -49,6 +51,22 @@ export class HDStudentPage implements OnInit {
 
       this.classes[clindex] = theclass
     });
+
+    this.account.studentDelete$.subscribe((student) => {
+      let clindex = this.classes.indexOf(this.classes.filter(cl => cl.id === student.class_id)[0])
+      let theclass = this.classes[clindex]
+      let studindex = theclass.students.indexOf(theclass.students.filter(stud => stud.id === student.id)[0])
+      theclass.students.splice(studindex, 1)
+      this.classes[clindex] = theclass
+    })
+  }
+
+  deletestudent(student:Student) {
+    this.account.deletestudent(student).then((resp) => {
+      console.log("Updated student", resp)
+    }, (error) => {
+      console.log(error)
+    })
   }
   datechange(value) {
     console.log(this.event)
@@ -165,7 +183,7 @@ export class HDStudentPage implements OnInit {
 
   }
 
-  showConfirm() {
+  deleteConfirm(student:Student) {
     let confirm = this.alertctrl.create({
       title: 'Delete Student',
       message: 'Do you want to delete this student?',
@@ -179,6 +197,7 @@ export class HDStudentPage implements OnInit {
         {
           text: 'Agree',
           handler: () => {
+            this.deletestudent(student)
             console.log('Agree clicked');
           }
         }
