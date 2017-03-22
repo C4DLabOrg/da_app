@@ -20,7 +20,7 @@ export class AccountService {
     offlines: Offline[]
     classes: Classes[]
     clock: any
-    nonetnotification:boolean=true
+    nonetnotification: boolean = true
     private headers = new Headers({ "Content-Type": "application/x-www-form-urlencoded" })
     jheaders: Headers
     newofflineattendance$: EventEmitter<any> = new EventEmitter()
@@ -69,6 +69,17 @@ export class AccountService {
         })
 
     }
+    attendancelocalnot() {
+        LocalNotifications.schedule({
+            id: 3,
+            title: "Digital Attendance",
+            text: "Please Remember to Take Attendance",
+            at: new Date(new Date().getTime() + 1 * 1000 * 60 * 60 * 24 *1),
+            every: "everyday"
+        });
+        alert("set")
+
+    }
     profile(): Promise<any> {
         //this.jheaders = new Headers({ "Content-Type": "application/json", "Authorization": "Bearer " + token })
         return this.http.get(this.link + "api/teacher", { headers: this.jheaders }).toPromise()
@@ -78,7 +89,7 @@ export class AccountService {
     takeattendance(data: TakeAttendance): Promise<any> {
         return this.http.post(this.link + "api/attendance", data, { headers: this.jheaders }).toPromise()
             .then((respose) => {
-
+                this.attendancelocalnot()
                 respose.json()
             })
             .catch((error) => this.handleattendance(error, data))
@@ -175,12 +186,19 @@ export class AccountService {
         if (error.url == null) {
             console.log("No internet", attendance)
             this.saveoffline(attendance)
+            this.attendancelocalnot()
             return Promise.resolve([])
         }
         else {
             return Promise.reject(error.message || error)
         }
 
+    }
+    saveattendancehostory(attendance: TakeAttendance) {
+        this.storage.get("attendancehistory").then((data: TakeAttendance[]) => {
+            data == null ? data = [] : data = data;
+            console.log("Saved Attendances ", data)
+        })
     }
     getreport(id, date: any): Promise<any> {
         return this.http.get(this.link + "api/attendances/daily?_class=" + id + "&date=" + date).toPromise()
@@ -256,21 +274,21 @@ export class AccountService {
             .catch(this.error)
     }
     initiatesync() {
-       // this.nonetnotification=true
+        // this.nonetnotification=true
         this.ping().then((data) => {
             this.dosync()
         }, (error) => {
             if (error.url == null) {
                 setTimeout(() => {
-                   this.initiatesync()
-                   console.log("retrying to connect ..")
+                    this.initiatesync()
+                    console.log("retrying to connect ..")
                 }, 2000);
-                if(this.nonetnotification){
-                     this.updateStatus$.emit("No Internet Connection");
-                     this.nonetnotification=false
-                 }
-               
-                
+                if (this.nonetnotification) {
+                    this.updateStatus$.emit("No Internet Connection");
+                    this.nonetnotification = false
+                }
+
+
             }
         })
     }
@@ -279,8 +297,8 @@ export class AccountService {
             if (data == null) {
                 data = []
             }
-            else{
-                 this.updateStatus$.emit("Attendance Sync Started ...");
+            else {
+                this.updateStatus$.emit("Attendance Sync Started ...");
             }
             console.log(data)
             this.offlines = data
@@ -293,7 +311,7 @@ export class AccountService {
                     //this.offlines.splice(i, 1)
                     comp++;
                     if (d == comp) {
-                         this.storage.set("offline", null)
+                        this.storage.set("offline", null)
                         this.storage.set("lastsync", new Date())
                         this.storage.set("lastsyncdata", this.offlines)
                         this.offlines = []

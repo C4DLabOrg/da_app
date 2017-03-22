@@ -48,6 +48,7 @@ export class AttendancePage implements OnInit {
       console.log(message);
       this.showtoast(message,false,"top")
     })
+  //  this.account.saveattendancehostory()
   }
   simupdate(){
     this.account.initiatesync()
