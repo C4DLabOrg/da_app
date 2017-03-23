@@ -6,27 +6,77 @@
 
 <ion-content class="tutorial-page">
 
-      <ion-row wrap style="background-color:#3f51b5; height: 155px;">
-        <p style="color: white;text-align: center; font-weight: 700; font-size: 16px; padding-top: 15%;padding-left:40%;text-align: center;  white-space: normal;" (click)="students()">Students</p> 
-      </ion-row>
-      <div class="spacer" style="height: 5px;"></div>
+  <!--<ion-row wrap style="background-color:#3f51b5; height: 155px;">
+    <p style="color: white;text-align: center; font-weight: 700; font-size: 16px; padding-top: 15%;padding-left:40%;text-align: center;  white-space: normal;"
+      (click)="students()"> Add and Update Students Details</p>
+  </ion-row>
+  <div class="spacer" style="height: 5px;"></div>
+  <ion-row wrap style="background-color:#3f51b5; height: 155px;">
+    <p style="color: white;text-align: center; font-weight: 700; font-size: 16px; padding-top: 15%;padding-left:40%;text-align: center;  white-space: normal;"
+      (click)="studentdetails()">View Students Details</p>
+  </ion-row>
+  <div class="spacer" style="height: 5px;"></div>
 
-       <ion-row wrap style="background-color:#3f51b5; height: 155px;">
-        <p style="color: white;text-align: center; font-weight: 700; font-size: 16px; padding-top: 15%;padding-left:40%;text-align: center;  white-space: normal;"(click)="teachers()">Teachers</p>          
-      </ion-row>
-      <div class="spacer" style="height: 5px;"></div>
-        
-       <ion-row wrap style="background-color:#3f51b5; height: 155px;">
-        <p style="color: white;text-align: center; font-weight: 700; font-size: 16px; padding-top: 15%;padding-left:40%;text-align: center;  white-space: normal;">Classes</p>  
-      </ion-row>
-  
-     
-      
+  <ion-row wrap style="background-color:#3f51b5; height: 155px;">
+    <p style="color: white;text-align: center; font-weight: 700; font-size: 16px; padding-top: 15%;padding-left:40%;text-align: center;  white-space: normal;"
+      (click)="teachers()">Teachers</p>
+  </ion-row>
+  <div class="spacer" style="height: 5px;"></div>
+
+  <ion-row wrap style="background-color:#3f51b5; height: 155px;">
+    <p style="color: white;text-align: center; font-weight: 700; font-size: 16px; padding-top: 15%;padding-left:40%;text-align: center;  white-space: normal;">Classes</p>
+  </ion-row>-->
+  <ion-card color="primary">
+    <ion-card-header>
+      Students
+    </ion-card-header>
+
+    <ion-list>
+      <button (click)="students()" ion-item>
+      <ion-icon name="add-circle" item-left></ion-icon>
+      Add and  Edit Students
+    </button>
+
+      <button (click)="studentdetails()" ion-item>
+      <ion-icon name="list-box" item-left></ion-icon>
+      View Student details
+    </button>
+    </ion-list>
+  </ion-card>
+
+  <ion-card color="primary">
+    <ion-card-header>
+      Teachers
+    </ion-card-header>
+
+    <button   ion-item>
+      <ion-icon name="contacts" item-left></ion-icon>
+      Teachers
+    </button>
+    
+    <ion-list>
+    </ion-list>
+  </ion-card>
+  <ion-card color="primary">
+    <ion-card-header>
+      Classes
+    </ion-card-header>
+
+    <button   ion-item>
+      <ion-icon name="list" item-left></ion-icon>
+      Classes
+    </button>
+    <ion-list>
+    </ion-list>
+  </ion-card>
+
+
+
 </ion-content>
 
 
 
-              <!--<ion-slide-page>
+<!--<ion-slide-page>
                 <div style="background-color: mediumseagreen; border-radius: 5px; height: 160px;">
                 <p style="color: #FFFFFF; font-size: 16px; font-size: calc(12px + 4px); font-weight: 500; display: block; text-align: center; line-height: 150px">Sense With Cents</p>    
                 </div>   

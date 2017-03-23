@@ -14,6 +14,7 @@ export class AddStudentModal {
     studform: FormGroup
     class_id:number
     classes:Classes[]
+    load:boolean=false
     constructor(private viewCtrl: ViewController, private params: NavParams
         , private formBuilder: FormBuilder,private account:AccountService) {
         this.type = this.params.get("type")
@@ -63,17 +64,24 @@ export class AddStudentModal {
         }
     }
     newstudent(data){
+        this.load=true
         this.account.createstudent(data).then((resp)=>{
+             this.load=false
            console.log(resp)
            this.dismiss()
         },
-        (error)=>{console.log(error)})
+        (error)=>{
+            this.load=false
+            console.log(error)})
     }
     updatestudent(data){
+         this.load=true
         this.account.updatestudent(this.student.id,data).then((resp)=>{
+            this.load=false
             console.log("Updated student",resp)
              this.dismiss()
         },(error)=>{
+            this.load=false
             console.log(error)
         })
     }

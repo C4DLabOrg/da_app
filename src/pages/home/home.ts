@@ -25,6 +25,7 @@ export class AttendancePage implements OnInit {
   selectedclass: Classes
   toast: any
   confirm: any
+  attendancetaken: boolean = false
   mindate: string = this.addDays(new Date(), 14)
   maxdate: string = new Date().toISOString()
   constructor(public navCtrl: NavController,
@@ -46,11 +47,11 @@ export class AttendancePage implements OnInit {
     this.account.initiatesync()
     this.account.updateStatus$.subscribe((message) => {
       console.log(message);
-      this.showtoast(message,false,"top")
+      this.showtoast(message, false, "top")
     })
-  //  this.account.saveattendancehostory()
+    //  this.account.saveattendancehostory()
   }
-  simupdate(){
+  simupdate() {
     this.account.initiatesync()
   }
 
@@ -68,7 +69,7 @@ export class AttendancePage implements OnInit {
       }
 
       this.classes[clindex] = theclass
-   
+
     });
 
     this.account.studentDelete$.subscribe((student) => {
@@ -78,24 +79,31 @@ export class AttendancePage implements OnInit {
       theclass.students.splice(studindex, 1)
       this.classes[clindex] = theclass
     })
+    this.account.newclasslist$.subscribe((data)=>{
+      this.getclasses()
+      console.log("new list");
+    });
+  }
+  getclassattendance() {
+
   }
   datechange(value) {
     this.clearattendance()
     console.log(this.event)
   }
-  showtoast(name: string, status: boolean,position:string) {
+  showtoast(name: string, status: boolean, position: string) {
     if (this.toast) {
-      if(this.toast.position==position){
+      if (this.toast.position == position) {
         this.toast.dismiss()
       }
-      
+
     }
     let message = ""
     if (status) {
       message = name + "  is Present";
     }
-    else{
-      message=name
+    else {
+      message = name
     }
     this.toast = this.toastctrl.create({
       message: message,
@@ -111,7 +119,7 @@ export class AttendancePage implements OnInit {
   onchange(val, name) {
     console.log(val)
     if (val) {
-      this.showtoast(name, val,"bottom")
+      this.showtoast(name, val, "bottom")
     }
   }
 
@@ -123,14 +131,40 @@ export class AttendancePage implements OnInit {
   }
   selectclass(id) {
     this.selectedclass = this.classes[id]
-    for (let i = 0; i < this.selectedclass.students.length; i++) {
-      this.selectedclass.students[i].status = false
-    }
+    this.clearattendance()
   }
   clearattendance() {
-    for (let i = 0; i < this.selectedclass.students.length; i++) {
-      this.selectedclass.students[i].status = false
-    }
+
+    this.storage.get(this.selectedclass.class_name).then((data: TakeAttendance[]) => {
+      data == null ? data = [] : data = data;
+      let takenattendances = data.filter(att => att.date == this.event.split("T")[0]).filter(att => att.class_name == this.selectedclass.class_name)
+      if (takenattendances.length > 0) {
+        this.attendancetaken=true
+        let attend=takenattendances[0] as TakeAttendance
+         for (let i = 0; i < this.selectedclass.students.length; i++) {
+          let student=this.selectedclass.students[i]
+          let index=attend.present.indexOf(student.id)
+          if( index== -1){
+             this.selectedclass.students[i].status = false
+           }
+           else{
+              this.selectedclass.students[i].status = true
+           }       
+         
+
+        } 
+
+      }
+      else {
+        this.attendancetaken=false
+        for (let i = 0; i < this.selectedclass.students.length; i++) {
+          this.selectedclass.students[i].status = false
+        }
+      }
+
+
+    })
+
   }
   presentPopover(myEvent) {
     let popover = this.popoverCtrl.create(ClassPopoverPage, { "classes": this.classes });
@@ -212,7 +246,8 @@ export class AttendancePage implements OnInit {
       this.account.takeattendance(this.takeattendance).then((response) => {
 
         this.load = false
-        this.clearattendance()
+        this.attendancetaken=true
+       // this.clearattendance()
         //   console.log(response)
         this.navCtrl.push(ResultPage, { "attendance": this.takeattendance, "response": response })
       }, (error) => {

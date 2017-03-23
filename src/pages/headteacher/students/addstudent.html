@@ -81,7 +81,7 @@
     </ion-item>
 
      <div class="spacer" style="height:10px;"></div>
-    <button ion-button full type="submit" [disabled]="!studform.valid"> <span *ngIf="type">{{type}}</span></button>
+    <button ion-button full type="submit" [disabled]="!studform.valid || load"> <span *ngIf="type">{{load?'Loading ...':type}}</span></button>
     
   </form>
 

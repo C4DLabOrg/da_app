@@ -27,7 +27,7 @@ export class AccountService {
     studentsChange$: EventEmitter<Student> = new EventEmitter<Student>()
     studentDelete$: EventEmitter<Student> = new EventEmitter<Student>()
     updateStatus$: EventEmitter<string> = new EventEmitter<string>()
-
+    newclasslist$:EventEmitter<any>=new EventEmitter()
     constructor(private http: Http, private toastctrl: ToastController,
         private url: Link, private storage: Storage) {
         this.newofflineattendance$ = new EventEmitter()
@@ -43,6 +43,9 @@ export class AccountService {
             .toPromise()
             .then(response => response.json() as Token)
             .catch(this.error)
+    }
+    newclasslist(){
+        this.newclasslist$.emit("new list");
     }
     public getauth() {
         this.storage.get("user").then((data) => {
@@ -77,8 +80,7 @@ export class AccountService {
             at: new Date(new Date().getTime() + 1 * 1000 * 60 * 60 * 24 * 1),
             every: "everyday"
         });
-        alert("set")
-
+      
     }
     profile(): Promise<any> {
         //this.jheaders = new Headers({ "Content-Type": "application/json", "Authorization": "Bearer " + token })
@@ -90,7 +92,8 @@ export class AccountService {
         return this.http.post(this.link + "api/attendance", data, { headers: this.jheaders }).toPromise()
             .then((respose) => {
                 this.attendancelocalnot()
-                respose.json()
+                 this.saveattendancehistory(data)
+                return respose.json()
             })
             .catch((error) => this.handleattendance(error, data))
     }
@@ -193,6 +196,7 @@ export class AccountService {
             console.log("No internet", attendance)
             this.saveoffline(attendance)
             this.attendancelocalnot()
+            this.saveattendancehistory(attendance)
             return Promise.resolve([])
         }
         else {
@@ -200,9 +204,26 @@ export class AccountService {
         }
 
     }
-    saveattendancehostory(attendance: TakeAttendance) {
-        this.storage.get("attendancehistory").then((data: TakeAttendance[]) => {
+    saveattendancehistory(attendance: TakeAttendance) {
+        this.storage.get(attendance.class_name).then((data: TakeAttendance[]) => {
             data == null ? data = [] : data = data;
+             if(data.length >=24){
+                data.splice(0,1)
+            }
+            if(data.length==0){
+                data.push(attendance)
+            }
+            else{
+                let attends=data.filter(attend =>attend.date==attendance.date)
+                if(attends.length>0){
+                    let index=data.indexOf(attends[0])
+                    data[index]=attendance
+                }
+                else{
+                    data.push(attendance)
+                }
+            }
+            this.storage.set(attendance.class_name,data);
             console.log("Saved Attendances ", data)
         })
     }
@@ -253,12 +274,13 @@ export class AccountService {
         });
     }
     sync(data: Offline, index: number): Promise<any> {
-        return this.http.post(data.link, data.attendance, this.jheaders).toPromise()
-            .then((response) => {
-                //this.deleteoffline(index)
-                response.json()
-            })
-            .catch(this.error)
+        return this.takeattendance(data.attendance).then(data=>data).catch(this.error)
+        // return this.http.post(data.link, data.attendance, this.jheaders).toPromise()
+        //     .then((response) => {
+        //         //this.deleteoffline(index)
+        //         response.json()
+        //     })
+        //     .catch(this.error)
     }
     private deleteoffline(index: number) {
         this.storage.get("offline").then((offlines) => {

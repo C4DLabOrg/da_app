@@ -14,14 +14,16 @@
 
       <div class="spacer" style="height: 2px;"></div>
       <ion-list *ngIf="classes">
-            <ion-item-divider color="primary">Student Details </ion-item-divider>
+            <ion-item-divider color="primary">Student Details
+
+            </ion-item-divider>
             <div class="spacer" style="height: 10px;"></div>
             <button ion-button clear>
                   <ion-icon name='calendar' style="color: #d03e84"></ion-icon>
 
                          <!--<p style="color:#d03e84 ">&nbsp; &nbsp; 30th January 2017</p>-->
                            <ion-datetime  style="color:#d03e84 " [min]="mindate" [max]="maxdate" displayFormat="  DD MMMM YYYY" (ionChange)="datechange(event)" pickerFormat="DD MMM  YYYY" [(ngModel)]="event"></ion-datetime>
-
+                            <ion-note *ngIf="attendancetaken" color="green" item-right><ion-icon name="checkmark-circle"></ion-icon></ion-note>
             </button>
             <ion-item *ngFor="let stud of classes[index].students|orderBy:'gender':true;let i=index">
                   <ion-label>
@@ -32,8 +34,8 @@
 
                   </ion-label>
 
-                  <ion-checkbox (ngModelChange)="onchange($event,stud.student_name)" item-right [(ngModel)]="stud.status" ></ion-checkbox>
-</ion-item>
+                  <ion-checkbox (ngModelChange)="onchange($event,stud.student_name)" item-right [(ngModel)]="stud.status"></ion-checkbox>
+            </ion-item>
 
             <!--<ion-item>
              <ion-label>Daenerys Targaryen
@@ -103,7 +105,8 @@
 
       </ion-list>
 
-      <button [disabled]="load" ion-button block (click)="confirmattendance()">{{  load==false ? 'Submit' : 'Submitting ...' }}</button>
+      <button *ngIf="!attendancetaken" [disabled]="load" ion-button block (click)="confirmattendance()">{{  load==false ? 'Submit' : 'Submitting ...' }}</button>
+       <button *ngIf="attendancetaken" [disabled]="load" ion-button block (click)="confirmattendance()">{{  load==false ? 'Update Attendance' : 'Updating ...' }}</button>
       <div class="spacer" style="height: 20px;"></div>
 
 </ion-content>

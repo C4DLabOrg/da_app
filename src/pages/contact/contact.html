@@ -34,11 +34,16 @@
     <ion-item-divider color="primary">Application</ion-item-divider>
 
     <div class="spacer" style="height:10px;"></div>
-      
+
     <button (click)="gosync()" ion-item>
         Update Attendance
         <ion-icon name="sync" style="color: #3f51b5" item-left></ion-icon>
       </button>
+    <button [disabled]="load" (click)="downloadlist()" ion-item>
+     Download Latest Class List
+      <ion-icon name="cloud-download" item-left style="color: #3f51b5"></ion-icon>
+    </button>
+
 
     <ion-item>
       About and Help

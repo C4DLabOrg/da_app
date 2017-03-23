@@ -4,6 +4,7 @@ import { NavController } from 'ionic-angular';
 import {Storage} from '@ionic/storage';
 import { HDStudentPage} from '../students/students'
 import {HDTeachersPage} from '../teachers/teachers'
+import {AboutPage} from '../../about/about'
 
 @Component({
   selector: 'page-about',
@@ -26,7 +27,10 @@ export class HDSchoolPage implements OnInit {
    students(){
     this.navCtrl.push(HDStudentPage)
   }
-   teachers(){
+   studentdetails(){
+    this.navCtrl.push(AboutPage)
+  }
+    teachers(){
     this.navCtrl.push(HDTeachersPage)
   }
 

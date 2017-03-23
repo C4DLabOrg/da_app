@@ -25,6 +25,8 @@ export class HDStudentPage implements OnInit {
   selectedclass: Classes
   toast: any
   confirm: any
+  dload:boolean=false
+  stdid:number=0
   constructor(public navCtrl: NavController,
     private popoverCtrl: PopoverController, private modalctrl: ModalController,
     private storage: Storage, private account: AccountService,
@@ -60,13 +62,17 @@ export class HDStudentPage implements OnInit {
       theclass.students.splice(studindex, 1)
       this.classes[clindex] = theclass
     })
+      this.account.newclasslist$.subscribe((data)=>{
+      this.getclasses()
+    });
   }
 
   deletestudent(student:Student) {
-  
+    this.dload=true
     this.account.deletestudent(student).then((resp) => {
-     
+     this.dload=false
     }, (error) => {
+      this.dload=false
       console.log(error)
     })
   }
@@ -186,6 +192,7 @@ export class HDStudentPage implements OnInit {
   }
 
   deleteConfirm(student:Student) {
+    this.stdid=student.id
     let confirm = this.alertctrl.create({
       title: 'Delete Student',
       message: 'Do you want to delete this student?',

@@ -24,6 +24,7 @@ import { HDTeachersPage} from '../pages/headteacher/teachers/teachers'
 import {HDSync} from '../pages/sync/sync'
 import {StudentSearch} from '../pipes/student-search'
 import { Ng2OrderModule } from 'ng2-order-pipe';
+
 @NgModule({
   declarations: [
     MyApp,

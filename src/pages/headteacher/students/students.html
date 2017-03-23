@@ -26,13 +26,13 @@
                         <ion-badge item-right>{{i+1}}</ion-badge>{{stud.student_name}}
                         <div class="spacer" style="height: 4px;"></div>
 
-                        <p style="font-size: 13px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {{stud.class_id}}</p>
+                        <p style="font-size: 13px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {{stud.emis_code}}</p>
 
                   </ion-label>
 
                   <a ion-button (click)="presentModal(stud,'update')" small item-right>Edit</a>
 
-                  <a ion-button small item-right color="danger" (click)="deleteConfirm(stud)">Delete</a>
+                  <button ion-button small item-right color="danger" [disabled]="dload && stdid==stud.id" (click)="deleteConfirm(stud)">Delete</button>
                   
               
           </ion-item>
