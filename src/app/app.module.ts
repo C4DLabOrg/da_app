@@ -23,6 +23,7 @@ import {AddTeacherModal} from '../pages/headteacher/teachers/addteacher'
 import { HDTeachersPage} from '../pages/headteacher/teachers/teachers'
 import {HDSync} from '../pages/sync/sync'
 import {StudentSearch} from '../pipes/student-search'
+import { Ng2OrderModule } from 'ng2-order-pipe';
 @NgModule({
   declarations: [
     MyApp,
@@ -45,7 +46,7 @@ import {StudentSearch} from '../pipes/student-search'
     HDSync,StudentSearch
 
   ],
-  imports: [ ChartModule,
+  imports: [ ChartModule,Ng2OrderModule,
     IonicModule.forRoot(MyApp)
   ],
   bootstrap: [IonicApp],

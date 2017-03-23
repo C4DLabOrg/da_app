@@ -28,8 +28,14 @@ export class LoginPage {
     this.loader = this.loadctrl.create({ content: message })
     this.loader.present();
   }
-  gotoPage() {
-    this.navCtrl.setRoot(TabsPage)
+  gotoPage(data) {
+    if(data.headteacher){
+          this.navCtrl.setRoot(HDTabsPage)
+    }
+    else{
+          this.navCtrl.setRoot(TabsPage)
+    }
+
   }
   login() {
     this.error = null;
@@ -112,7 +118,7 @@ export class LoginPage {
         this.storage.set("reasons", data.reasons)
         this.storage.set("classes", data.classes).then(() => {
           this.loader.dismiss();
-          this.gotoPage()
+          this.gotoPage(data.profile)
         })
       }).catch((error) => {
         this.loader.dismiss();

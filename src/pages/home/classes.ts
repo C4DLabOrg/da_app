@@ -19,5 +19,7 @@ export class Student{
     student_id:number
     status:boolean=false
     date_enrolled:string    
+    guardian_name:string
+    guardian_phone:string
 
 }

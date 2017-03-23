@@ -27,6 +27,8 @@ export class AddStudentModal {
             midname: [''],
             class_id: ['', Validators.required],
             gender: ['' ],
+            guardian_name: ['' ],
+            guardian_phone: ['' ],
             date_enrolled:['',Validators.required]
         });
         if(this.student){
@@ -36,6 +38,8 @@ export class AddStudentModal {
                 midname:this.student.midname,
                 class_id:this.class_id,
                 gender:this.student.gender,
+                guardian_phone:this.student.guardian_phone,
+                guardian_name:this.student.guardian_name,
                 date_enrolled:this.student.date_enrolled
             })
         }

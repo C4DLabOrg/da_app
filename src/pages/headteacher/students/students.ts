@@ -53,6 +53,7 @@ export class HDStudentPage implements OnInit {
     });
 
     this.account.studentDelete$.subscribe((student) => {
+      console.log("removing from ...")
       let clindex = this.classes.indexOf(this.classes.filter(cl => cl.id === student.class_id)[0])
       let theclass = this.classes[clindex]
       let studindex = theclass.students.indexOf(theclass.students.filter(stud => stud.id === student.id)[0])
@@ -62,8 +63,9 @@ export class HDStudentPage implements OnInit {
   }
 
   deletestudent(student:Student) {
+  
     this.account.deletestudent(student).then((resp) => {
-      console.log("Updated student", resp)
+     
     }, (error) => {
       console.log(error)
     })

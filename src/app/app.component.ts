@@ -27,9 +27,19 @@ export class MyApp implements OnInit {
 
   gotoApp() {
     this.storage.get("user").then((val) => {
+     
       console.log(val)
       if (val) {
-        this.rootPage=TabsPage
+         this.storage.get("profile").then((profile)=>{
+           if(profile.headteacher){
+              this.rootPage=HDTabsPage
+           }
+           else{
+               this.rootPage=TabsPage
+           }
+        
+      })
+      
       }
       else {
         this.rootPage=LoginPage

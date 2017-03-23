@@ -21,7 +21,7 @@
       <ion-icon name="search" item-left></ion-icon>
     </ion-item-divider>
     <div class="spacer" style="height: 10px;"></div>
-    <ion-item-sliding #item *ngFor="let stud of classes[index].students|student:studname;let i=index">
+    <ion-item-sliding #item *ngFor="let stud of classes[index].students|orderBy:'gender':true|student:studname;let i=index">
       <ion-item>
         <ion-label>
           <ion-badge item-right>{{i+1}}</ion-badge>{{stud.student_name}}

@@ -23,7 +23,7 @@
                            <ion-datetime  style="color:#d03e84 " [min]="mindate" [max]="maxdate" displayFormat="  DD MMMM YYYY" (ionChange)="datechange(event)" pickerFormat="DD MMM  YYYY" [(ngModel)]="event"></ion-datetime>
 
             </button>
-            <ion-item *ngFor="let stud of classes[index].students;let i=index">
+            <ion-item *ngFor="let stud of classes[index].students|orderBy:'gender':true;let i=index">
                   <ion-label>
                         <ion-badge item-right>{{i+1}}</ion-badge>{{stud.student_name}}
                         <div class="spacer" style="height: 4px;"></div>

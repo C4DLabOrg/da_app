@@ -74,7 +74,7 @@ export class AccountService {
             id: 3,
             title: "Digital Attendance",
             text: "Please Remember to Take Attendance",
-            at: new Date(new Date().getTime() + 1 * 1000 * 60 * 60 * 24 *1),
+            at: new Date(new Date().getTime() + 1 * 1000 * 60 * 60 * 24 * 1),
             every: "everyday"
         });
         alert("set")
@@ -126,9 +126,10 @@ export class AccountService {
             .catch(this.error)
     }
     deletestudent(student: Student): Promise<any> {
+        console.log(student)
         return this.http.delete(this.link + "api/students/" + student.id, { headers: this.jheaders }).toPromise()
             .then(resp => {
-                this.storageaddstudent(resp.json())
+                this.storagedeletestudent(student)
                 return resp.json()
             })
             .catch(this.error)
@@ -149,15 +150,20 @@ export class AccountService {
         })
     }
     storagedeletestudent(student: Student) {
+        console.log("deleting ..student", student)
         this.storage.get("classes").then((data) => {
             let classes = data as Classes[]
-            let clindex = classes.indexOf(classes.filter(cl => cl.id === student.id)[0])
+            let theclasses = classes.filter(cl => cl.id === student.class_id)
+            let clindex = classes.indexOf(classes.filter(cl => cl.id === student.class_id)[0])
+            console.log("clindex", clindex, theclasses.length)
             let theclass = classes[clindex]
-            let studentindex = theclass.students.indexOf(student)
+            let studentindex = theclass.students.indexOf(theclass.students.filter(stud => stud.id === student.id)[0])
+            console.log("student index", studentindex)
             theclass.students.splice(studentindex, 1)
             classes[clindex] = theclass
             // let thestud=classes.filter(cl=>cl.id == student.class_id)[0]
             //                 .students.filter(stud=>stud.id==student.id)[0];
+            console.log("deledee ..student")
             this.storage.set("classes", classes).then((data) => {
                 this.studentDelete$.emit(student);
             });

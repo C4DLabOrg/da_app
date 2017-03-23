@@ -68,6 +68,7 @@ export class AttendancePage implements OnInit {
       }
 
       this.classes[clindex] = theclass
+   
     });
 
     this.account.studentDelete$.subscribe((student) => {
