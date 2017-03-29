@@ -32,8 +32,14 @@
     </ion-item>
    <div class="spacer" style="height:10px;"></div>
     <ion-item>
-      <ion-label stacked>last Name</ion-label>
+      <ion-label stacked>Last Name</ion-label>
       <ion-input formControlName="lstname"></ion-input>
+    </ion-item>
+
+    <div class="spacer" style="height:10px;"></div>
+    <ion-item>
+      <ion-label stacked>Student ID</ion-label>
+      <ion-input formControlName="student_id"></ion-input>
     </ion-item>
 
   <div class="spacer" style="height:15px;"></div>
@@ -51,7 +57,7 @@
   <div class="spacer" style="height:15px;"></div>
 
     <ion-item>
-      <ion-label>Gender</ion-label>
+      <ion-label stacked>Gender</ion-label>
       <ion-select formControlName="gender">
         <ion-option value="F" selected="true">Female</ion-option>
         <ion-option value="M">Male</ion-option>
@@ -62,19 +68,19 @@
       <ion-label floating>Class</ion-label>
       <ion-input formControlName="class_id"></ion-input>
     </ion-item>-->
-      <div class="spacer" style="height:10px;"></div>
+      <div class="spacer" style="height:15px;"></div>
 
     <ion-item>
-      <ion-label>Class</ion-label>
+      <ion-label stacked>Class</ion-label>
       <ion-select *ngIf="classes" formControlName="class_id">
         <ion-option *ngFor="let class of classes" value="{{class.id}}">{{class.class_name}}</ion-option>
       </ion-select>
     </ion-item>
 
-    <div class="spacer" style="height:10px;"></div>
+    <div class="spacer" style="height:15px;"></div>
 
     <ion-item>
-      <ion-label>Enrolled   <ion-icon name='calendar' style="color: #d03e84"></ion-icon></ion-label>
+      <ion-label stacked>Enrolled   <ion-icon name='calendar' style="color: #d03e84"></ion-icon></ion-label>
      
       <ion-datetime  displayFormat="  DD MMMM YYYY"  pickerFormat="DD MMM  YYYY"
         formControlName="date_enrolled"></ion-datetime>
