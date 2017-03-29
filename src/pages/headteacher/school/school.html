@@ -29,12 +29,13 @@
   <ion-card color="primary">
     <ion-card-header>
       Students
+    <ion-badge color="white" style="margin-left: 65%">260</ion-badge>
     </ion-card-header>
 
     <ion-list>
       <button (click)="students()" ion-item>
       <ion-icon name="add-circle" item-left></ion-icon>
-      Add and  Edit Students
+      Add/Edit Students
     </button>
 
       <button (click)="studentdetails()" ion-item>
@@ -47,11 +48,17 @@
   <ion-card color="primary">
     <ion-card-header>
       Teachers
+    <ion-badge color="white" style="margin-left: 65%">14</ion-badge>
     </ion-card-header>
 
     <button   ion-item>
-      <ion-icon name="contacts" item-left></ion-icon>
-      Teachers
+      <ion-icon name="contact" item-left></ion-icon>
+      Add/Edit Teachers
+    </button>
+
+      <button   ion-item>
+      <ion-icon name="list-box" item-left></ion-icon>
+      View Teacher Details
     </button>
     
     <ion-list>
@@ -60,11 +67,17 @@
   <ion-card color="primary">
     <ion-card-header>
       Classes
+    <ion-badge color="white" style="margin-left: 65%">10</ion-badge>
     </ion-card-header>
 
     <button   ion-item>
-      <ion-icon name="list" item-left></ion-icon>
-      Classes
+      <ion-icon name="easel" item-left></ion-icon>
+      Add/Edit Classes
+    </button>
+
+     <button   ion-item>
+      <ion-icon name="list-box" item-left></ion-icon>
+      View Class Details
     </button>
     <ion-list>
     </ion-list>
