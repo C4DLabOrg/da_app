@@ -7,6 +7,7 @@ import {  AddTeacherModal} from './addteacher'
 import { NavController, ToastController, AlertController, PopoverController, ModalController } from 'ionic-angular';
 import { Storage } from '@ionic/storage'
 
+
 @Component({
   selector: 'page-teachers',
   templateUrl: 'teachers.html'
