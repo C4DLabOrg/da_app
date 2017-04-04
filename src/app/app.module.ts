@@ -13,7 +13,7 @@ import {Storage} from '@ionic/storage';
 import {AccountService} from '../pages/login/account.services';
 import {Link} from './link';
 import {ClassPopoverPage} from '../pages/home/classpopover.component';
-import { ChartModule } from 'angular2-highcharts';
+import { ChartModule, } from 'angular2-highcharts';
 import { HDTabsPage } from '../pages/headteacher/tabs/tabs';
 import { HDReportPage } from '../pages/headteacher/reports/reports';
 import { HDSchoolPage} from '../pages/headteacher/school/school';
@@ -24,6 +24,8 @@ import { HDTeachersPage} from '../pages/headteacher/teachers/teachers'
 import {HDSync} from '../pages/sync/sync'
 import {StudentSearch} from '../pipes/student-search'
 import { Ng2OrderModule } from 'ng2-order-pipe';
+declare var require: any;
+
 
 @NgModule({
   declarations: [
@@ -47,7 +49,7 @@ import { Ng2OrderModule } from 'ng2-order-pipe';
     HDSync,StudentSearch
 
   ],
-  imports: [ ChartModule,Ng2OrderModule,
+  imports: [ ChartModule.forRoot(require('highcharts')),Ng2OrderModule,
     IonicModule.forRoot(MyApp)
   ],
   bootstrap: [IonicApp],
