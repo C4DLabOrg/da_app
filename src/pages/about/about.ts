@@ -6,11 +6,12 @@ import { AccountService } from '../login/account.services'
 import { TakeAttendance } from '../home/takeattendance'
 import { Classes, Student } from '../home/classes'
 import { ClassPopoverPage } from "../home/classpopover.component"
-// import { CallNumber } from '@ionic-native/call-number';
+import { CallNumber } from '@ionic-native/call-number';
 
 @Component({
   selector: 'page-about',
   templateUrl: 'about.html',
+  providers:[CallNumber]
 
 })
 export class AboutPage implements OnInit {
@@ -23,7 +24,7 @@ export class AboutPage implements OnInit {
   constructor(public navCtrl: NavController, private account: AccountService,
     private popoverCtrl: PopoverController,
     private storage: Storage, private alertctrl: AlertController,
-    // private call: CallNumber,
+    private call: CallNumber,
     private toastctrl: ToastController) {
 
   }
@@ -136,9 +137,9 @@ export class AboutPage implements OnInit {
     }
   }
   makecall(phone: string) {
-    //   this.call.callNumber(phone, true)
-    //     .then(() => console.log('Launched dialer!'))
-    //     .catch(() => console.log('Error launching dialer'));
+      this.call.callNumber(phone, true)
+        .then(() => console.log('Launched dialer!'))
+        .catch(() => console.log('Error launching dialer'));
 
   }
 
