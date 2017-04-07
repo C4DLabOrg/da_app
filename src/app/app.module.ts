@@ -24,7 +24,8 @@ import { HDTeachersPage} from '../pages/headteacher/teachers/teachers'
 import {HDSync} from '../pages/sync/sync'
 import {StudentSearch} from '../pipes/student-search'
 import { Ng2OrderModule } from 'ng2-order-pipe';
-declare var require: any;
+//import {require} from '@types/node'
+//declare var require: any;
 
 
 @NgModule({
@@ -49,7 +50,7 @@ declare var require: any;
     HDSync,StudentSearch
 
   ],
-  imports: [ ChartModule.forRoot(require('highcharts')),Ng2OrderModule,
+  imports: [ ChartModule,Ng2OrderModule,
     IonicModule.forRoot(MyApp)
   ],
   bootstrap: [IonicApp],
