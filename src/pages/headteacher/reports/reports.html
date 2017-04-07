@@ -31,56 +31,83 @@
     <ion-card-content>
       <ion-item>
         <ion-icon name='checkmark-circle' item-left style="color: #55acee"></ion-icon>
-        Students Present
+        <h2>Students Present</h2>
         <ion-badge *ngIf="resp" item-right> {{resp.present_females+resp.present_males}}</ion-badge>
+      </ion-item>
+      
+      <ion-item>  
+        <ion-icon name='' item-left></ion-icon>
+        <h5>Male Present</h5>
+        <ion-badge item-right> {{resp.present_males}} </ion-badge>
+      </ion-item>
+      
+      <ion-item>  
+         <ion-icon name='' item-left></ion-icon>
+        <h5>Female Present</h5>
+        <ion-badge item-right> {{resp.present_females}} </ion-badge>
       </ion-item>
 
       <ion-item>
         <ion-icon name='close-circle' item-left style="color: #d03e84"></ion-icon>
-        Students Absent
+        <h2>Students Absent</h2>
         <ion-badge *ngIf="resp" item-right> {{resp.absent_males+resp.absent_females}}</ion-badge>
       </ion-item>
-    </ion-card-content>
 
-  </ion-card>
-  <ion-card *ngIf="if_report">
-    <!-- bar graph here-->
-    <ion-card-content>
-      <ion-item>
-        <h2 *ngIf="selectedclass">{{selectedclass.class_name}}</h2>
-        <p>{{event|date:'mediumDate'}}</p>
+      <ion-item>  
+        <ion-icon name='' item-left></ion-icon>
+        <h5>Male Absent</h5>
+        <ion-badge item-right> {{resp.absent_males}} </ion-badge>
       </ion-item>
-     
-        <chart style="width:90%;height:35%" [options]="options"></chart>
-
-      <div *ngIf="resp">
-        <ion-item>
-          <ion-icon name='checkmark-circle' item-left style="color: #55acee"></ion-icon>
-          Female Present
-          <ion-badge item-right> {{resp.present_females}} </ion-badge>
-        </ion-item>
-
-        <ion-item>
-          <ion-icon name='close-circle' item-left style="color: #d03e84"></ion-icon>
-          Female Absent
-          <ion-badge item-right> {{resp.absent_females}} </ion-badge>
-        </ion-item>
-
-        <ion-item>
-          <ion-icon name='checkmark-circle' item-left style="color: #55acee"></ion-icon>
-          Male Present
-          <ion-badge item-right> {{resp.present_males}} </ion-badge>
-        </ion-item>
-
-        <ion-item>
-          <ion-icon name='close-circle' item-left style="color: #d03e84"></ion-icon>
-          Male Absent
-          <ion-badge item-right> {{resp.absent_males}} </ion-badge>
-        </ion-item>
-      </div>
+      
+      <ion-item>  
+         <ion-icon name='' item-left></ion-icon>
+        <h5>Female Absent</h5>
+        <ion-badge item-right> {{resp.absent_females}} </ion-badge>
+      </ion-item>
     </ion-card-content>
 
   </ion-card>
+  
+  <ion-card color="primary">
+    <ion-card-header>
+      Students Absent
+    </ion-card-header>
+  </ion-card>
+
+     <ion-item>
+       <ion-label>
+          <ion-badge item-right>1</ion-badge>&nbsp; &nbsp; Norman Munge
+          <div class="spacer" style="height: 4px;"></div>
+        </ion-label>
+
+        <ion-icon (click)="callConfirm(stud)" item-right style="font-size: 21px"name="call"></ion-icon>
+
+     </ion-item>
+
+    <ion-item>
+       <ion-label>
+          <ion-badge item-right>2</ion-badge>&nbsp; &nbsp; Micha Mwangi
+          <div class="spacer" style="height: 4px;"></div>
+        </ion-label>
+
+      <ion-icon (click)="callConfirm(stud)" item-right style="font-size: 21px"name="call"></ion-icon>
+
+     </ion-item>
+
+    <ion-item>
+       <ion-label>
+          <ion-badge item-right>3</ion-badge>&nbsp; &nbsp; Ali Dennis
+          <div class="spacer" style="height: 4px;"></div>
+        </ion-label>
+       <ion-icon (click)="callConfirm(stud)" item-right style="font-size: 21px"name="call"></ion-icon>
+
+     </ion-item>
+
+
+
+
+   
+
 
   <div class="spacer" style="height: 7px;"></div>
   <div *ngIf="absent_students">

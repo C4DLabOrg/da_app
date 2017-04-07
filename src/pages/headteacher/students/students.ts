@@ -214,6 +214,34 @@ export class HDStudentPage implements OnInit {
     });
     confirm.present();
   }
+
+    reasonConfirm(student:Student) {
+    this.stdid=student.id
+    let alert = this.alertctrl.create();
+    alert.setTitle('Reason to delete');
+
+    alert.addInput({
+      type: 'checkbox',
+      label: 'Student transfered school',
+      value: 'value1',
+    
+    });
+
+    alert.addInput({
+      type: 'checkbox',
+      label: 'Student droped out of school',
+      value: 'value2'
+    });
+
+    alert.addButton('Cancel');
+    alert.addButton({
+      text: 'Delete',
+      handler: data => {
+        console.log('Checkbox data:', data);
+      }
+    });
+    alert.present();
+  }
 }
 
 
