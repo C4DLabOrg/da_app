@@ -1,7 +1,8 @@
 <ion-header>
       <ion-navbar color="primary">
-            <ion-title>Students<small *ngIf="classes">( {{classes[index].class_name}})</small> </ion-title>
-
+            <div *ngIf="classes">
+            <ion-title>Students<small *ngIf="classes.length>0">( {{classes[index].class_name}})</small> </ion-title>
+            </div>
             <ion-buttons end>
                   <button ion-button (click)="presentPopover($event)">
                   <ion-icon name="more"></ion-icon>
@@ -21,6 +22,7 @@
             </ion-item-divider>
 
             <div class="spacer" style="height: 10px;"></div>
+            <div *ngIf="classes.length>0">
             <ion-item *ngFor="let stud of classes[index].students|orderBy:'gender':true|student:studname;let i=index">
                   <ion-label>
                         <ion-badge item-right>{{i+1}}</ion-badge>{{stud.student_name}}
@@ -36,7 +38,7 @@
                   
               
           </ion-item>
-  
+            </div>
       </ion-list>
 
       <ion-fab right bottom>

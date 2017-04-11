@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-
 import { NavController, PopoverController, ToastController, AlertController } from 'ionic-angular';
 import { Storage } from '@ionic/storage'
 import { Classes } from './classes'
@@ -8,8 +7,6 @@ import { TakeAttendance } from './takeattendance'
 import { AccountService } from '../login/account.services'
 import { ResultPage } from '../result/result.component'
 import { DatePipe } from '@angular/common'
-
-
 @Component({
   selector: 'page-home',
   templateUrl: 'home.html'
@@ -69,7 +66,6 @@ export class AttendancePage implements OnInit {
       }
 
       this.classes[clindex] = theclass
-
     });
 
     this.account.studentDelete$.subscribe((student) => {
@@ -126,7 +122,10 @@ export class AttendancePage implements OnInit {
   getclasses() {
     this.storage.get("classes").then((data) => {
       this.classes = data
-      this.selectclass(0)
+      if(this.classes.length>0){
+          this.selectclass(0)
+      }
+    
     })
   }
   selectclass(id) {
@@ -134,8 +133,8 @@ export class AttendancePage implements OnInit {
     this.clearattendance()
   }
   clearattendance() {
-
-    this.storage.get(this.selectedclass.class_name).then((data: TakeAttendance[]) => {
+    if(this.classes.length>0){
+  this.storage.get(this.selectedclass.class_name).then((data: TakeAttendance[]) => {
       data == null ? data = [] : data = data;
       let takenattendances = data.filter(att => att.date == this.event.split("T")[0]).filter(att => att.class_name == this.selectedclass.class_name)
       if (takenattendances.length > 0) {
@@ -164,6 +163,8 @@ export class AttendancePage implements OnInit {
 
 
     })
+    }
+  
 
   }
   presentPopover(myEvent) {

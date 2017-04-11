@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AccountService } from '../../login/account.services'
 import { TakeAttendance } from '../../home/takeattendance'
-import { Classes,Student } from '../../home/classes'
+import { Classes, Student } from '../../home/classes'
 import { ClassPopoverPage } from '../../home/classpopover.component'
 import { AddStudentModal } from './addstudent'
 
@@ -25,8 +25,8 @@ export class HDStudentPage implements OnInit {
   selectedclass: Classes
   toast: any
   confirm: any
-  dload:boolean=false
-  stdid:number=0
+  dload: boolean = false
+  stdid: number = 0
   constructor(public navCtrl: NavController,
     private popoverCtrl: PopoverController, private modalctrl: ModalController,
     private storage: Storage, private account: AccountService,
@@ -62,17 +62,17 @@ export class HDStudentPage implements OnInit {
       theclass.students.splice(studindex, 1)
       this.classes[clindex] = theclass
     })
-      this.account.newclasslist$.subscribe((data)=>{
+    this.account.newclasslist$.subscribe((data) => {
       this.getclasses()
     });
   }
 
-  deletestudent(student:Student) {
-    this.dload=true
+  deletestudent(student: Student) {
+    this.dload = true
     this.account.deletestudent(student).then((resp) => {
-     this.dload=false
+      this.dload = false
     }, (error) => {
-      this.dload=false
+      this.dload = false
       console.log(error)
     })
   }
@@ -118,7 +118,10 @@ export class HDStudentPage implements OnInit {
   getclasses() {
     this.storage.get("classes").then((data) => {
       this.classes = data
-      this.selectclass(0)
+      if (this.classes.length > 0) {
+        this.selectclass(0)
+      }
+
     })
   }
   selectclass(id) {
@@ -191,8 +194,8 @@ export class HDStudentPage implements OnInit {
 
   }
 
-  deleteConfirm(student:Student) {
-    this.stdid=student.id
+  deleteConfirm(student: Student) {
+    this.stdid = student.id
     let confirm = this.alertctrl.create({
       title: 'Delete Student',
       message: 'Do you want to delete this student?',
@@ -215,8 +218,8 @@ export class HDStudentPage implements OnInit {
     confirm.present();
   }
 
-    reasonConfirm(student:Student) {
-    this.stdid=student.id
+  reasonConfirm(student: Student) {
+    this.stdid = student.id
     let alert = this.alertctrl.create();
     alert.setTitle('Reason to delete');
 
@@ -224,7 +227,7 @@ export class HDStudentPage implements OnInit {
       type: 'checkbox',
       label: 'Student transfered school',
       value: 'value1',
-    
+
     });
 
     alert.addInput({

@@ -69,7 +69,10 @@ export class AboutPage implements OnInit {
   getclasses() {
     this.storage.get("classes").then((data) => {
       this.classes = data
-      this.selectclass(0)
+       if(this.classes.length>0){
+          this.selectclass(0)
+      }
+    
     })
   }
   showtoast(message: string, position: string) {
