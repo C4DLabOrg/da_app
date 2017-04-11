@@ -78,7 +78,7 @@ export class AddStudentModal {
     }
     updatestudent(data){
          this.load=true
-        this.account.updatestudent(this.student.id,data).then((resp)=>{
+        this.account.updatestudent(this.student.id,data,this.student).then((resp)=>{
             this.load=false
             console.log("Updated student",resp)
              this.dismiss()

@@ -1,4 +1,3 @@
-
 import { Component } from '@angular/core'
 import { ViewController, NavParams } from 'ionic-angular'
 import { Student } from '../../home/classes'
@@ -22,6 +21,7 @@ export class AddTeacherModal {
             fstname: ['', Validators.required],
             lstname: [''],
             midname: [''],
+            student_id:[''],
             class_id: ['', Validators.required],
             gender: ['' ],
         });

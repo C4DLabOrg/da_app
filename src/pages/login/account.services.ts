@@ -27,7 +27,7 @@ export class AccountService {
     studentsChange$: EventEmitter<Student> = new EventEmitter<Student>()
     studentDelete$: EventEmitter<Student> = new EventEmitter<Student>()
     updateStatus$: EventEmitter<string> = new EventEmitter<string>()
-    newclasslist$:EventEmitter<any>=new EventEmitter()
+    newclasslist$: EventEmitter<any> = new EventEmitter()
     constructor(private http: Http, private toastctrl: ToastController,
         private url: Link, private storage: Storage) {
         this.newofflineattendance$ = new EventEmitter()
@@ -44,7 +44,7 @@ export class AccountService {
             .then(response => response.json() as Token)
             .catch(this.error)
     }
-    newclasslist(){
+    newclasslist() {
         this.newclasslist$.emit("new list");
     }
     public getauth() {
@@ -80,7 +80,7 @@ export class AccountService {
             at: new Date(new Date().getTime() + 1 * 1000 * 60 * 60 * 24 * 1),
             every: "everyday"
         });
-      
+
     }
     profile(): Promise<any> {
         //this.jheaders = new Headers({ "Content-Type": "application/json", "Authorization": "Bearer " + token })
@@ -92,7 +92,7 @@ export class AccountService {
         return this.http.post(this.link + "api/attendance", data, { headers: this.jheaders }).toPromise()
             .then((respose) => {
                 this.attendancelocalnot()
-                 this.saveattendancehistory(data)
+                this.saveattendancehistory(data)
                 return respose.json()
             })
             .catch((error) => this.handleattendance(error, data))
@@ -112,10 +112,10 @@ export class AccountService {
             .then(response => response.json())
             .catch(this.error)
     }
-    updatestudent(id, data: any): Promise<any> {
+    updatestudent(id, data: any, student: Student): Promise<any> {
         return this.http.patch(this.link + "api/students/" + id, data, { headers: this.jheaders }).toPromise()
             .then((response) => {
-                this.storageupdatestudent(response.json())
+                this.storageupdatestudent(student, response.json())
                 return response.json()
             })
             .catch(this.error)
@@ -128,9 +128,9 @@ export class AccountService {
             })
             .catch(this.error)
     }
-    deletestudent(student: Student): Promise<any> {
+    deletestudent(student: Student, reason: String): Promise<any> {
         console.log(student)
-        return this.http.delete(this.link + "api/students/" + student.id, { headers: this.jheaders }).toPromise()
+        return this.http.delete(this.link + "api/students/" + student.id + "?reason=" + reason, { headers: this.jheaders }).toPromise()
             .then(resp => {
                 this.storagedeletestudent(student)
                 return resp.json()
@@ -173,19 +173,40 @@ export class AccountService {
 
         })
     }
-    storageupdatestudent(student: Student) {
+    storageupdatestudent(student: Student, newstudent: Student) {
         this.storage.get("classes").then((data) => {
+            let changeclass=false
             let classes = data as Classes[]
             let clindex = classes.indexOf(classes.filter(cl => cl.id === student.class_id)[0])
             let theclass = classes[clindex]
             let studinedx = theclass.students.indexOf(theclass.students.filter(stud => stud.id === student.id)[0])
-            theclass.students[studinedx] = student
-            classes[clindex] = theclass
-            let thestud = theclass.students[studinedx]
+            if (student.class_id != newstudent.class_id) {
+                console.log("new class")
+                theclass.students.splice(studinedx, 1)
+                let nwclindex = classes.indexOf(classes.filter(cl => cl.id === newstudent.class_id)[0])
+                let nwtheclass = classes[nwclindex]
+                nwtheclass.students.push(newstudent)
+                classes[clindex]=theclass
+                Classes[nwclindex] = nwtheclass
+                changeclass=true;
+            }
+            else {
+                console.log("Old class")
+                theclass.students[studinedx] = newstudent
+                classes[clindex] = theclass
+            }
+
             // let thestud=classes.filter(cl=>cl.id == student.class_id)[0]
             //                 .students.filter(stud=>stud.id==student.id)[0];
             this.storage.set("classes", classes).then((data) => {
-                this.studentsChange$.emit(student);
+                
+                if(changeclass){
+                     this.studentDelete$.emit(student);
+                     this.studentsChange$.emit(newstudent);
+                }
+                else{
+                    this.studentsChange$.emit(newstudent);
+                }
             });
         })
     }
@@ -207,23 +228,23 @@ export class AccountService {
     saveattendancehistory(attendance: TakeAttendance) {
         this.storage.get(attendance.class_name).then((data: TakeAttendance[]) => {
             data == null ? data = [] : data = data;
-             if(data.length >=24){
-                data.splice(0,1)
+            if (data.length >= 24) {
+                data.splice(0, 1)
             }
-            if(data.length==0){
+            if (data.length == 0) {
                 data.push(attendance)
             }
-            else{
-                let attends=data.filter(attend =>attend.date==attendance.date)
-                if(attends.length>0){
-                    let index=data.indexOf(attends[0])
-                    data[index]=attendance
+            else {
+                let attends = data.filter(attend => attend.date == attendance.date)
+                if (attends.length > 0) {
+                    let index = data.indexOf(attends[0])
+                    data[index] = attendance
                 }
-                else{
+                else {
                     data.push(attendance)
                 }
             }
-            this.storage.set(attendance.class_name,data);
+            this.storage.set(attendance.class_name, data);
             console.log("Saved Attendances ", data)
         })
     }
@@ -274,7 +295,7 @@ export class AccountService {
         });
     }
     sync(data: Offline, index: number): Promise<any> {
-        return this.takeattendance(data.attendance).then(data=>data).catch(this.error)
+        return this.takeattendance(data.attendance).then(data => data).catch(this.error)
         // return this.http.post(data.link, data.attendance, this.jheaders).toPromise()
         //     .then((response) => {
         //         //this.deleteoffline(index)

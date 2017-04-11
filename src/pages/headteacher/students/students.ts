@@ -67,9 +67,9 @@ export class HDStudentPage implements OnInit {
     });
   }
 
-  deletestudent(student: Student) {
+  deletestudent(student: Student,reason:String) {
     this.dload = true
-    this.account.deletestudent(student).then((resp) => {
+    this.account.deletestudent(student,reason).then((resp) => {
       this.dload = false
     }, (error) => {
       this.dload = false
@@ -209,7 +209,7 @@ export class HDStudentPage implements OnInit {
         {
           text: 'Agree',
           handler: () => {
-            this.deletestudent(student)
+            this.deletestudent(student,"DROP")
             console.log('Agree clicked');
           }
         }
@@ -222,24 +222,25 @@ export class HDStudentPage implements OnInit {
     this.stdid = student.id
     let alert = this.alertctrl.create();
     alert.setTitle('Reason to delete');
-
     alert.addInput({
-      type: 'checkbox',
+      type: 'radio',
       label: 'Student transfered school',
-      value: 'value1',
+      value: 'TRANS',
+      checked:true
 
     });
 
     alert.addInput({
-      type: 'checkbox',
+      type: 'radio',
       label: 'Student droped out of school',
-      value: 'value2'
+      value: 'DROP'
     });
 
     alert.addButton('Cancel');
     alert.addButton({
-      text: 'Delete',
+      text: 'delete',
       handler: data => {
+        this.deletestudent(student,data)
         console.log('Checkbox data:', data);
       }
     });
