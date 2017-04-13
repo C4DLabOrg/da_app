@@ -3,6 +3,7 @@ import { Component,OnInit } from '@angular/core';
 import { NavController } from 'ionic-angular';
 import {Storage} from '@ionic/storage';
 import { HDStudentPage} from '../students/students'
+import {HDClassesPage} from '../classes/classes'
 import {HDTeachersPage} from '../teachers/teachers'
 import {AboutPage} from '../../about/about'
 
@@ -32,6 +33,9 @@ export class HDSchoolPage implements OnInit {
   }
     teachers(){
     this.navCtrl.push(HDTeachersPage)
+  }
+    goclasses(){
+    this.navCtrl.push(HDClassesPage)
   }
 
 

@@ -1,22 +1,22 @@
 import { Component, OnInit } from '@angular/core';
 import { AccountService } from '../../login/account.services'
 import { TakeAttendance } from '../../home/takeattendance'
-import { Teacher } from '../../home/classes'
+import { Classes } from '../../home/classes'
 import { ClassPopoverPage } from '../../home/classpopover.component'
-import {  AddTeacherModal} from './addteacher'
+import {  AddClassModal} from './addclass'
 import { NavController, ToastController, AlertController, PopoverController, ModalController } from 'ionic-angular';
 import { Storage } from '@ionic/storage'
 
 
 @Component({
-  selector: 'page-teachers',
-  templateUrl: 'teachers.html'
-})
-export class HDTeachersPage implements OnInit {
+  selector: 'page-classes',
+  templateUrl: 'classes.html'
+})                                                        
+export class HDClassesPage implements OnInit {
 
   content: any
   text: any
-  teachers:Teacher[]
+  classes:Classes[]
   load: boolean = false
   index: number = 0
   event: string
@@ -31,8 +31,36 @@ export class HDTeachersPage implements OnInit {
 
   }
   ngOnInit() {
-    this.getteachers()
+    this.getclasses()
     this.event = new Date().toISOString()
+  }
+    onStudentsChange() {
+    this.account.studentsChange$.subscribe((student) => {
+      let clindex = this.classes.indexOf(this.classes.filter(cl => cl.id === student.class_id)[0])
+      let theclass = this.classes[clindex]
+      let studs = theclass.students.filter(stud => stud.id === student.id)
+      if (studs.length > 0) {
+        let studinedx = theclass.students.indexOf(studs[0])
+        theclass.students[studinedx] = student
+      }
+      else {
+        theclass.students.push(student)
+      }
+
+      this.classes[clindex] = theclass
+    });
+
+    this.account.studentDelete$.subscribe((student) => {
+      console.log("removing from ...")
+      let clindex = this.classes.indexOf(this.classes.filter(cl => cl.id === student.class_id)[0])
+      let theclass = this.classes[clindex]
+      let studindex = theclass.students.indexOf(theclass.students.filter(stud => stud.id === student.id)[0])
+      theclass.students.splice(studindex, 1)
+      this.classes[clindex] = theclass
+    })
+    this.account.newclasslist$.subscribe((data) => {
+      this.getclasses()
+    });
   }
   datechange(value) {
     console.log(this.event)
@@ -73,9 +101,9 @@ export class HDTeachersPage implements OnInit {
     }
 
   }
-  getteachers() {
-    this.storage.get("teachers").then((data) => {
-      this.teachers = data
+  getclasses() {
+    this.storage.get("classes").then((data) => {
+      this.classes = data
     })
   }
 

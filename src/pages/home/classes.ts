@@ -7,6 +7,7 @@ export class Classes{
 
     
 }
+
 export class Student{
     emis_code:number
     id:number
@@ -22,4 +23,23 @@ export class Student{
     guardian_name:string
     guardian_phone:string
 
+}
+export class Teacher{
+    user:number
+    fstname:string
+    name:string
+    lstname:string
+    phone_no:string
+    teacher_type:string
+    birthday:string
+    gender:string
+    tsc_no:string
+    bom_no:string
+    headteacher:boolean
+    qualifications:string
+    subjects:any
+    school:number
+    date_started_teaching:string
+    joined_current_school:string
+    school_name:string
 }

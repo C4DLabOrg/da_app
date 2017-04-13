@@ -1,6 +1,6 @@
 <ion-header>
       <ion-navbar color="primary">
-            <ion-title>Teachers <small *ngIf="teachers">( {{teachers.length}})</small> </ion-title>
+            <ion-title>Classes <small *ngIf="classes">( {{classes.length}})</small> </ion-title>
 
             <ion-buttons end>
                   <button ion-button >
@@ -13,15 +13,15 @@
 <ion-content color="primary">
 
       <div class="spacer" style="height: 2px;"></div>
-      <ion-list *ngIf="teachers">
-            <ion-item-divider color="primary">Teachers Details </ion-item-divider>
+      <ion-list *ngIf="classes">
+            <ion-item-divider color="primary">Classes Details </ion-item-divider>
             <div class="spacer" style="height: 10px;"></div>
-            <ion-item *ngFor="let teach of teachers;let i=index">
+            <ion-item *ngFor="let class of classes;let i=index">
                   <ion-label>
-                        <ion-badge item-right>{{i+1}}</ion-badge>{{teach.name}}
+                        <ion-badge item-right>{{i+1}}</ion-badge>{{class.class_name}}
                         <div class="spacer" style="height: 4px;"></div>
 
-                        <p style="font-size: 13px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {{teach.teacher_type}}</p>
+                        <p style="font-size: 13px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {{class.students.length}} Students</p>
 
                   </ion-label>
 
