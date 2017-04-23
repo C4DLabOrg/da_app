@@ -79,9 +79,12 @@ export class HDReportPage implements OnInit {
         pie: {
           allowPointSelect: true,
           cursor: 'pointer',
+           showInLegend: false,
           dataLabels: {
-            enabled: false,
-            format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+            enabled: true,
+            distance: -30,
+           // format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+           format: '{point.percentage:.1f} %',
 
           }
         }
@@ -98,6 +101,7 @@ export class HDReportPage implements OnInit {
         pie: {
           allowPointSelect: true,
           cursor: 'pointer',
+         
           dataLabels: {
             enabled: false,
             format: '<b>{point.name}</b>: {point.percentage:.1f} %',
@@ -131,6 +135,13 @@ export class HDReportPage implements OnInit {
   getclasses() {
     this.storage.get("classes").then((data) => {
       this.classes = data
+      //Add the class to represent all the classes 
+      let cl=new Classes()
+      cl.id=0
+      cl.class_name="All Classes"
+      cl.students=[]
+      this.classes.unshift(cl);
+      console.log(this.classes);
       this.selectclass(0)
     })
   }
@@ -145,7 +156,10 @@ export class HDReportPage implements OnInit {
 
   getreports() {
     this.showloader("Generating reports")
-    this.account.getreport(this.selectedclass.id, this.event.split("T")[0]).then((resp) => {
+    let id:any=this.selectedclass.id
+    //IF id ==0 it means it represents all the classes thus set it to ""
+    if(id==0)id="";
+    this.account.getreport(id, this.event.split("T")[0]).then((resp) => {
       this.loader.dismiss();
       console.log(resp)
       this.resp=resp

@@ -21,7 +21,6 @@ export class HDClassesPage implements OnInit {
   index: number = 0
   event: string
   takeattendance = new TakeAttendance()
-
   toast: any
   confirm: any
   constructor(public navCtrl: NavController,

@@ -1,24 +1,42 @@
 <ion-header>
-  <ion-navbar>
-    <ion-title>Add Student</ion-title>
+    <ion-navbar>
+    <ion-title><span *ngIf="type"> {{type=="add"?'Add':"Update"}}</span> Teacher</ion-title>
+    <ion-buttons end>
+      <button ion-button small outline (click)="dismiss()">
+      <ion-icon name='arrow-dropleft'></ion-icon> &nbsp;
+         Back
+      </button>
+
+       <!--<button ion-button color="light" icon-left>
+      <ion-icon name='arrow-back'></ion-icon>
+      Back
+    </button>-->
+    </ion-buttons>
   </ion-navbar>
 </ion-header>
 
 <ion-content class="tutorial-page">
   <span *ngIf="student"> Student:{{student.fstname}}</span>
-  <form [formGroup]="studform" (ngSubmit)="addstud()">
+  <form [formGroup]="teachform" (ngSubmit)="addteach()">
+     <div class="spacer" style="height:5px;"></div>
     <ion-item>
       <ion-label floating>Firts Name</ion-label>
       <ion-input type="text" formControlName="fstname"></ion-input>
     </ion-item>
-    <ion-item>
-      <ion-label floating>Middle Name</ion-label>
-      <ion-input formControlName="midname"></ion-input>
-    </ion-item>
+     <div class="spacer" style="height:5px;"></div>
     <ion-item>
       <ion-label floating>last Name</ion-label>
       <ion-input formControlName="lstname"></ion-input>
     </ion-item>
+     <div class="spacer" style="height:5px;"></div>
+      <ion-item>
+      <ion-label>Teacher Type</ion-label>
+      <ion-select formControlName="teacher_type">
+        <ion-option value="TSC" selected="true">Tsc</ion-option>
+        <ion-option value="BOM">Board of Management</ion-option>
+      </ion-select>
+    </ion-item>
+     <div class="spacer" style="height:5px;"></div>
     <ion-item>
       <ion-label>Gender</ion-label>
       <ion-select formControlName="gender">
@@ -26,13 +44,16 @@
         <ion-option value="M">Male</ion-option>
       </ion-select>
     </ion-item>
+     <div class="spacer" style="height:5px;"></div>
     <ion-item>
-      <ion-label floating>Class</ion-label>
-      <ion-input formControlName="class_id"></ion-input>
+      <ion-label> Is an Admin</ion-label>
+      <ion-checkbox item-right formControlName="headteacher"></ion-checkbox>
     </ion-item>
-    <button ion-button type="submit" [disabled]="!studform.valid"> <span *ngIf="type">{{type}}</span></button>
+    <ion-item>
+      <ion-label floating>Phone Number</ion-label>
+      <ion-input formControlName="phone_no"></ion-input>
+    </ion-item>
+     <div class="spacer" style="height:5px;"></div>
+    <button ion-button full type="submit" [disabled]="!teachform.valid"> <span *ngIf="type">{{load?'Submitting ...':type}}</span></button>
   </form>
-  <button ion-button (click)="dismiss()">Close</button>
-
-
 </ion-content>

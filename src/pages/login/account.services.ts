@@ -6,7 +6,7 @@ import 'rxjs'
 import { Storage } from '@ionic/storage'
 import { TakeAttendance } from '../home/takeattendance'
 import { ChangePassword } from '../password/changepassword'
-import { Classes, Student } from '../home/classes'
+import { Classes, Student, Teacher } from '../home/classes'
 import { Offline } from './offline'
 import { ToastController } from 'ionic-angular';
 import { LocalNotifications } from 'ionic-native';
@@ -28,6 +28,8 @@ export class AccountService {
     studentDelete$: EventEmitter<Student> = new EventEmitter<Student>()
     updateStatus$: EventEmitter<string> = new EventEmitter<string>()
     newclasslist$: EventEmitter<any> = new EventEmitter()
+    teacherchange$: EventEmitter<Teacher> = new EventEmitter<Teacher>()
+    teacherdelete$: EventEmitter<Teacher> = new EventEmitter<Teacher>()
     constructor(private http: Http, private toastctrl: ToastController,
         private url: Link, private storage: Storage) {
         this.newofflineattendance$ = new EventEmitter()
@@ -128,6 +130,64 @@ export class AccountService {
             })
             .catch(this.error)
     }
+    createteacher(data: any): Promise<any> {
+        return this.http.post(this.link + "api/teacher", data, { headers: this.jheaders }).toPromise()
+            .then(resp => {
+                this.storageaddteacher(resp.json())
+                return resp.json()
+            }).catch(this.error)
+    }
+    storageaddteacher(teacher: Teacher) {
+        // console.log(teacher)
+        this.storage.get("teachers").then(data => {
+            let teachers = data as Teacher[]
+            teachers.push(teacher);
+            this.storage.set("teachers", teachers).then((data) => {
+                this.teacherchange$.emit(teacher);
+            })
+            //let teachindex=teachers.indexOf(teachers.filter(teach=> teach.id===teacher.id)[0])
+
+        })
+    }
+    updateteacher(id: number, data: any): Promise<any> {
+        return this.http.patch(this.link + "api/teachers/" + id, data, { headers: this.jheaders }).toPromise()
+            .then(resp => {
+                this.storageupdateteacher(resp.json())
+                return resp.json()
+            })
+            .catch(this.error)
+    }
+    storageupdateteacher(teacher: Teacher) {
+        this.storage.get("teachers").then(data => {
+            let teachers = data as Teacher[]
+            let teachindex = teachers.indexOf(teachers.filter(tc => tc.id === teacher.id)[0])
+            teachers[teachindex] = teacher
+            this.storage.set("techers", teachers).then(data => {
+                this.teacherchange$.emit(teacher);
+            })
+
+        })
+    }
+    deleteteacher(teacher: Teacher): Promise<any> {
+        return this.http.delete(this.link + "api/teachers/" + teacher.id, { headers: this.jheaders })
+            .toPromise()
+            .then(resp => {
+                this.storagedeleteteacher(teacher)
+                return resp.json()
+            })
+            .catch(this.error)
+    }
+    storagedeleteteacher(teacher: Teacher) {
+        this.storage.get("teachers").then(data => {
+            let teachers = data as Teacher[]
+            let teachindex = teachers.indexOf(teachers.filter(tc => tc.id === teacher.id)[0])
+            teachers.splice(teachindex, 1)
+            this.storage.set("techers", teachers).then(data => {
+                this.teacherdelete$.emit(teacher);
+            })
+        })
+
+    }
     deletestudent(student: Student, reason: String): Promise<any> {
         console.log(student)
         return this.http.delete(this.link + "api/students/" + student.id + "?reason=" + reason, { headers: this.jheaders }).toPromise()
@@ -175,7 +235,7 @@ export class AccountService {
     }
     storageupdatestudent(student: Student, newstudent: Student) {
         this.storage.get("classes").then((data) => {
-            let changeclass=false
+            let changeclass = false
             let classes = data as Classes[]
             let clindex = classes.indexOf(classes.filter(cl => cl.id === student.class_id)[0])
             let theclass = classes[clindex]
@@ -186,9 +246,9 @@ export class AccountService {
                 let nwclindex = classes.indexOf(classes.filter(cl => cl.id === newstudent.class_id)[0])
                 let nwtheclass = classes[nwclindex]
                 nwtheclass.students.push(newstudent)
-                classes[clindex]=theclass
+                classes[clindex] = theclass
                 Classes[nwclindex] = nwtheclass
-                changeclass=true;
+                changeclass = true;
             }
             else {
                 console.log("Old class")
@@ -199,12 +259,12 @@ export class AccountService {
             // let thestud=classes.filter(cl=>cl.id == student.class_id)[0]
             //                 .students.filter(stud=>stud.id==student.id)[0];
             this.storage.set("classes", classes).then((data) => {
-                
-                if(changeclass){
-                     this.studentDelete$.emit(student);
-                     this.studentsChange$.emit(newstudent);
+
+                if (changeclass) {
+                    this.studentDelete$.emit(student);
+                    this.studentsChange$.emit(newstudent);
                 }
-                else{
+                else {
                     this.studentsChange$.emit(newstudent);
                 }
             });
@@ -274,7 +334,7 @@ export class AccountService {
                 offlines = []
                 this.setlocalnot()
                 //Inititate Watchout for internet Connection
-                this.initiatesync()
+               
 
             }
             let offs: Offline[] = offlines as Offline[]
@@ -285,6 +345,7 @@ export class AccountService {
             offs.push(off)
             this.storage.set("offline", offs).then((data) => {
                 this.newofflineattendance$.emit("new")
+                 this.initiatesync()
 
             })
 
@@ -324,21 +385,30 @@ export class AccountService {
     }
     initiatesync() {
         // this.nonetnotification=true
-        this.ping().then((data) => {
-            this.dosync()
-        }, (error) => {
-            if (error.url == null) {
-                setTimeout(() => {
-                    this.initiatesync()
-                    console.log("retrying to connect ..")
-                }, 2000);
-                if (this.nonetnotification) {
-                    this.updateStatus$.emit("No Internet Connection");
-                    this.nonetnotification = false
-                }
-
-
+        this.storage.get("offline").then((data) => {
+            if (data == null) {
+                data = []
+                console.log("No offlines")
             }
+            else {
+                this.ping().then((data) => {
+                    this.dosync()
+                }, (error) => {
+                    if (error.url == null) {
+                        setTimeout(() => {
+                            this.initiatesync()
+                            console.log("retrying to connect ..")
+                        }, 2000);
+                        if (this.nonetnotification) {
+                            this.updateStatus$.emit("No Internet Connection");
+                            this.nonetnotification = false
+                        }
+
+
+                    }
+                })
+            }
+
         })
     }
     dosync() {

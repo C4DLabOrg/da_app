@@ -24,7 +24,7 @@
       <h2 *ngIf="selectedclass">{{selectedclass.class_name}}</h2>
       <p>{{event|date:'mediumDate'}}</p>
     </ion-item>
-    <chart style="width:90%;height:35%" [options]="options2"></chart>
+    <chart style="width:90%;height:35%" [options]="options"></chart>
 
 
 
@@ -37,13 +37,13 @@
       
       <ion-item>  
         <ion-icon name='' item-left></ion-icon>
-        <h5>Male Present</h5>
+        <h5>Males Present</h5>
         <ion-badge item-right> {{resp.present_males}} </ion-badge>
       </ion-item>
       
       <ion-item>  
          <ion-icon name='' item-left></ion-icon>
-        <h5>Female Present</h5>
+        <h5>Females Present</h5>
         <ion-badge item-right> {{resp.present_females}} </ion-badge>
       </ion-item>
 
@@ -55,13 +55,13 @@
 
       <ion-item>  
         <ion-icon name='' item-left></ion-icon>
-        <h5>Male Absent</h5>
+        <h5>Males Absent</h5>
         <ion-badge item-right> {{resp.absent_males}} </ion-badge>
       </ion-item>
       
       <ion-item>  
          <ion-icon name='' item-left></ion-icon>
-        <h5>Female Absent</h5>
+        <h5>Females Absent</h5>
         <ion-badge item-right> {{resp.absent_females}} </ion-badge>
       </ion-item>
     </ion-card-content>

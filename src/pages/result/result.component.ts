@@ -51,8 +51,10 @@ export class ResultPage implements AfterViewInit {
                 allowPointSelect: true,
                 cursor: 'pointer',
                 dataLabels: {
-                    enabled: false,
-                    format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+                    enabled: true,
+                    distance:-30,
+                    format: '{point.percentage:.1f} %',
+                    //format: '<b>{point.name}</b>: {point.percentage:.1f} %',
                   
                 }
             }

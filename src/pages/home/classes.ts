@@ -25,6 +25,7 @@ export class Student{
 
 }
 export class Teacher{
+    id:number
     user:number
     fstname:string
     name:string
