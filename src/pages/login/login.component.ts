@@ -6,6 +6,7 @@ import { TabsPage } from '../tabs/tabs'
 import { AccountService } from './account.services'
 import { Storage } from '@ionic/storage'
 import { HDTabsPage } from '../headteacher/tabs/tabs';
+import $ from "jquery";
 @Component({
   selector: 'page-login',
   templateUrl: 'login.component.html'
@@ -37,12 +38,13 @@ export class LoginPage {
     }
 
   }
+  
   login() {
     this.error = null;
     this.ldpresent("Logging in ...")
     if (this.username && this.password) {
       this.account.getauth()
-      this.account.login(this.username, this.password)
+      this.account.login($.trim(this.username), this.password)
         .then((response) => {
           this.storage.set("user", response).then(() => {
             this.gototab()

@@ -108,7 +108,7 @@ export class AccountService {
             .catch(this.error);
     }
     //Change password
-    changepassword(data: ChangePassword): Promise<any> {
+    changepassword(data: any): Promise<any> {
         //   console.log(this.jheaders)
         return this.http.put(this.link + "api/change-password", data, { headers: this.jheaders }).toPromise()
             .then(response => response.json())

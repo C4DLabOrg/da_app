@@ -22,14 +22,24 @@ export class PasswordPage {
     this.loader = this.loadctrl.create({ content: message })
     this.loader.present();
   }
-  change() {
+  confirmpass(){
     this.error = null;
     this.title=null;
     this.ldpresent("Changing password ...")
+    if(this.changepass.confirm_password !=this.changepass.new_password){
+      this.error="Passwords mismatch"
+      this.loader.dismiss()
+    }
+    else{
+      this.change()
+    }
+  }
+  change() {
+    
     // this.changepass.new_password=this.new_password
     // this.changepass.old_password=this.old_password
    
-    this.account.changepassword(this.changepass).then((resp) => {
+    this.account.changepassword({old_password:this.changepass.old_password,new_password:this.changepass.new_password}).then((resp) => {
       console.log(resp)
       this.title="Successful";
       this.message="Password Changed"

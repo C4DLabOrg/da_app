@@ -18,7 +18,7 @@ export class HDReportPage implements OnInit {
   options: any
   options2: any
   loader: any
-  if_report:boolean=false
+  if_report: boolean = false
   selectedclass: Classes
   constructor(public navCtrl: NavController,
     private storage: Storage, private account: AccountService,
@@ -31,6 +31,12 @@ export class HDReportPage implements OnInit {
     this.getprofile()
     this.getclasses()
     this.event = new Date().toISOString()
+    this.onClassesChange()
+  }
+  onClassesChange() {
+    this.account.newclasslist$.subscribe((data) => {
+      this.getclasses()
+    });
   }
   datechange(value) {
     console.log(this.event)
@@ -50,22 +56,22 @@ export class HDReportPage implements OnInit {
     })
   }
   graph(resp) {
-     let data = []
-     let data2 = []
+    let data = []
+    let data2 = []
     if (resp.length > 0) {
-      this.if_report=true
+      this.if_report = true
       this.resp = resp[0]
       data.push({ name: "Present Males", y: this.resp.present_males })
       data.push({ name: "Absent Males", y: this.resp.absent_males })
       data.push({ name: "Present Females", y: this.resp.present_females })
       data.push({ name: "Absent Females", y: this.resp.absent_females })
-      
+
       data2.push({ name: "Students Present", y: this.resp.present_females + this.resp.present_males })
       data2.push({ name: "Students Absent", y: this.resp.absent_females + this.resp.absent_males })
       //console.log(data)
     }
     else {
-      this.if_report=false
+      this.if_report = false
       this.showalert("No Reports", "Attendance was not taken for this day")
     }
     this.options = {
@@ -79,12 +85,12 @@ export class HDReportPage implements OnInit {
         pie: {
           allowPointSelect: true,
           cursor: 'pointer',
-           showInLegend: false,
+          showInLegend: false,
           dataLabels: {
             enabled: true,
             distance: -30,
-           // format: '<b>{point.name}</b>: {point.percentage:.1f} %',
-           format: '{point.percentage:.1f} %',
+            // format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+            format: '{point.percentage:.1f} %',
 
           }
         }
@@ -101,7 +107,7 @@ export class HDReportPage implements OnInit {
         pie: {
           allowPointSelect: true,
           cursor: 'pointer',
-         
+
           dataLabels: {
             enabled: false,
             format: '<b>{point.name}</b>: {point.percentage:.1f} %',
@@ -136,10 +142,10 @@ export class HDReportPage implements OnInit {
     this.storage.get("classes").then((data) => {
       this.classes = data
       //Add the class to represent all the classes 
-      let cl=new Classes()
-      cl.id=0
-      cl.class_name="All Classes"
-      cl.students=[]
+      let cl = new Classes()
+      cl.id = 0
+      cl.class_name = "All Classes"
+      cl.students = []
       this.classes.unshift(cl);
       console.log(this.classes);
       this.selectclass(0)
@@ -156,13 +162,13 @@ export class HDReportPage implements OnInit {
 
   getreports() {
     this.showloader("Generating reports")
-    let id:any=this.selectedclass.id
+    let id: any = this.selectedclass.id
     //IF id ==0 it means it represents all the classes thus set it to ""
-    if(id==0)id="";
+    if (id == 0) id = "";
     this.account.getreport(id, this.event.split("T")[0]).then((resp) => {
       this.loader.dismiss();
       console.log(resp)
-      this.resp=resp
+      this.resp = resp
       this.graph(resp)
 
     }, (error) => {
