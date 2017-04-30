@@ -115,23 +115,25 @@ export class LoginPage {
       this.account.profile().then((data) => {
         console.log("dumm", data);
         let us: any = {}
-        this.storage.set("profile", data.profile)
-        this.storage.set("subjects", data.subjects)
-        this.storage.set("reasons", data.reasons)
-        this.storage.set("teachers", data.teachers)
-        this.storage.set("classes", data.classes).then(() => {
-          this.loader.dismiss();
-          this.gotoPage(data.profile)
-        })
-      }).catch((error) => {
         this.loader.dismiss();
+        this.gotoPage(data.profile)
+        // this.storage.set("profile", data.profile)
+        // this.storage.set("subjects", data.subjects)
+        // this.storage.set("reasons", data.reasons)
+        // this.storage.set("teachers", data.teachers)
+        // this.storage.set("classes", data.classes).then(() => {
+        //   this.loader.dismiss();
+        //   this.gotoPage(data.profile)
+        // })
+      },(error)=>{
+           this.loader.dismiss();
         console.log("this ***", error)
         if (error != null) {
-          if (error.json().error_description) {
-            this.error = error.json().error_description
+          if (error.error_description) {
+            this.error = error.data.error_description
           } else {
             if (error.json().error) {
-              this.error = error.json().error.replace("_", " ")
+              this.error = error.data.error.replace("_", " ")
             }
 
           }

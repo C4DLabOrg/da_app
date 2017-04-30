@@ -87,7 +87,15 @@ export class AccountService {
     profile(): Promise<any> {
         //this.jheaders = new Headers({ "Content-Type": "application/json", "Authorization": "Bearer " + token })
         return this.http.get(this.link + "api/teacher", { headers: this.jheaders }).toPromise()
-            .then(response => response.json() as any)
+            .then((response) => {
+                let data=response.json() as any
+                this.storage.set("profile", data.profile)
+                this.storage.set("subjects", data.subjects)
+                this.storage.set("reasons", data.reasons)
+                this.storage.set("teachers", data.teachers)
+                this.storage.set("classes", data.classes)
+                return  response.json() as any
+            })
             .catch(this.error)
     }
     takeattendance(data: TakeAttendance): Promise<any> {
@@ -334,7 +342,7 @@ export class AccountService {
                 offlines = []
                 this.setlocalnot()
                 //Inititate Watchout for internet Connection
-               
+
 
             }
             let offs: Offline[] = offlines as Offline[]
@@ -345,7 +353,7 @@ export class AccountService {
             offs.push(off)
             this.storage.set("offline", offs).then((data) => {
                 this.newofflineattendance$.emit("new")
-                 this.initiatesync()
+                this.initiatesync()
 
             })
 

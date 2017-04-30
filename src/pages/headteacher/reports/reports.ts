@@ -20,6 +20,7 @@ export class HDReportPage implements OnInit {
   loader: any
   if_report: boolean = false
   selectedclass: Classes
+  pgnew: boolean = true
   constructor(public navCtrl: NavController,
     private storage: Storage, private account: AccountService,
     private popoverCtrl: PopoverController,
@@ -31,16 +32,23 @@ export class HDReportPage implements OnInit {
     this.getprofile()
     this.getclasses()
     this.event = new Date().toISOString()
-    this.onClassesChange()
+   
   }
   onClassesChange() {
     this.account.newclasslist$.subscribe((data) => {
       this.getclasses()
     });
   }
+  ionViewWillLeave() {
+    console.log("bye bye");
+  }
   datechange(value) {
     console.log(this.event)
     this.getreports()
+  }
+  ionViewWillEnter(){
+    this.onClassesChange()
+
   }
   showloader(message) {
     this.loader = this.loaderctrl.create({
@@ -123,7 +131,10 @@ export class HDReportPage implements OnInit {
     for (let i = 0; i < this.selectedclass.students.length; i++) {
       this.selectedclass.students[i].status = false
     }
+
     this.getreports()
+
+
   }
   presentPopover(myEvent) {
     let popover = this.popoverCtrl.create(ClassPopoverPage, { "classes": this.classes });
