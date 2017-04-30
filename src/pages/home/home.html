@@ -1,6 +1,9 @@
 <ion-header>
       <ion-navbar color="primary">
-            <ion-title>Take Attendance <small *ngIf="classes">(Class {{classes[index].class_name}})</small> </ion-title>
+            <div *ngIf="classes">
+            <ion-title>Mark Attendance <small *ngIf="classes.length >0">( {{classes[index].class_name}})</small> </ion-title>
+            </div>
+
             <ion-buttons end>
                   <button ion-button (click)="presentPopover($event)">
                   <ion-icon name="more"></ion-icon>
@@ -10,18 +13,34 @@
 </ion-header>
 
 <ion-content color="primary">
-      
+
       <div class="spacer" style="height: 2px;"></div>
       <ion-list *ngIf="classes">
-            <ion-item-divider color="primary">Student Details </ion-item-divider>
-            <div class="spacer" style="height: 20px;"></div>
-            <ion-item *ngFor="let stud of classes[index].students">
-                  <ion-label>{{stud.student_name}}
+            <ion-item-divider color="primary">Student Details
+
+            </ion-item-divider>
+            <div class="spacer" style="height: 10px;"></div>
+            <button ion-button clear>
+                  <ion-icon name='calendar' style="color: #d03e84"></ion-icon>
+
+                         <!--<p style="color:#d03e84 ">&nbsp; &nbsp; 30th January 2017</p>-->
+                           <ion-datetime  style="color:#d03e84 " [min]="mindate" [max]="maxdate" displayFormat="  DD MMMM YYYY" (ionChange)="datechange(event)" pickerFormat="DD MMM  YYYY" [(ngModel)]="event"></ion-datetime>
+                            <ion-note *ngIf="attendancetaken" color="green" item-right><ion-icon name="checkmark-circle"></ion-icon></ion-note>
+            </button>
+            <div *ngIf="classes.length>0">
+            <ion-item   *ngFor="let stud of classes[index].students|orderBy:'gender':true;let i=index">
+                  <ion-label>
+                        <ion-badge item-right>{{i+1}}</ion-badge>{{stud.student_name}}
                         <div class="spacer" style="height: 4px;"></div>
-                        <p style="font-size: 13px;">{{stud.emis_code}}</p>
+
+                        <p style="font-size: 13px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {{stud.emis_code}}</p>
+
                   </ion-label>
-                  <ion-checkbox item-right color="primary" checked="true"></ion-checkbox>
-</ion-item>
+
+                  <ion-checkbox (ngModelChange)="onchange($event,stud.student_name)" item-right [(ngModel)]="stud.status"></ion-checkbox>
+            </ion-item>
+            </div>
+
             <!--<ion-item>
              <ion-label>Daenerys Targaryen
              <div class="spacer" style="height: 4px;"></div>
@@ -89,8 +108,10 @@
 
 
       </ion-list>
-
-      <button ion-button default style="margin-left: 65%">Submit</button>
+      <diV *ngIf="classes">
+      <button *ngIf="!attendancetaken " [disabled]="load || classes.length<=0" ion-button block (click)="confirmattendance()">{{  load==false ? 'Submit' : 'Submitting ...' }}</button>
+      </diV>
+       <button *ngIf="attendancetaken" [disabled]="load" ion-button block (click)="confirmattendance()">{{  load==false ? 'Update Attendance' : 'Updating ...' }}</button>
       <div class="spacer" style="height: 20px;"></div>
 
 </ion-content>

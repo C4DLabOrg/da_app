@@ -7,10 +7,28 @@ import { AttendancePage } from '../pages/home/home';
 import { TabsPage } from '../pages/tabs/tabs';
 import {LoginPage} from '../pages/login/login.component';
 import {PasswordPage} from '../pages/password/password.component';
+import {ResultPage} from '../pages/result/result.component';
+import {AbsencePage} from '../pages/absence/absence.component';
 import {Storage} from '@ionic/storage';
 import {AccountService} from '../pages/login/account.services';
 import {Link} from './link';
-import {ClassPopoverPage} from '../pages/home/classpopover.component'
+import {ClassPopoverPage} from '../pages/home/classpopover.component';
+import { ChartModule, } from 'angular2-highcharts';
+import { HDTabsPage } from '../pages/headteacher/tabs/tabs';
+import { HDReportPage } from '../pages/headteacher/reports/reports';
+import { HDSchoolPage} from '../pages/headteacher/school/school';
+import { HDStudentPage} from '../pages/headteacher/students/students'
+import {AddStudentModal} from '../pages/headteacher/students/addstudent'
+import {AddTeacherModal} from '../pages/headteacher/teachers/addteacher'
+import { HDTeachersPage} from '../pages/headteacher/teachers/teachers'
+import {AddClassModal} from '../pages/headteacher/classes/addclass'
+import { HDClassesPage} from '../pages/headteacher/classes/classes'
+import {HDSync} from '../pages/sync/sync'
+import {StudentSearch} from '../pipes/student-search'
+import { Ng2OrderModule } from 'ng2-order-pipe';
+//import {require} from '@types/node'
+//declare var require: any;
+
 
 @NgModule({
   declarations: [
@@ -21,9 +39,22 @@ import {ClassPopoverPage} from '../pages/home/classpopover.component'
     TabsPage,
     LoginPage,
     PasswordPage,
-    ClassPopoverPage
+    ClassPopoverPage,
+    ResultPage,
+    AbsencePage,
+    HDTabsPage,
+    HDReportPage,
+    HDSchoolPage,
+    HDStudentPage,
+    AddStudentModal,
+    AddTeacherModal,
+    AddClassModal,
+    HDClassesPage,
+    HDTeachersPage,
+    HDSync,StudentSearch
+
   ],
-  imports: [
+  imports: [ ChartModule,Ng2OrderModule,
     IonicModule.forRoot(MyApp)
   ],
   bootstrap: [IonicApp],
@@ -35,7 +66,20 @@ import {ClassPopoverPage} from '../pages/home/classpopover.component'
     TabsPage,
     LoginPage,
     PasswordPage,
-    ClassPopoverPage
+    ClassPopoverPage,
+    ResultPage,
+    AbsencePage,
+    HDTabsPage,
+    HDReportPage,
+    HDSchoolPage,
+    AddClassModal,
+    HDClassesPage,
+    HDStudentPage,
+    AddStudentModal,
+    AddTeacherModal,
+    HDTeachersPage,
+    HDSync
+
   ],
   providers: [{provide: ErrorHandler, useClass: IonicErrorHandler},Storage,AccountService,Link]
 })

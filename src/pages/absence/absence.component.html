@@ -1,0 +1,69 @@
+<ion-header>
+  <ion-navbar>
+    <ion-buttons *ngIf="absent_students" start>
+       <button ion-button icon-right color="royal" [disabled]="load" (click)="showConfirm()">
+        {{ index==(absent_students.length-1) ?  'Done':'Next Student'}}
+        <ion-icon name="arrow-dropright"></ion-icon>
+      </button>
+    </ion-buttons>
+    <ion-buttons end>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
+<ion-content>
+
+<ion-card *ngIf="selected_student">
+  <ion-card-header>
+    <b style="color:#3f51b5">{{selected_student.student.student_name}}</b>
+  </ion-card-header>
+  <ion-list>
+    <button ion-item>
+      <ion-icon style ="font-size:22px; color:#3f51b5" name="person" item-left></ion-icon>
+      <h4 style="font-size:14px;"><b>EMIS Code - {{selected_student.student.emis_code}}</b></h4>
+    </button>
+
+    <button ion-item>
+      <ion-icon style ="font-size:22px; color:#3f51b5" name="close-circle" item-left></ion-icon>
+      <h4 style="font-size:14px;"><b>Total Days Absent - {{selected_student.days}}</b></h4>
+    </button>
+
+  </ion-list>
+</ion-card>
+
+<ion-card *ngIf="reasons">
+    <ion-card-header>
+        <b style="color:#3f51b5">Reason For Absence</b>
+        <p style="color: dimgray">(Please select one or more)</p>
+    </ion-card-header>
+
+    <ion-item *ngFor="let re of reasons;let ind=index">
+        <ion-label>{{re.name}}</ion-label>
+        <ion-checkbox color="dark"  (ngModelChange)="onchange($event,re.id,ind)" [(ngModel)]="re.status" item-right></ion-checkbox>
+    </ion-item>
+
+    <!--<ion-item>
+        <ion-label>Distance From School</ion-label>
+        <ion-checkbox color="dark" checked="false" item-right></ion-checkbox>
+    </ion-item>
+
+     <ion-item>
+        <ion-label>Drugs</ion-label>
+        <ion-checkbox color="dark" checked="false" item-right></ion-checkbox>
+    </ion-item>
+
+     <ion-item>
+        <ion-label>No Teachers</ion-label>
+        <ion-checkbox color="dark" checked="false" item-right></ion-checkbox>
+    </ion-item>
+
+     <ion-item>
+        <ion-label>No Water/Food At Home</ion-label>
+        <ion-checkbox color="dark" checked="false" item-right></ion-checkbox>
+    </ion-item>
+
+    <ion-item>
+        <ion-label>Sick</ion-label>
+        <ion-checkbox color="dark" checked="false" item-right></ion-checkbox>
+    </ion-item>-->
+    
+</ion-card>

@@ -1,0 +1,121 @@
+<ion-header>
+  <ion-navbar color="primary">
+    <ion-title>Attendance Report <small *ngIf="classes">( {{classes[index].class_name}})</small> </ion-title>
+
+    <ion-buttons end>
+      <button ion-button (click)="presentPopover($event)">
+                  <ion-icon name="more"></ion-icon>
+                  </button>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
+<ion-content>
+  <button ion-button clear>
+                  <ion-icon name='calendar' style="color: #d03e84"></ion-icon>
+
+                         <!--<p style="color:#d03e84 ">&nbsp; &nbsp; 30th January 2017</p>-->
+                           <ion-datetime  style="color:#d03e84 " displayFormat="  DD MMMM YYYY" (ionChange)="datechange(event)" pickerFormat="DD MMM  YYYY" [(ngModel)]="event"></ion-datetime>
+
+  </button>
+
+  <ion-card *ngIf="if_report">
+
+    <ion-item>
+      <h2 *ngIf="selectedclass">{{selectedclass.class_name}}</h2>
+      <p>{{event|date:'mediumDate'}}</p>
+    </ion-item>
+    <chart style="width:90%;height:35%" [options]="options"></chart>
+
+
+
+    <ion-card-content>
+      <ion-item>
+        <ion-icon name='checkmark-circle' item-left style="color: #55acee"></ion-icon>
+        <h2>Students Present</h2>
+        <ion-badge *ngIf="resp" item-right> {{resp.present_females+resp.present_males}}</ion-badge>
+      </ion-item>
+      
+      <ion-item>  
+        <ion-icon name='' item-left></ion-icon>
+        <h5>Males Present</h5>
+        <ion-badge item-right> {{resp.present_males}} </ion-badge>
+      </ion-item>
+      
+      <ion-item>  
+         <ion-icon name='' item-left></ion-icon>
+        <h5>Females Present</h5>
+        <ion-badge item-right> {{resp.present_females}} </ion-badge>
+      </ion-item>
+
+      <ion-item>
+        <ion-icon name='close-circle' item-left style="color: #d03e84"></ion-icon>
+        <h2>Students Absent</h2>
+        <ion-badge *ngIf="resp" item-right> {{resp.absent_males+resp.absent_females}}</ion-badge>
+      </ion-item>
+
+      <ion-item>  
+        <ion-icon name='' item-left></ion-icon>
+        <h5>Males Absent</h5>
+        <ion-badge item-right> {{resp.absent_males}} </ion-badge>
+      </ion-item>
+      
+      <ion-item>  
+         <ion-icon name='' item-left></ion-icon>
+        <h5>Females Absent</h5>
+        <ion-badge item-right> {{resp.absent_females}} </ion-badge>
+      </ion-item>
+    </ion-card-content>
+
+  </ion-card>
+  
+  <ion-card color="primary">
+    <ion-card-header>
+      Students Absent
+    </ion-card-header>
+  </ion-card>
+
+     <ion-item>
+       <ion-label>
+          <ion-badge item-right>1</ion-badge>&nbsp; &nbsp; Norman Munge
+          <div class="spacer" style="height: 4px;"></div>
+        </ion-label>
+
+        <ion-icon (click)="callConfirm(stud)" item-right style="font-size: 21px"name="call"></ion-icon>
+
+     </ion-item>
+
+    <ion-item>
+       <ion-label>
+          <ion-badge item-right>2</ion-badge>&nbsp; &nbsp; Micha Mwangi
+          <div class="spacer" style="height: 4px;"></div>
+        </ion-label>
+
+      <ion-icon (click)="callConfirm(stud)" item-right style="font-size: 21px"name="call"></ion-icon>
+
+     </ion-item>
+
+    <ion-item>
+       <ion-label>
+          <ion-badge item-right>3</ion-badge>&nbsp; &nbsp; Ali Dennis
+          <div class="spacer" style="height: 4px;"></div>
+        </ion-label>
+       <ion-icon (click)="callConfirm(stud)" item-right style="font-size: 21px"name="call"></ion-icon>
+
+     </ion-item>
+
+
+
+
+   
+
+
+  <div class="spacer" style="height: 7px;"></div>
+  <div *ngIf="absent_students">
+    <button [disabled]="absent_students.length==0" ion-button color="primary" outline icon-left style="margin-left: 15%" (click)="absence()">
+      <ion-icon name='create' is-active="false"></ion-icon>
+      Reason For Absence &nbsp; <ion-badge *ngIf="absent_students" item-right>{{absent_students.length}}</ion-badge>
+    </button>
+  </div>
+
+
+</ion-content>

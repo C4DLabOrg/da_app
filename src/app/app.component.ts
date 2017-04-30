@@ -1,10 +1,10 @@
 import { Component,OnInit } from '@angular/core';
 import { Platform } from 'ionic-angular';
 import { StatusBar, Splashscreen } from 'ionic-native';
-import { LoginPage } from '../pages/login/login.component'
+import { LoginPage } from '../pages/login/login.component';
 import { TabsPage } from '../pages/tabs/tabs';
+import { HDTabsPage } from '../pages/headteacher/tabs/tabs';
 import {Storage}  from '@ionic/storage'
-
 
 
 @Component({
@@ -19,6 +19,7 @@ export class MyApp implements OnInit {
       StatusBar.styleDefault();
       Splashscreen.hide();
     });
+  
   }
   ngOnInit(){
     this.gotoApp()
@@ -26,9 +27,19 @@ export class MyApp implements OnInit {
 
   gotoApp() {
     this.storage.get("user").then((val) => {
+     
       console.log(val)
       if (val) {
-        this.rootPage=TabsPage
+         this.storage.get("profile").then((profile)=>{
+           if(profile.headteacher){
+              this.rootPage=HDTabsPage
+           }
+           else{
+               this.rootPage=TabsPage
+           }
+        
+      })
+      
       }
       else {
         this.rootPage=LoginPage

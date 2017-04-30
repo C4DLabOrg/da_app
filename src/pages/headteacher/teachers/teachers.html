@@ -1,0 +1,42 @@
+<ion-header>
+      <ion-navbar color="primary">
+            <ion-title>Teachers <small *ngIf="teachers">( {{teachers.length}})</small> </ion-title>
+
+            <ion-buttons end>
+                  <button ion-button >
+                  <ion-icon name="more"></ion-icon>
+                  </button>
+            </ion-buttons>
+      </ion-navbar>
+</ion-header>
+
+<ion-content color="primary">
+
+      <div class="spacer" style="height: 2px;"></div>
+      <ion-list *ngIf="teachers">
+            <ion-item-divider color="primary">Teachers Details </ion-item-divider>
+            <div class="spacer" style="height: 10px;"></div>
+            <ion-item *ngFor="let teach of teachers;let i=index">
+                  <ion-label>
+                        <ion-badge item-right>{{i+1}}</ion-badge>{{teach.name}}
+                        <div class="spacer" style="height: 4px;"></div>
+
+                        <p style="font-size: 13px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {{teach.teacher_type}}</p>
+
+                  </ion-label>
+
+                  <a ion-button (click)="presentModal(teach,'update')" small item-right>Edit</a>
+
+                  <a ion-button small item-right color="danger" (click)="deleteConfirm(teach)" >Remove</a>
+                  
+              
+          </ion-item>
+  
+      </ion-list>
+
+      <ion-fab right bottom>
+        <button (click)="presentModal('a','add')" ion-fab mini color="dark"><ion-icon name="add"></ion-icon></button>
+      </ion-fab>
+      <div class="spacer" style="height: 20px;"></div>
+
+</ion-content>
