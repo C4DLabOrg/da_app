@@ -460,4 +460,14 @@ export class AccountService {
     }
 
 
+
+    ///Get the absent students
+    getabsentstudents(id,date:any):Promise<any>{
+        return this.http.get(this.link+"api/students/absent?_class="+id+"&date="+date).toPromise()
+                .then(resp=>resp.json())
+                .catch(this.error)
+
+    }
+
+
 }

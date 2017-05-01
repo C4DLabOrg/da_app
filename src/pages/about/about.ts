@@ -111,7 +111,7 @@ export class AboutPage implements OnInit {
       }
     })
   }
-  callConfirm(student: Student) {
+ callConfirm(student: Student) {
     if (student.guardian_phone) {
       let confirm = this.alertctrl.create({
         title: 'Call  Guardian',

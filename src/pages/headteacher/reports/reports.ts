@@ -5,6 +5,7 @@ import { Storage } from '@ionic/storage'
 import { AccountService } from '../../login/account.services'
 import { Classes } from '../../home/classes'
 import { Report } from './report'
+declare var window;
 @Component({
   selector: 'page-about',
   templateUrl: 'reports.html'
@@ -21,6 +22,8 @@ export class HDReportPage implements OnInit {
   if_report: boolean = false
   selectedclass: Classes
   pgnew: boolean = true
+ 
+  absentstudents:any
   constructor(public navCtrl: NavController,
     private storage: Storage, private account: AccountService,
     private popoverCtrl: PopoverController,
@@ -163,6 +166,7 @@ export class HDReportPage implements OnInit {
     })
   }
   showalert(title, message) {
+    
     let alert = this.alertctrl.create({
       title: title,
       subTitle: message,
@@ -170,28 +174,88 @@ export class HDReportPage implements OnInit {
     });
     alert.present();
   }
+  stoploader(i){
+    if(i==2){
+      if(this.loader){
+        this.loader.dismiss();
+        console.log("Loader dismissed")
+      }
+      
+    }
+  }
 
   getreports() {
+    let i=0;
     this.showloader("Generating reports")
     let id: any = this.selectedclass.id
-    //IF id ==0 it means it represents all the classes thus set it to ""
+    //IF id ==0 it means it represents all the classes thus set  to ""
     if (id == 0) id = "";
+
+    //Getting the aggredates
     this.account.getreport(id, this.event.split("T")[0]).then((resp) => {
-      this.loader.dismiss();
+      i++
+      this.stoploader(i)
       console.log(resp)
       this.resp = resp
       this.graph(resp)
 
     }, (error) => {
-      this.loader.dismiss();
+      i++
+      this.stoploader(i)
       if (error.url == null) {
         this.showalert("NO Internet Connection", "Turn on your wifi or data")
       }
       console.log(error)
       console.log(error)
     })
-  }
 
+    //Getting the absent students and frequency
+    this.account.getabsentstudents(id,this.event.split("T")[0]).then(resp=>{
+       i++
+      this.stoploader(i)
+      this.absentstudents=resp 
+    },error=>{
+       i++
+      this.stoploader(i)
+      console.log(error)
+    })
+  }
+   callConfirm(student: any) {
+    if (student.guardian_phone) {
+      let confirm = this.alertctrl.create({
+        title: 'Call  Guardian',
+        message: 'Place a call to ' + student.guardian_name + " ?",
+        buttons: [
+          {
+            text: 'Disagree',
+            handler: () => {
+              console.log('Disagree clicked');
+            }
+          },
+          {
+            text: 'Agree',
+            handler: () => {
+              this.makecall(student.guardian_phone)
+              console.log('Agree clicked');
+            }
+          }
+        ]
+      });
+      confirm.present();
+    }
+    else {
+      
+      this.showalert("No Contact Information", "Contact an admin to add the contact information")
+
+    }
+  }
+   makecall(phone: string) {
+      // this.call.callNumber(phone, true)
+      //   .then(() => console.log('Launched dialer!'))
+      //   .catch(() => console.log('Error launching dialer'));
+       window.location = "tel:"+phone;
+
+  }
 
 
 }
