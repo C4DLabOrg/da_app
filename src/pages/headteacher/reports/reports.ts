@@ -35,7 +35,7 @@ export class HDReportPage implements OnInit {
     this.getprofile()
     this.getclasses()
     this.event = new Date().toISOString()
-   
+     this.onClassesChange()
   }
   onClassesChange() {
     this.account.newclasslist$.subscribe((data) => {
@@ -49,10 +49,7 @@ export class HDReportPage implements OnInit {
     console.log(this.event)
     this.getreports()
   }
-  ionViewWillEnter(){
-    this.onClassesChange()
-
-  }
+ 
   showloader(message) {
     this.loader = this.loaderctrl.create({
       content: message

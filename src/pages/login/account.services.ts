@@ -94,6 +94,7 @@ export class AccountService {
                 this.storage.set("reasons", data.reasons)
                 this.storage.set("teachers", data.teachers)
                 this.storage.set("classes", data.classes)
+                this.storage.set("schoolinfo",data.schoolinfo)
                 return  response.json() as any
             })
             .catch(this.error)

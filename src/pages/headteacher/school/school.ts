@@ -1,40 +1,55 @@
-import { Component,OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
 import { NavController } from 'ionic-angular';
-import {Storage} from '@ionic/storage';
-import { HDStudentPage} from '../students/students'
-import {HDClassesPage} from '../classes/classes'
-import {HDTeachersPage} from '../teachers/teachers'
-import {AboutPage} from '../../about/about'
+import { Storage } from '@ionic/storage';
+import { HDStudentPage } from '../students/students'
+import { HDClassesPage } from '../classes/classes'
+import { HDTeachersPage } from '../teachers/teachers'
+import { AboutPage } from '../../about/about'
+import {AccountService} from '../../login/account.services'
 
 @Component({
   selector: 'page-about',
   templateUrl: 'school.html'
 })
 export class HDSchoolPage implements OnInit {
-  user:any
-  constructor(public navCtrl: NavController,private storage:Storage) {
+  user: any
+  schoolinfo: any
+  constructor(public navCtrl: NavController, 
+  private storage: Storage,private account:AccountService) {
 
   }
-  ngOnInit(){
+  ngOnInit() {
     this.getprofile()
+    this.getschoolinfo()
+    this.onnewlist()
   }
-  getprofile(){
-    this.storage.get("profile").then((data)=>{
-      this.user=data
+  onnewlist(){
+    this.account.newclasslist$.subscribe((data)=>{
+      this.getschoolinfo()
+    });
+  }
+  getprofile() {
+    
+    this.storage.get("profile").then((data) => {
+      this.user = data
     })
   }
-
-   students(){
+  getschoolinfo() {
+    this.storage.get("schoolinfo").then((data) => {
+      this.schoolinfo = data
+    })
+  }
+  students() {
     this.navCtrl.push(HDStudentPage)
   }
-   studentdetails(){
+  studentdetails() {
     this.navCtrl.push(AboutPage)
   }
-    teachers(){
+  teachers() {
     this.navCtrl.push(HDTeachersPage)
   }
-    goclasses(){
+  goclasses() {
     this.navCtrl.push(HDClassesPage)
   }
 
