@@ -87,17 +87,27 @@ export class AccountService {
     profile(): Promise<any> {
         //this.jheaders = new Headers({ "Content-Type": "application/json", "Authorization": "Bearer " + token })
         return this.http.get(this.link + "api/teacher", { headers: this.jheaders }).toPromise()
-            .then((response) => {
-                let data=response.json() as any
-                this.storage.set("profile", data.profile)
-                this.storage.set("subjects", data.subjects)
-                this.storage.set("reasons", data.reasons)
-                this.storage.set("teachers", data.teachers)
-                this.storage.set("classes", data.classes)
-                this.storage.set("schoolinfo",data.schoolinfo)
-                return  response.json() as any
-            })
+            .then((response) => this.saveall(response))
+            .then(response=>response)
             .catch(this.error)
+    }
+    saveall(response) {
+        return new Promise(resolve => {
+            console.log("saving all ");
+            let data = response.json() as any
+            this.storage.set("profile", data.profile)
+            this.storage.set("subjects", data.subjects)
+            this.storage.set("reasons", data.reasons)
+            this.storage.set("teachers", data.teachers)
+            this.storage.set("schoolinfo", data.schoolinfo)
+            this.storage.set("classes", data.classes).then(()=>{
+                console.log("done saving them")
+                 resolve(response.json())
+            })
+            
+           
+
+        });
     }
     takeattendance(data: TakeAttendance): Promise<any> {
         return this.http.post(this.link + "api/attendance", data, { headers: this.jheaders }).toPromise()
@@ -463,10 +473,10 @@ export class AccountService {
 
 
     ///Get the absent students
-    getabsentstudents(id,date:any):Promise<any>{
-        return this.http.get(this.link+"api/students/absent?_class="+id+"&date="+date).toPromise()
-                .then(resp=>resp.json())
-                .catch(this.error)
+    getabsentstudents(id, date: any): Promise<any> {
+        return this.http.get(this.link + "api/students/absent?_class=" + id + "&date=" + date).toPromise()
+            .then(resp => resp.json())
+            .catch(this.error)
 
     }
 
