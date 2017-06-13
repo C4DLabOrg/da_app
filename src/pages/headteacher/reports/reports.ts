@@ -193,8 +193,8 @@ export class HDReportPage implements OnInit {
       i++
       this.stoploader(i)
       console.log(resp)
-      this.resp = resp
-      this.graph(resp)
+      this.resp = resp.results
+      this.graph(resp.results)
 
     }, (error) => {
       i++
@@ -210,7 +210,7 @@ export class HDReportPage implements OnInit {
     this.account.getabsentstudents(id,this.event.split("T")[0]).then(resp=>{
        i++
       this.stoploader(i)
-      this.absentstudents=resp 
+      this.absentstudents=resp.results
     },error=>{
        i++
       this.stoploader(i)
