@@ -236,6 +236,18 @@ export class HDStudentPage implements OnInit {
       value: 'DROP'
     });
 
+    alert.addInput({
+      type: 'radio',
+      label: 'Error in entry of information',
+      value: 'ERR'
+    });
+
+     alert.addInput({
+      type: 'text',
+      label: 'Other Reason',
+      value: 'OTHER'
+    });
+
     alert.addButton('Cancel');
     alert.addButton({
       text: 'delete',
