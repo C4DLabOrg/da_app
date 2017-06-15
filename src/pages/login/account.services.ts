@@ -398,7 +398,7 @@ export class AccountService {
         });
     }
     ping(): Promise<any> {
-        return this.http.options(this.link + "api/attendance").toPromise()
+        return this.http.options(this.link + "api/ping").toPromise()
             .then((resp) => resp.json())
             .catch(this.error)
     }
@@ -443,29 +443,42 @@ export class AccountService {
 
             let d = this.offlines.length
             let comp = 0
+            let compl=1;
+    
+            let promises_array:Array<any> = [];
+             
             for (let i = 0; i < this.offlines.length; i++) {
-                console.log("Starting ...", i)
-                this.sync(this.offlines[i], i).then((data) => {
-                    //this.offlines.splice(i, 1)
-                    comp++;
-                    if (d == comp) {
-                        this.storage.set("offline", null)
-                        this.storage.set("lastsync", new Date())
-                        this.storage.set("lastsyncdata", this.offlines)
-                        this.offlines = []
-                        this.updateStatus$.emit("Attendance sync Completed");
-                        console.log("Done syncing..", i)
-                    }
+                 console.log("Starting ...", i)
+                promises_array.push(this.sync(this.offlines[i], i))
+                //.then((data) => {
+                //     //this.offlines.splice(i, 1)
+                //     // comp++;
+                //     // if (d == comp) {
+                //     //     this.storage.set("offline", null)
+                //     //     this.storage.set("lastsync", new Date())
+                //     //     this.storage.set("lastsyncdata", this.offlines)
+                //     //     this.offlines = []
+                //     //  //   this.updateStatus$.emit("Attendance sync Completed");
+                //    console.log("Done syncing..", i)
+                //     // }
 
-                }, (error) => {
-                    false
+                // }, (error) => {
+                //     false
 
-                    if (error.url == null) {
-                        this.updateStatus$.emit("No Internet Connection");
-                    }
-                    console.log(error)
-                });
+                //     if (error.url == null) {
+                //       //  this.updateStatus$.emit("No Internet Connection");
+                //     }
+                //    // console.log(error)
+                // });
             }
+            Promise.all(promises_array).then(()=>{
+                
+            },(error)=>{
+                console.log("Eroro")
+            }).then(()=>{
+                console.log("Done everything");
+                this.updateStatus$.emit("Attendance sync Completed");
+            });;
             //Close
         });
     }

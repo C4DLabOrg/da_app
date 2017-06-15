@@ -1,6 +1,7 @@
 <ion-header>
   <ion-navbar>
-    <ion-title>My School</ion-title>
+    <ion-title *ngIf="is_headteacher">My School</ion-title>
+    <ion-title *ngIf="!is_headteacher">My Students</ion-title>
   </ion-navbar>
 </ion-header>
 
@@ -45,7 +46,7 @@
     </ion-list>
   </ion-card>
 
-  <ion-card color="primary">
+  <ion-card *ngIf="is_headteacher" color="primary">
     <ion-card-header>
       Teachers
     <ion-badge *ngIf="schoolinfo" color="white" style="margin-left: 65%">{{schoolinfo.teachers}}</ion-badge>
@@ -64,7 +65,7 @@
     <ion-list>
     </ion-list>
   </ion-card>
-  <ion-card color="primary">
+  <ion-card *ngIf="is_headteacher" color="primary">
     <ion-card-header>
       Classes
     <ion-badge *ngIf="schoolinfo" color="white" style="margin-left: 65%">{{schoolinfo.classes}}</ion-badge>
