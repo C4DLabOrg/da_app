@@ -15,6 +15,7 @@ import {AccountService} from '../../login/account.services'
 export class HDSchoolPage implements OnInit {
   user: any
   schoolinfo: any
+  is_headteacher:boolean=false
   constructor(public navCtrl: NavController, 
   private storage: Storage,private account:AccountService) {
 
@@ -33,6 +34,8 @@ export class HDSchoolPage implements OnInit {
     
     this.storage.get("profile").then((data) => {
       this.user = data
+      this.is_headteacher=this.user.headteacher
+      console.log(this.is_headteacher)
     })
   }
   getschoolinfo() {
