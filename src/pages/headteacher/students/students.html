@@ -41,8 +41,8 @@
             </div>
       </ion-list>
 
-      <ion-fab right bottom>
-        <button (click)="presentModal('new','add')" ion-fab mini color="dark"><ion-icon name="add"></ion-icon></button>
+      <ion-fab  *ngIf="classes" right bottom>
+        <button *ngIf="classes.length>0" (click)="presentModal('new','add')" ion-fab mini color="dark"><ion-icon name="add"></ion-icon></button>
       </ion-fab>
       <div class="spacer" style="height: 20px;"></div>
 

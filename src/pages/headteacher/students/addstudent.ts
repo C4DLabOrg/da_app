@@ -47,6 +47,17 @@ export class AddStudentModal {
             })
         }
         else{
+                this.studform.setValue({
+                fstname:"",
+                lstname:"",
+                midname:"",
+                student_id: "",
+                class_id:this.class_id,
+                gender:"",
+                guardian_phone:"",
+                guardian_name:"",
+                date_enrolled:""
+            })
             
         }
     }

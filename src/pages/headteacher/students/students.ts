@@ -81,7 +81,7 @@ export class HDStudentPage implements OnInit {
   }
   presentModal(student, type) {
     if (student == 'new') {
-      let modal = this.modalctrl.create(AddStudentModal, { classes: this.classes, type: type, class: "" });
+      let modal = this.modalctrl.create(AddStudentModal, { classes: this.classes, type: type, class: this.selectedclass.id });
       modal.present();
     } else {
       let modal = this.modalctrl.create(AddStudentModal, { classes: this.classes, student: student, type: type, class: this.selectedclass.id });
