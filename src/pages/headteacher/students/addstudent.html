@@ -82,7 +82,7 @@
     <ion-item>
       <ion-label stacked>Enrolled   <ion-icon name='calendar' style="color: #d03e84"></ion-icon></ion-label>
      
-      <ion-datetime  displayFormat="  DD MMMM YYYY"  pickerFormat="DD MMM  YYYY"
+      <ion-datetime [max]="maxdate"  displayFormat="  DD MMMM YYYY"  pickerFormat="DD MMM  YYYY"
         formControlName="date_enrolled"></ion-datetime>
     </ion-item>
 

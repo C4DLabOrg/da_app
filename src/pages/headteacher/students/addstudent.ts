@@ -15,6 +15,7 @@ export class AddStudentModal {
     class_id:number
     classes:Classes[]
     load:boolean=false
+     maxdate: string = new Date().toISOString()
     constructor(private viewCtrl: ViewController, private params: NavParams
         , private formBuilder: FormBuilder,private account:AccountService) {
         this.type = this.params.get("type")
