@@ -152,9 +152,8 @@ export class AboutPage implements OnInit {
     
     }
 
-  individual() {
-
-    this.navCtrl.push(IndividualPage);
+  individual(student) {
+    this.navCtrl.push(IndividualPage,{"student":student});
   }
 
 

@@ -26,7 +26,7 @@
     <div *ngIf="classes.length>0">
     <ion-item-sliding #item *ngFor="let stud of classes[index].students|orderBy:'gender':true|student:studname;let i=index">
       <ion-item>
-        <ion-label (click)="individual()">
+        <ion-label (click)="individual(stud)">
           <ion-badge item-right>{{i+1}}</ion-badge>{{stud.student_name}}
           <p style="font-size: 13px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{stud.emis_code}}</p>
         </ion-label>

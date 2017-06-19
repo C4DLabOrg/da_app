@@ -1,7 +1,7 @@
 import { Component,OnInit } from '@angular/core';
-import { NavController, LoadingController } from 'ionic-angular';
-
-
+import { NavController, LoadingController,NavParams } from 'ionic-angular';
+import {AccountService} from '../../login/account.services'
+import {Student} from '../../home/classes'
 @Component({
   selector: 'individual',
   templateUrl: 'individual.html'
@@ -10,27 +10,62 @@ export class IndividualPage implements OnInit {
 
   text: string;
   options: any;
-
-  constructor() {
-    console.log('Hello Individual Component');
-    this.text = 'Hello World';
+  student:Student
+  presentpercentage:number=0
+  constructor(private account:AccountService,private navparams:NavParams) {
+   
   }
 
   ngOnInit(){
-    this.graph();
+   // this.graph();
   }
 
-  graph(){
+  getstudentreport(){
+     // 
+  }
+    ngAfterViewInit() {
+    let student=this.navparams.get("student");
+    this.student=student
+    console.log("student ",student);
+    this.account.getstudentweeklyreport(student.id).then((data=>{
+        data=data.results
+        let presents=[]
+        let absents=[]
+        let categories=[]
+        let totalpresent=0
+        let totalabsent=0
+         console.log(data)
+        for(let i=0;i<data.length;i++){
+            let d=data[i]
+            presents.push(d["present"])
+            totalabsent+=d["absent"]
+            totalpresent+=d["present"]
+            absents.push(d["absent"])
+            categories.push(d["value"])
+        }
+        if(totalabsent !=0){
+        this.presentpercentage=Math.round(totalpresent/(totalabsent+totalpresent)*100)
+        }
+       
+        let graphdata={}
+        graphdata["present"]=presents
+        graphdata["absent"]=absents
+        graphdata["categories"]=categories
+        console.log(graphdata)
+        if(presents.length !=0 && absents.length !=0){
+             this.graph(graphdata)
+        }
+       
+    }))
+
+  }
+
+  graph(data){
   this.options = {
       chart: { type: 'column' },
       title: { text: '' },
       xAxis: {
-        categories: [
-            'Week1',
-            'Week2',
-            'Week3',
-            'Week4',
-        ],
+        categories:data["categories"],
         crosshair:true
     },
         yAxis: {
@@ -42,11 +77,11 @@ export class IndividualPage implements OnInit {
     },
         series: [{
         name: 'Present',
-        data: [3, 1, 2, 0]
+        data: data["present"]
 
     }, {
         name: 'Absent',
-        data: [2, 4, 3, 5]
+        data: data["absent"]
 
     }],
 

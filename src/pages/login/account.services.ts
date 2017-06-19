@@ -129,7 +129,6 @@ export class AccountService {
             })
             .catch((error) => this.handleattendance(error, data))
     }
-
     //Update reason for absent
 
     updateabsence(id, data: any): Promise<any> {
@@ -343,6 +342,11 @@ export class AccountService {
         return this.http.get(this.link + "api/attendances/daily?_class=" + id + "&date=" + date).toPromise()
             .then(resp => resp.json())
             .catch(this.error)
+    }
+    getstudentweeklyreport(id):Promise<any>{
+        return this.http.get(this.link+"api/attendances/weekly?student="+id).toPromise()
+        .then(resp=>resp.json())
+        .catch(this.error)
     }
     showtoast(message: string) {
         if (this.toast) {
