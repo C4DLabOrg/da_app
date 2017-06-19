@@ -23,6 +23,7 @@ export class HDReportPage implements OnInit {
   selectedclass: Classes
   pgnew: boolean = true
  
+  isonpage:boolean=true
   absentstudents:any
   constructor(public navCtrl: NavController,
     private storage: Storage, private account: AccountService,
@@ -42,8 +43,13 @@ export class HDReportPage implements OnInit {
       this.getclasses()
     });
   }
+   ionViewWillEnter() {
+     this.isonpage=true
+    console.log("I'm alive! ",this.isonpage);
+  }
   ionViewWillLeave() {
-    console.log("bye bye");
+    this.isonpage=false
+    console.log("bye bye ",this.isonpage);
   }
   datechange(value) {
     console.log(this.event)
@@ -73,7 +79,6 @@ export class HDReportPage implements OnInit {
       data.push({ name: "Absent Males", y: this.resp.absent_males })
       data.push({ name: "Present Females", y: this.resp.present_females })
       data.push({ name: "Absent Females", y: this.resp.absent_females })
-
       data2.push({ name: "Students Present", y: this.resp.present_females + this.resp.present_males })
       data2.push({ name: "Students Absent", y: this.resp.absent_females + this.resp.absent_males })
       //console.log(data)
@@ -131,9 +136,9 @@ export class HDReportPage implements OnInit {
     for (let i = 0; i < this.selectedclass.students.length; i++) {
       this.selectedclass.students[i].status = false
     }
-
-    this.getreports()
-
+    if(this.isonpage){
+      this.getreports()
+    }
 
   }
   presentPopover(myEvent) {

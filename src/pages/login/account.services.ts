@@ -20,6 +20,10 @@ export class AccountService {
     offlines: Offline[]
     classes: Classes[]
     clock: any
+    totalrequests: number = 0
+    completedrequests: number = 0
+    errorrequests: number = 0
+    showattendanceprogress:boolean=false
     nonetnotification: boolean = true
     private headers = new Headers({ "Content-Type": "application/x-www-form-urlencoded" })
     jheaders: Headers
@@ -88,7 +92,7 @@ export class AccountService {
         //this.jheaders = new Headers({ "Content-Type": "application/json", "Authorization": "Bearer " + token })
         return this.http.get(this.link + "api/teacher", { headers: this.jheaders }).toPromise()
             .then((response) => this.saveall(response))
-            .then(response=>response)
+            .then(response => response)
             .catch(this.error)
     }
     saveall(response) {
@@ -100,21 +104,28 @@ export class AccountService {
             this.storage.set("reasons", data.reasons)
             this.storage.set("teachers", data.teachers)
             this.storage.set("schoolinfo", data.schoolinfo)
-            this.storage.set("classes", data.classes).then(()=>{
+            this.storage.set("classes", data.classes).then(() => {
                 console.log("done saving them")
-                 resolve(response.json())
+                resolve(response.json())
             })
-            
-           
+
+
 
         });
     }
     takeattendance(data: TakeAttendance): Promise<any> {
+        this.totalrequests++
         return this.http.post(this.link + "api/attendance", data, { headers: this.jheaders }).toPromise()
             .then((respose) => {
                 this.attendancelocalnot()
                 this.saveattendancehistory(data)
+                this.completedrequests++;
+                 if(this.showattendanceprogress){
+                     let per=(this.completedrequests+this.errorrequests)/this.totalrequests
+                    this.updateStatus$.emit(Math.round(per*100)+" %");
+                 }
                 return respose.json()
+               
             })
             .catch((error) => this.handleattendance(error, data))
     }
@@ -291,6 +302,7 @@ export class AccountService {
     }
 
     private handleattendance(error: any, attendance: TakeAttendance): Promise<any> {
+        this.errorrequests++;
         //console.log(error)
         if (error.url == null) {
             console.log("No internet", attendance)
@@ -436,6 +448,7 @@ export class AccountService {
                 data = []
             }
             else {
+                this.showattendanceprogress=true
                 this.updateStatus$.emit("Attendance Sync Started ...");
             }
             console.log(data)
@@ -443,12 +456,12 @@ export class AccountService {
 
             let d = this.offlines.length
             let comp = 0
-            let compl=1;
-    
-            let promises_array:Array<any> = [];
-             
+            let compl = 1;
+
+            let promises_array: Array<any> = [];
+
             for (let i = 0; i < this.offlines.length; i++) {
-                 console.log("Starting ...", i)
+                console.log("Starting ...", i)
                 promises_array.push(this.sync(this.offlines[i], i))
                 //.then((data) => {
                 //     //this.offlines.splice(i, 1)
@@ -471,12 +484,13 @@ export class AccountService {
                 //    // console.log(error)
                 // });
             }
-            Promise.all(promises_array).then(()=>{
-                
-            },(error)=>{
+            Promise.all(promises_array).then(() => {
+                console.log("Done one")
+            }, (error) => {
                 console.log("Eroro")
-            }).then(()=>{
+            }).then(() => {
                 console.log("Done everything");
+                this.showattendanceprogress=false
                 this.updateStatus$.emit("Attendance sync Completed");
             });;
             //Close
