@@ -1,0 +1,43 @@
+<ion-header>
+  <ion-navbar color="primary">
+    <ion-title>Reuben Kibegwa</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content>
+  <div class="spacer" style="height:4px;"></div>
+  <ion-item>
+   <button ion-button clear>
+           <ion-icon name='calendar' style="color: #d03e84"></ion-icon>
+
+                     <p style="color:#d03e84 ">&nbsp; &nbsp; January 2017</p>
+                        <!--<ion-datetime  style="color:#d03e84 " [min]="mindate" [max]="maxdate" displayFormat="  DD MMMM YYYY" (ionChange)="datechange(event)" pickerFormat="DD MMM  YYYY" [(ngModel)]="event"></ion-datetime>
+                        <ion-note *ngIf="attendancetaken" color="green" item-right><ion-icon name="checkmark-circle"></ion-icon></ion-note>-->
+  </button>
+  
+   <h6><b>Monthly Attendance Report</b></h6>
+  </ion-item>
+   <div class="spacer" style="height:35px;"></div>
+
+   <chart style="width:95%;height:35%" [options]="options"></chart>
+
+   <ion-card>
+     
+    <ion-item style="background-color: #3f51b5">
+      <ion-icon style="color: white" name="done-all" item-left item-start large></ion-icon>
+      <h4 style="color: white; font-size: 20px"><b>70%</b></h4>
+      <p style="color: white">Attendance Record</p>
+    </ion-item>
+
+     <div class="spacer" style="height:4px;"></div>
+      
+    <ion-item style="background-color: #d03e84">
+      <ion-icon style="color: white" name="alert" item-left item-start large></ion-icon>
+      <h4 style="color: white; font-size: 20px"><b>30%</b></h4>
+      <p style="color: white">Dropout Probability Rate</p>
+    </ion-item>
+
+    
+   </ion-card>
+
+</ion-content>
