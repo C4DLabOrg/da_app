@@ -21,6 +21,7 @@ import { HDStudentPage} from '../pages/headteacher/students/students'
 import {AddStudentModal} from '../pages/headteacher/students/addstudent'
 import {AddTeacherModal} from '../pages/headteacher/teachers/addteacher'
 import { HDTeachersPage} from '../pages/headteacher/teachers/teachers'
+import { HelpPage} from '../pages/help/help'
 import {AddClassModal} from '../pages/headteacher/classes/addclass'
 import { HDClassesPage} from '../pages/headteacher/classes/classes'
 import {HDSync} from '../pages/sync/sync'
@@ -53,6 +54,7 @@ import { Ng2OrderModule } from 'ng2-order-pipe';
     HDClassesPage,
     HDTeachersPage,
     IndividualPage,
+    HelpPage,
     HDSync,StudentSearch
 
   ],
@@ -81,6 +83,7 @@ import { Ng2OrderModule } from 'ng2-order-pipe';
     AddTeacherModal,
     HDTeachersPage,
     IndividualPage,
+    HelpPage,
     HDSync
 
   ],

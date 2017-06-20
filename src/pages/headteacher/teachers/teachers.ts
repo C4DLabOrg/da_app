@@ -114,8 +114,8 @@ export class HDTeachersPage implements OnInit {
   }
   deleteConfirm(teacher: Teacher) {
     let confirm = this.alertctrl.create({
-      title: 'Delete Student',
-      message: 'Do you want to delete this student?',
+      title: 'Delete Teacher',
+      message: 'Do you want to delete this teacher?',
       buttons: [
         {
           text: 'Disagree',

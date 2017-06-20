@@ -71,7 +71,7 @@ export class IndividualPage implements OnInit {
         yAxis: {
         min: 0,
         title: {
-            text: 'Number'
+            text: 'Record'
         }
 
     },
