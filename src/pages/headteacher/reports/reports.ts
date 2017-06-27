@@ -87,6 +87,7 @@ export class HDReportPage implements OnInit {
       this.if_report = false
       this.showalert("No Reports", "Attendance was not taken for this day")
     }
+    
     this.options = {
       chart: { type: 'pie' },
       title: { text: '' },

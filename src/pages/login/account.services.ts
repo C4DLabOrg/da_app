@@ -495,6 +495,10 @@ export class AccountService {
             }).then(() => {
                 console.log("Done everything");
                 this.showattendanceprogress=false
+                this.storage.set("offline", null)
+                this.storage.set("lastsync", new Date())
+                this.storage.set("lastsyncdata", this.offlines)
+                this.offlines = []
                 this.updateStatus$.emit("Attendance sync Completed");
             });;
             //Close
