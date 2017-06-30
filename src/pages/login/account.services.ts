@@ -343,8 +343,8 @@ export class AccountService {
             .then(resp => resp.json())
             .catch(this.error)
     }
-    getstudentweeklyreport(id):Promise<any>{
-        return this.http.get(this.link+"api/attendances/weekly?student="+id).toPromise()
+    getstudentweeklyreport(id,start_date,end_date):Promise<any>{
+        return this.http.get(this.link+"api/attendances/weekly?start_date="+start_date+"&end_date="+end_date+"&student="+id).toPromise()
         .then(resp=>resp.json())
         .catch(this.error)
     }
