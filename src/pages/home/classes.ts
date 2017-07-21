@@ -22,6 +22,7 @@ export class Student{
     date_enrolled:string    
     guardian_name:string
     guardian_phone:string
+    is_oosc:boolean
 
 }
 export class Teacher{

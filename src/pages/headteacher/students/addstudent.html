@@ -72,8 +72,17 @@
         <ion-option *ngFor="let class of classes" value="{{class.id}}">{{class.class_name}}</ion-option>
       </ion-select>
     </ion-item>
+    
 
     <div class="spacer" style="height:10px;"></div>
+
+      <ion-item>
+         <ion-label>Newly Enrolled Student</ion-label>
+      <ion-checkbox formControlName="is_oosc" item-right></ion-checkbox>
+    </ion-item>
+
+    <div class="spacer" style="height:10px;"></div>
+
 
     <ion-item>
       <ion-label stacked>Enrollment Date   <ion-icon name='calendar' style="color: #d03e84"></ion-icon></ion-label>
@@ -81,6 +90,8 @@
       <ion-datetime [max]="maxdate"  displayFormat="  DD MMMM YYYY"  pickerFormat="DD MMM  YYYY"
         formControlName="date_enrolled"></ion-datetime>
     </ion-item>
+
+   
     <button ion-button full type="submit" [disabled]="!studform.valid || load"> <span *ngIf="type">{{load?'Loading ...':type}}</span></button>
     
   </form>
