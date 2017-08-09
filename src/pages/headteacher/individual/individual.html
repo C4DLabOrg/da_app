@@ -7,6 +7,15 @@
 <ion-content>
   <div class="spacer" style="height:4px;"></div>
   <ion-item>
+    <!--<ion-input type="number" (ngModelChange)="onmonthyearchange(month,year)" [(ngModel)]="year"></ion-input>-->
+
+    <ion-select [(ngModel)]="year" (ngModelChange)="onmonthyearchange(month,year)" style="color:#d03e84 ">
+      <ion-option value="2016">2016</ion-option>
+      <ion-option value="2017" selected="true">2017</ion-option>
+      <ion-option value="2018">2018</ion-option>
+    </ion-select>
+  </ion-item>
+  <ion-item>
     <!--<button ion-button clear>
            <ion-icon name='calendar' style="color: #d03e84"></ion-icon>
       
@@ -15,23 +24,20 @@
     <ion-select [(ngModel)]="month" (ngModelChange)="onmonthyearchange(month,year)" style="color:#d03e84 ">
       <ion-option value="1" selected="true">January</ion-option>
       <ion-option value="2">February</ion-option>
-      <ion-option value="3" >March</ion-option>
+      <ion-option value="3">March</ion-option>
       <ion-option value="4">April</ion-option>
       <ion-option value="5">May</ion-option>
-      <ion-option value="6" >June</ion-option>
+      <ion-option value="6">June</ion-option>
       <ion-option value="7">July</ion-option>
       <ion-option value="8">August</ion-option>
-      <ion-option value="9" >September</ion-option>
+      <ion-option value="9">September</ion-option>
       <ion-option value="10">Octomber</ion-option>
-      <ion-option value="11" >November</ion-option>
+      <ion-option value="11">November</ion-option>
       <ion-option value="12">December</ion-option>
     </ion-select>
-    
+
   </ion-item>
-  <ion-item>
-     <ion-input type="number" (ngModelChange)="onmonthyearchange(month,year)" [(ngModel)]="year"></ion-input>
-     <h6><b>Monthly Attendance Report</b></h6>
-  </ion-item>
+  <!--<h6><b>Monthly Attendance Report</b></h6>-->
   <div class="spacer" style="height:35px;"></div>
   <ion-card color="secondary" *ngIf="!load && presentpercentage =='---'">
 

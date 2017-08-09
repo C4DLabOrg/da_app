@@ -14,8 +14,9 @@ export class IndividualPage implements OnInit {
     load: boolean = false
     presentpercentage: any = "---"
     absentpercentage: any = "---"
-    month: any = "1"
+    month: any = (new Date().getMonth()+1).toString()
     year: any = new Date().getFullYear()
+
     constructor(private account: AccountService, private navparams: NavParams) {
 
     }
@@ -34,6 +35,7 @@ export class IndividualPage implements OnInit {
         console.log("student ", student, this.month, this.year);
         this.load = true
         this.account.getstudentweeklyreport(student.id,start_date,end_date).then((data => {
+            let count=data.count
             data = data.results
             let presents = []
             let absents = []
@@ -49,7 +51,7 @@ export class IndividualPage implements OnInit {
                 absents.push(d["absent"])
                 categories.push(d["value"])
             }
-            if (totalabsent != 0) {
+            if (count != 0) {
                 this.presentpercentage = Math.round(totalpresent / (totalabsent + totalpresent) * 100)
                 this.absentpercentage = 100 - this.presentpercentage
             }
