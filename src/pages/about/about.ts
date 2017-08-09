@@ -5,6 +5,7 @@ import { Storage } from '@ionic/storage'
 import { AccountService } from '../login/account.services'
 import { TakeAttendance } from '../home/takeattendance'
 import { Classes, Student } from '../home/classes'
+import { IndividualPage } from '../headteacher/individual/individual'
 import { ClassPopoverPage } from "../home/classpopover.component"
 // import { CallNumber } from '@ionic-native/call-number';
 declare var window;
@@ -111,7 +112,7 @@ export class AboutPage implements OnInit {
       }
     })
   }
-  callConfirm(student: Student) {
+ callConfirm(student: Student) {
     if (student.guardian_phone) {
       let confirm = this.alertctrl.create({
         title: 'Call  Guardian',
@@ -151,6 +152,9 @@ export class AboutPage implements OnInit {
     
     }
 
+  individual(student) {
+    this.navCtrl.push(IndividualPage,{"student":student});
+  }
 
 
 }

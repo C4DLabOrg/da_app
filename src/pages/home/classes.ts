@@ -2,7 +2,9 @@
 export class Classes{
     id:number
     class_name:string
+    _class:string
     students:Student[]
+    school:number
     
 
     

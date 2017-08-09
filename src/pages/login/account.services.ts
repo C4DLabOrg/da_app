@@ -20,6 +20,10 @@ export class AccountService {
     offlines: Offline[]
     classes: Classes[]
     clock: any
+    totalrequests: number = 0
+    completedrequests: number = 0
+    errorrequests: number = 0
+    showattendanceprogress: boolean = false
     nonetnotification: boolean = true
     private headers = new Headers({ "Content-Type": "application/x-www-form-urlencoded" })
     jheaders: Headers
@@ -29,6 +33,7 @@ export class AccountService {
     updateStatus$: EventEmitter<string> = new EventEmitter<string>()
     newclasslist$: EventEmitter<any> = new EventEmitter()
     teacherchange$: EventEmitter<Teacher> = new EventEmitter<Teacher>()
+    classeschange$: EventEmitter<Classes> = new EventEmitter<Classes>()
     teacherdelete$: EventEmitter<Teacher> = new EventEmitter<Teacher>()
     constructor(private http: Http, private toastctrl: ToastController,
         private url: Link, private storage: Storage) {
@@ -87,27 +92,44 @@ export class AccountService {
     profile(): Promise<any> {
         //this.jheaders = new Headers({ "Content-Type": "application/json", "Authorization": "Bearer " + token })
         return this.http.get(this.link + "api/teacher", { headers: this.jheaders }).toPromise()
-            .then((response) => {
-                let data=response.json() as any
-                this.storage.set("profile", data.profile)
-                this.storage.set("subjects", data.subjects)
-                this.storage.set("reasons", data.reasons)
-                this.storage.set("teachers", data.teachers)
-                this.storage.set("classes", data.classes)
-                return  response.json() as any
-            })
+            .then((response) => this.saveall(response))
+            .then(response => response)
             .catch(this.error)
     }
+    saveall(response) {
+        return new Promise(resolve => {
+            console.log("saving all ");
+            let data = response.json() as any
+            this.storage.set("profile", data.profile)
+            this.storage.set("subjects", data.subjects)
+            this.storage.set("reasons", data.reasons)
+            this.storage.set("teachers", data.teachers)
+            this.storage.set("schoolinfo", data.schoolinfo)
+            this.storage.set("classes", data.classes).then(() => {
+                console.log("done saving them")
+                resolve(response.json())
+            })
+
+
+
+        });
+    }
     takeattendance(data: TakeAttendance): Promise<any> {
+        this.totalrequests++
         return this.http.post(this.link + "api/attendance", data, { headers: this.jheaders }).toPromise()
             .then((respose) => {
                 this.attendancelocalnot()
                 this.saveattendancehistory(data)
+                this.completedrequests++;
+                if (this.showattendanceprogress) {
+                    let per = (this.completedrequests + this.errorrequests) / this.totalrequests
+                    this.updateStatus$.emit(Math.round(per * 100) + " %");
+                }
                 return respose.json()
+
             })
             .catch((error) => this.handleattendance(error, data))
     }
-
     //Update reason for absent
 
     updateabsence(id, data: any): Promise<any> {
@@ -130,10 +152,27 @@ export class AccountService {
             })
             .catch(this.error)
     }
+    updateclass(id, data: any): Promise<any> {
+        return this.http.patch(this.link + "api/streams/" + id, data, { headers: this.jheaders }).toPromise()
+            .then((response) => {
+                this.storageupdateclass(response.json())
+                return response.json()
+            })
+            .catch(this.error)
+    }
+
     createstudent(data: any): Promise<any> {
         return this.http.post(this.link + "api/students", data, { headers: this.jheaders }).toPromise()
             .then(resp => {
                 this.storageaddstudent(resp.json())
+                return resp.json()
+            })
+            .catch(this.error)
+    }
+    createstream(data: any): Promise<any> {
+        return this.http.post(this.link + "api/streams", data, { headers: this.jheaders }).toPromise()
+            .then(resp => {
+                this.storageaddstream(resp.json())
                 return resp.json()
             })
             .catch(this.error)
@@ -172,6 +211,20 @@ export class AccountService {
             teachers[teachindex] = teacher
             this.storage.set("techers", teachers).then(data => {
                 this.teacherchange$.emit(teacher);
+            })
+
+        })
+    }
+    storageupdateclass(stream: Classes) {
+        this.storage.get("classes").then(data => {
+            let classes = data as Classes[]
+            let streamindex = classes.indexOf(classes.filter(tc => tc.id === stream.id)[0])
+
+            //Back up the students list and add it after the update
+            stream.students = classes[streamindex].students
+            classes[streamindex] = stream
+            this.storage.set("classes", classes).then(data => {
+                this.classeschange$.emit(stream);
             })
 
         })
@@ -218,6 +271,20 @@ export class AccountService {
                 this.studentsChange$.emit(student);
             });
 
+        })
+    }
+    storageaddstream(new_stream: Classes) {
+        let stream = new_stream
+        stream.students = []
+        this.storage.get("classes").then((data) => {
+            let classes = data as Classes[]
+            classes.unshift(stream)
+            // let thestud=classes.filter(cl=>cl.id == student.class_id)[0]
+            //                 .students.filter(stud=>stud.id==student.id)[0];
+            this.storage.set("classes", classes).then((data) => {
+                this.classeschange$.emit(stream);
+                console.log("emmitted the new class");
+            });
         })
     }
     storagedeletestudent(student: Student) {
@@ -280,6 +347,7 @@ export class AccountService {
     }
 
     private handleattendance(error: any, attendance: TakeAttendance): Promise<any> {
+        this.errorrequests++;
         //console.log(error)
         if (error.url == null) {
             console.log("No internet", attendance)
@@ -318,6 +386,11 @@ export class AccountService {
     }
     getreport(id, date: any): Promise<any> {
         return this.http.get(this.link + "api/attendances/daily?_class=" + id + "&date=" + date).toPromise()
+            .then(resp => resp.json())
+            .catch(this.error)
+    }
+    getstudentweeklyreport(id, start_date, end_date): Promise<any> {
+        return this.http.get(this.link + "api/attendances/weekly?start_date=" + start_date + "&end_date=" + end_date + "&student=" + id).toPromise()
             .then(resp => resp.json())
             .catch(this.error)
     }
@@ -387,7 +460,7 @@ export class AccountService {
         });
     }
     ping(): Promise<any> {
-        return this.http.options(this.link + "api/attendance").toPromise()
+        return this.http.options(this.link + "api/ping").toPromise()
             .then((resp) => resp.json())
             .catch(this.error)
     }
@@ -417,6 +490,8 @@ export class AccountService {
                 })
             }
 
+        }, (error) => {
+            console.log(error);
         })
     }
     dosync() {
@@ -425,6 +500,7 @@ export class AccountService {
                 data = []
             }
             else {
+                this.showattendanceprogress = true
                 this.updateStatus$.emit("Attendance Sync Started ...");
             }
             console.log(data)
@@ -432,31 +508,59 @@ export class AccountService {
 
             let d = this.offlines.length
             let comp = 0
+            let compl = 1;
+
+            let promises_array: Array<any> = [];
+
             for (let i = 0; i < this.offlines.length; i++) {
                 console.log("Starting ...", i)
-                this.sync(this.offlines[i], i).then((data) => {
-                    //this.offlines.splice(i, 1)
-                    comp++;
-                    if (d == comp) {
-                        this.storage.set("offline", null)
-                        this.storage.set("lastsync", new Date())
-                        this.storage.set("lastsyncdata", this.offlines)
-                        this.offlines = []
-                        this.updateStatus$.emit("Attendance sync Completed");
-                        console.log("Done syncing..", i)
-                    }
+                promises_array.push(this.sync(this.offlines[i], i))
+                //.then((data) => {
+                //     //this.offlines.splice(i, 1)
+                //     // comp++;
+                //     // if (d == comp) {
+                //     //     this.storage.set("offline", null)
+                //     //     this.storage.set("lastsync", new Date())
+                //     //     this.storage.set("lastsyncdata", this.offlines)
+                //     //     this.offlines = []
+                //     //  //   this.updateStatus$.emit("Attendance sync Completed");
+                //    console.log("Done syncing..", i)
+                //     // }
 
-                }, (error) => {
-                    false
+                // }, (error) => {
+                //     false
 
-                    if (error.url == null) {
-                        this.updateStatus$.emit("No Internet Connection");
-                    }
-                    console.log(error)
-                });
+                //     if (error.url == null) {
+                //       //  this.updateStatus$.emit("No Internet Connection");
+                //     }
+                //    // console.log(error)
+                // });
             }
+            Promise.all(promises_array).then(() => {
+                console.log("Done one")
+            }, (error) => {
+                console.log("Eroro")
+            }).then(() => {
+                console.log("Done everything");
+                this.showattendanceprogress = false
+                this.storage.set("offline", null)
+                this.storage.set("lastsync", new Date())
+                this.storage.set("lastsyncdata", this.offlines)
+                this.offlines = []
+                this.updateStatus$.emit("Attendance sync Completed");
+            });;
             //Close
         });
+    }
+
+
+
+    ///Get the absent students
+    getabsentstudents(id, date: any): Promise<any> {
+        return this.http.get(this.link + "api/students/absent?_class=" + id + "&date=" + date).toPromise()
+            .then(resp => resp.json())
+            .catch(this.error)
+
     }
 
 

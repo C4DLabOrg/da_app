@@ -20,6 +20,7 @@ export class HDStudentPage implements OnInit {
   classes: Classes[]
   load: boolean = false
   index: number = 0
+  studname:string
   event: string
   takeattendance = new TakeAttendance()
   selectedclass: Classes
@@ -44,6 +45,7 @@ export class HDStudentPage implements OnInit {
       let theclass = this.classes[clindex]
       let studs = theclass.students.filter(stud => stud.id === student.id)
       if (studs.length > 0) {
+        this.studname=""
         let studinedx = theclass.students.indexOf(studs[0])
         theclass.students[studinedx] = student
       }
@@ -136,6 +138,7 @@ export class HDStudentPage implements OnInit {
       ev: myEvent
     });
     popover.onDidDismiss((data) => {
+       this.studname=""
       if (data != null) {
         this.index = data.id
         this.selectclass(data.id)
@@ -234,6 +237,18 @@ export class HDStudentPage implements OnInit {
       type: 'radio',
       label: 'Student droped out of school',
       value: 'DROP'
+    });
+
+    alert.addInput({
+      type: 'radio',
+      label: 'Error in entry of information',
+      value: 'ERR'
+    });
+
+     alert.addInput({
+      type: 'text',
+      label: 'Other Reason',
+      value: 'OTHER'
     });
 
     alert.addButton('Cancel');

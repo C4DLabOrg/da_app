@@ -30,6 +30,7 @@
       <ion-label stacked>Middle Name</ion-label>
       <ion-input formControlName="midname"></ion-input>
     </ion-item>
+
    <div class="spacer" style="height:10px;"></div>
     <ion-item>
       <ion-label stacked>Last Name</ion-label>
@@ -42,33 +43,28 @@
       <ion-input type="number" formControlName="student_id"></ion-input>
     </ion-item>
 
-  <div class="spacer" style="height:15px;"></div>
+  <div class="spacer" style="height:10px;"></div>
+    <ion-item>
+      <ion-label stacked>Student Gender</ion-label>
+      <ion-select formControlName="gender">
+        <ion-option value="F" selected="true">Female</ion-option>
+        <ion-option value="M">Male</ion-option>
+      </ion-select>
+    </ion-item>
+
+  <div class="spacer" style="height:10px;"></div>
    <ion-item>
       <ion-label stacked>Guardian Name</ion-label>
       <ion-input formControlName="guardian_name"></ion-input>
     </ion-item>
 
-  <div class="spacer" style="height:15px;"></div>
+  <div class="spacer" style="height:10px;"></div>
    <ion-item>
       <ion-label stacked>Guardian Phone</ion-label>
       <ion-input formControlName="guardian_phone"></ion-input>
     </ion-item>
 
-  <div class="spacer" style="height:15px;"></div>
-
-    <ion-item>
-      <ion-label stacked>Gender</ion-label>
-      <ion-select formControlName="gender">
-        <ion-option value="F" selected="true">Female</ion-option>
-        <ion-option value="M">Male</ion-option>
-      </ion-select>
-
-    </ion-item>
-    <!--<ion-item>
-      <ion-label floating>Class</ion-label>
-      <ion-input formControlName="class_id"></ion-input>
-    </ion-item>-->
-      <div class="spacer" style="height:15px;"></div>
+  <div class="spacer" style="height:10px;"></div>
 
     <ion-item>
       <ion-label stacked>Class</ion-label>
@@ -77,16 +73,14 @@
       </ion-select>
     </ion-item>
 
-    <div class="spacer" style="height:15px;"></div>
+    <div class="spacer" style="height:10px;"></div>
 
     <ion-item>
-      <ion-label stacked>Enrolled   <ion-icon name='calendar' style="color: #d03e84"></ion-icon></ion-label>
+      <ion-label stacked>Enrollment Date   <ion-icon name='calendar' style="color: #d03e84"></ion-icon></ion-label>
      
-      <ion-datetime  displayFormat="  DD MMMM YYYY"  pickerFormat="DD MMM  YYYY"
+      <ion-datetime [max]="maxdate"  displayFormat="  DD MMMM YYYY"  pickerFormat="DD MMM  YYYY"
         formControlName="date_enrolled"></ion-datetime>
     </ion-item>
-
-     <div class="spacer" style="height:10px;"></div>
     <button ion-button full type="submit" [disabled]="!studform.valid || load"> <span *ngIf="type">{{load?'Loading ...':type}}</span></button>
     
   </form>
