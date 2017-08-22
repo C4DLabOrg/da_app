@@ -98,7 +98,7 @@ export class HDReportPage implements OnInit {
     }
     else {
       this.if_report = false
-      this.showalert("No Reports", "Attendance was not taken for this day")
+      this.showalert("No Reports", "Attendance for this day was not taken.")
     }
 
     this.options = {
@@ -225,7 +225,7 @@ export class HDReportPage implements OnInit {
       i++
       this.stoploader(i)
       if (error.url == null) {
-        this.showalert("NO Internet Connection", "Turn on your wifi or data")
+        this.showalert("Internet Connection", "No Internet Connection.Turn on your wifi or data.")
       }
       console.log(error)
       console.log(error)
@@ -268,7 +268,7 @@ export class HDReportPage implements OnInit {
     }
     else {
 
-      this.showalert("No Contact Information", "Contact the Admin")
+      this.showalert("No Information", "Please contact your Admin.")
 
     }
   }

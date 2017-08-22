@@ -86,8 +86,9 @@
 
     <ion-item (click)="showCalendar()">
 
-      <ion-label stacked>Enrollment Date  <ion-icon name='calendar' style="color: #d03e84"></ion-icon>
-       &nbsp; {{event|date}}
+      <ion-label>Enrollment date &nbsp;
+      <ion-icon name='calendar' style="color: #d03e84"></ion-icon>
+       {{event|date}}
       </ion-label>
 <!--     
       <ion-datetime [max]="maxdate"  displayFormat="  DD MMMM YYYY"  pickerFormat="DD MMM  YYYY"
