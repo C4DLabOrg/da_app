@@ -28,6 +28,7 @@ import {HDSync} from '../pages/sync/sync'
 import { IndividualPage} from '../pages/headteacher/individual/individual';
 import {StudentSearch} from '../pipes/student-search'
 import { Ng2OrderModule } from 'ng2-order-pipe';
+import { DatePicker } from 'ionic2-date-picker/ionic2-date-picker';
 //import {require} from '@types/node'
 //declare var require: any;
 
@@ -55,7 +56,8 @@ import { Ng2OrderModule } from 'ng2-order-pipe';
     HDTeachersPage,
     IndividualPage,
     HelpPage,
-    HDSync,StudentSearch
+    HDSync,StudentSearch,
+    DatePicker
 
   ],
   imports: [ ChartModule,Ng2OrderModule,
@@ -84,7 +86,8 @@ import { Ng2OrderModule } from 'ng2-order-pipe';
     HDTeachersPage,
     IndividualPage,
     HelpPage,
-    HDSync
+    HDSync,
+    DatePicker
 
   ],
   providers: [{provide: ErrorHandler, useClass: IonicErrorHandler},Storage,AccountService,Link]
