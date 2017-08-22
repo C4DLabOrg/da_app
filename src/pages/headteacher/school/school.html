@@ -1,6 +1,6 @@
 <ion-header>
   <ion-navbar>
-    <ion-title *ngIf="is_headteacher">My School</ion-title>
+    <ion-title *ngIf="is_headteacher"><span *ngIf="profile">{{profile.school_name}}  </span> </ion-title>
     <ion-title *ngIf="!is_headteacher">My Students</ion-title>
   </ion-navbar>
 </ion-header>

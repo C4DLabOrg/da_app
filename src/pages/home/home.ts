@@ -7,9 +7,13 @@ import { TakeAttendance } from './takeattendance'
 import { AccountService } from '../login/account.services'
 import { ResultPage } from '../result/result.component'
 import { DatePipe } from '@angular/common'
+// import { DatePicker } from 'ionic2-date-picker/ionic2-date-picker'
+import {DatePicker  } from "../ionic2-date-picker/date-picker";
+
 @Component({
   selector: 'page-home',
-  templateUrl: 'home.html'
+  templateUrl: 'home.html',
+  providers: [ DatePicker ]
 })
 export class AttendancePage implements OnInit {
   content: any
@@ -28,7 +32,7 @@ export class AttendancePage implements OnInit {
   constructor(public navCtrl: NavController,
     private popoverCtrl: PopoverController,
     private storage: Storage, private account: AccountService,
-    private toastctrl: ToastController, private alertctrl: AlertController) {
+    private toastctrl: ToastController, private alertctrl: AlertController, public datePicker: DatePicker) {
 
   }
   addDays(theDate, days) {
@@ -39,7 +43,14 @@ export class AttendancePage implements OnInit {
     this.event = new Date().toISOString()
     this.onStudentsChange()
     this.initiatesync()
+    
+     this.datePicker.onDateSelected.subscribe( 
+      (date) => {
+        this.datechange(date)
+        console.log("Date changed ",date);
+    });
   }
+
   initiatesync() {
     this.account.initiatesync()
     this.account.updateStatus$.subscribe((message) => {
@@ -87,7 +98,9 @@ export class AttendancePage implements OnInit {
 
   }
   datechange(value) {
+    this.event=value
     this.clearattendance()
+    
     console.log(this.event)
   }
   showtoast(name: string, status: boolean, position: string) {
@@ -268,6 +281,9 @@ export class AttendancePage implements OnInit {
   }
 
 
+  showCalendar(){
+    this.datePicker.showCalendar();
+  }
 
 
 }

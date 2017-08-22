@@ -3,6 +3,7 @@ import { App } from 'ionic-angular';
 import { NavController,AlertController } from 'ionic-angular';
 import { Storage } from '@ionic/storage'
 import { LoginPage } from '../login/login.component'
+import { HelpPage } from '../help/help'
 import { HDSync } from '../sync/sync'
 import { PasswordPage } from '../password/password.component'
 import { AccountService } from '../login/account.services'
@@ -75,6 +76,13 @@ export class ContactPage implements OnInit {
 
     this.navCtrl.push(PasswordPage);
   }
+
+  help() {
+
+    this.navCtrl.push(HelpPage);
+  }
+
+
   ngOnInit() {
     this.getprofile()
   }

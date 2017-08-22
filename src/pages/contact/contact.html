@@ -1,6 +1,6 @@
 <ion-header>
   <ion-navbar color="primary">
-    <ion-title>User Profile</ion-title>
+    <ion-title><span *ngIf="user">{{user.name}}</span></ion-title>
   </ion-navbar>
 </ion-header>
 
@@ -45,10 +45,10 @@
     </button>
 
 
-    <ion-item>
+    <button (click) = "help()" ion-item>
       About and Help
       <ion-icon name="help-circle" item-left style="color: #3f51b5"></ion-icon>
-    </ion-item>
+    </button>
 
 
 

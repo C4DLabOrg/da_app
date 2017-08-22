@@ -21,12 +21,14 @@ import { HDStudentPage} from '../pages/headteacher/students/students'
 import {AddStudentModal} from '../pages/headteacher/students/addstudent'
 import {AddTeacherModal} from '../pages/headteacher/teachers/addteacher'
 import { HDTeachersPage} from '../pages/headteacher/teachers/teachers'
+import { HelpPage} from '../pages/help/help'
 import {AddClassModal} from '../pages/headteacher/classes/addclass'
 import { HDClassesPage} from '../pages/headteacher/classes/classes'
 import {HDSync} from '../pages/sync/sync'
 import { IndividualPage} from '../pages/headteacher/individual/individual';
 import {StudentSearch} from '../pipes/student-search'
 import { Ng2OrderModule } from 'ng2-order-pipe';
+import {DatePicker  } from "../pages/ionic2-date-picker/date-picker";
 //import {require} from '@types/node'
 //declare var require: any;
 
@@ -53,7 +55,9 @@ import { Ng2OrderModule } from 'ng2-order-pipe';
     HDClassesPage,
     HDTeachersPage,
     IndividualPage,
-    HDSync,StudentSearch
+    HelpPage,
+    HDSync,StudentSearch,
+    DatePicker
 
   ],
   imports: [ ChartModule,Ng2OrderModule,
@@ -81,7 +85,9 @@ import { Ng2OrderModule } from 'ng2-order-pipe';
     AddTeacherModal,
     HDTeachersPage,
     IndividualPage,
-    HDSync
+    HelpPage,
+    HDSync,
+    DatePicker
 
   ],
   providers: [{provide: ErrorHandler, useClass: IonicErrorHandler},Storage,AccountService,Link]

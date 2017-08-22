@@ -10,11 +10,11 @@
   </ion-navbar>
 </ion-header>
 <ion-content>
-  <button ion-button clear>
+  <button ion-button clear (click)="showCalendar()">
                   <ion-icon name='calendar' style="color: #d03e84"></ion-icon>
 
                          <!--<p style="color:#d03e84 ">&nbsp; &nbsp; 30th January 2017</p>-->
-                           <ion-datetime  style="color:#d03e84 " displayFormat="  DD MMMM YYYY" (ionChange)="datechange(event)" pickerFormat="DD MMM  YYYY" [(ngModel)]="event"></ion-datetime>
+                           <!--<ion-datetime  style="color:#d03e84 " displayFormat="  DD MMMM YYYY" (ionChange)="datechange(event)" pickerFormat="DD MMM  YYYY" [(ngModel)]="event"></ion-datetime>-->
 
   </button>
 
@@ -25,8 +25,6 @@
       <p>{{event|date:'mediumDate'}}</p>
     </ion-item>
     <chart style="width:90%;height:35%" [options]="options"></chart>
-
-
 
     <ion-card-content>
       <ion-item>
@@ -104,12 +102,6 @@
        <ion-icon (click)="callConfirm(stud)" item-right style="font-size: 21px"name="call"></ion-icon>
 
      </ion-item>-->
-
-
-
-
-
-
 
   <div class="spacer" style="height: 7px;"></div>
   <div *ngIf="absent_students">

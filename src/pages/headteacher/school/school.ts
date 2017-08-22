@@ -16,6 +16,7 @@ export class HDSchoolPage implements OnInit {
   user: any
   schoolinfo: any
   is_headteacher:boolean=false
+  profile:any
   constructor(public navCtrl: NavController, 
   private storage: Storage,private account:AccountService) {
 
@@ -42,6 +43,10 @@ export class HDSchoolPage implements OnInit {
     this.storage.get("schoolinfo").then((data) => {
       this.schoolinfo = data
     })
+    this.storage.get("profile").then((data) => {
+      this.profile = data
+    })
+    
   }
   students() {
     this.navCtrl.push(HDStudentPage)

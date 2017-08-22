@@ -5,10 +5,13 @@ import { Storage } from '@ionic/storage'
 import { AccountService } from '../../login/account.services'
 import { Classes } from '../../home/classes'
 import { Report } from './report'
+import { DatePicker } from "../../ionic2-date-picker/date-picker";
+
 declare var window;
 @Component({
   selector: 'page-about',
-  templateUrl: 'reports.html'
+  templateUrl: 'reports.html',
+  providers: [ DatePicker ]
 })
 export class HDReportPage implements OnInit {
   user: any
@@ -28,10 +31,16 @@ export class HDReportPage implements OnInit {
   constructor(public navCtrl: NavController,
     private storage: Storage, private account: AccountService,
     private popoverCtrl: PopoverController,
-    private loaderctrl: LoadingController,
+    private loaderctrl: LoadingController
+    , public datePicker: DatePicker,
     private alertctrl: AlertController) {
 
   }
+
+  showCalendar(){
+    this.datePicker.showCalendar();
+  }
+
   ngOnInit() {
     this.getprofile()
     this.getclasses()

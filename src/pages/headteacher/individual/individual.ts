@@ -97,6 +97,7 @@ export class IndividualPage implements OnInit {
                     text: 'Number'
                 }
 
+
             },
             series: [{
                 name: 'Present',

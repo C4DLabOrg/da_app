@@ -32,6 +32,7 @@ export class AddStudentModal {
             gender: ['' ],
             guardian_name: ['' ],
             guardian_phone: ['' ],
+            is_oosc:[''],
             date_enrolled:['',Validators.required]
         });
         if(this.student){
@@ -41,6 +42,7 @@ export class AddStudentModal {
                 midname:this.student.midname,
                 student_id: this.student.student_id,
                 class_id:this.class_id,
+                is_oosc:this.student.is_oosc,
                 gender:this.student.gender,
                 guardian_phone:this.student.guardian_phone,
                 guardian_name:this.student.guardian_name,
@@ -55,6 +57,7 @@ export class AddStudentModal {
                 student_id: "",
                 class_id:this.class_id,
                 gender:"",
+                is_oosc:false,
                 guardian_phone:"",
                 guardian_name:"",
                 date_enrolled:""
