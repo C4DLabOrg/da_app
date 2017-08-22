@@ -28,7 +28,7 @@ import {HDSync} from '../pages/sync/sync'
 import { IndividualPage} from '../pages/headteacher/individual/individual';
 import {StudentSearch} from '../pipes/student-search'
 import { Ng2OrderModule } from 'ng2-order-pipe';
-import { DatePicker } from 'ionic2-date-picker/ionic2-date-picker';
+import {DatePicker  } from "../pages/ionic2-date-picker/date-picker";
 //import {require} from '@types/node'
 //declare var require: any;
 

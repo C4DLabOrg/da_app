@@ -7,12 +7,13 @@ import { TakeAttendance } from './takeattendance'
 import { AccountService } from '../login/account.services'
 import { ResultPage } from '../result/result.component'
 import { DatePipe } from '@angular/common'
-import { DatePicker } from 'ionic2-date-picker/ionic2-date-picker'
+// import { DatePicker } from 'ionic2-date-picker/ionic2-date-picker'
+import { DatePicker} from "../ionic2-date-picker/date-picker";
 
 @Component({
   selector: 'page-home',
   templateUrl: 'home.html',
-  providers: [ DatePicker ]
+  providers: [DatePicker]
 })
 export class AttendancePage implements OnInit {
   content: any
@@ -34,6 +35,12 @@ export class AttendancePage implements OnInit {
     private toastctrl: ToastController, private alertctrl: AlertController, public datePicker: DatePicker) {
 
   }
+  djangodate(date) {
+    let d = new Date(date)
+    let g = d.toLocaleDateString()
+    let f=g.split("/")
+    return f[2] + "-" + f[0] + "-" + f[1]
+  }
   addDays(theDate, days) {
     return new Date(theDate.getTime() - days * 24 * 60 * 60 * 1000).toISOString();
   }
@@ -42,7 +49,14 @@ export class AttendancePage implements OnInit {
     this.event = new Date().toISOString()
     this.onStudentsChange()
     this.initiatesync()
+
+    this.datePicker.onDateSelected.subscribe(
+      (date) => {
+        this.datechange(date)
+        console.log("Date changed ", date);
+      });
   }
+
   initiatesync() {
     this.account.initiatesync()
     this.account.updateStatus$.subscribe((message) => {
@@ -90,7 +104,12 @@ export class AttendancePage implements OnInit {
 
   }
   datechange(value) {
+    let d = new Date(value)
+    this.event = d.toDateString()
+    console.log(d.toDateString(), d.toUTCString(), d.toLocaleDateString());
+
     this.clearattendance()
+
     console.log(this.event)
   }
   showtoast(name: string, status: boolean, position: string) {
@@ -142,7 +161,7 @@ export class AttendancePage implements OnInit {
     if (this.classes.length > 0) {
       this.storage.get(this.selectedclass.class_name).then((data: TakeAttendance[]) => {
         data == null ? data = [] : data = data;
-        let takenattendances = data.filter(att => att.date == this.event.split("T")[0]).filter(att => att.class_name == this.selectedclass.class_name)
+        let takenattendances = data.filter(att => att.date == this.djangodate(this.event) ).filter(att => att.class_name == this.selectedclass.class_name)
         if (takenattendances.length > 0) {
           this.attendancetaken = true
           let attend = takenattendances[0] as TakeAttendance
@@ -251,7 +270,7 @@ export class AttendancePage implements OnInit {
         }
       }
       //  console.log(this.takeattendance)
-      this.takeattendance.date = this.event.split("T")[0]
+      this.takeattendance.date = this.djangodate(this.event)
       this.takeattendance.class_name = this.selectedclass.class_name
       this.account.takeattendance(this.takeattendance).then((response) => {
 
@@ -271,8 +290,8 @@ export class AttendancePage implements OnInit {
   }
 
 
-  showCalendar(){
-    this.datePicker.showCalendar();
+  showCalendar() {
+    this.datePicker.showCalendar(this.djangodate(this.event));
   }
 
 

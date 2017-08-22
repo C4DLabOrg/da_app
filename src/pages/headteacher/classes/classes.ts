@@ -100,6 +100,27 @@ export class HDClassesPage implements OnInit {
 
     this.toast.present()
   }
+  deleteConfirm() {
+    let confirm = this.alertctrl.create({
+      title: 'Delete Class',
+      message: 'Make Sure the class has no students.',
+      buttons: [
+        {
+          text: 'Disagree',
+          handler: () => {
+            console.log('Disagree clicked');
+          }
+        },
+        {
+          text: 'Agree',
+          handler: () => {
+            console.log('Agree clicked');
+          }
+        }
+      ]
+    });
+    confirm.present();
+  }
   onchange(val, name) {
     console.log(val)
     if (val) {
