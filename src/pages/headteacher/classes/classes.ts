@@ -103,7 +103,7 @@ export class HDClassesPage implements OnInit {
   deleteConfirm(id) {
     let confirm = this.alertctrl.create({
       title: 'Delete Class',
-      message: 'Make Sure the class has no students.',
+      message: 'Make sure the class has no students.',
       buttons: [
         {
           text: 'Disagree',
