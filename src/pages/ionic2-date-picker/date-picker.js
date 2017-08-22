@@ -17,16 +17,23 @@ import Moment from "moment";
   for more info on Angular 2 Components.
 */
 export var DatePicker = (function () {
-    function DatePicker(modalCtrl, viewCtrl) {
+    function DatePicker(modalCtrl, viewCtrl,data) {
+        console.log("daya passed ",data);
         this.modalCtrl = modalCtrl;
         this.viewCtrl = viewCtrl;
         this.onDateSelected = new EventEmitter();
         this.onCancelled = new EventEmitter();
         this.daysGroupedByWeek = [];
-        this.currentMoment = Moment();
+        this.setDate = new Date().toISOString();
+         this.currentMoment = Moment();
         this.renderCalender();
+
     }
     DatePicker.prototype.renderCalender = function () {
+        if(this.currentMoment == null){
+            this.currentMoment=Moment()
+        }
+       console.log("The currrent moment",this.currentMoment);
         this.daysOfMonth = this.generateDaysOfMonth(this.currentMoment.year(), this.currentMoment.month() + 1, this.currentMoment.date());
         this.daysGroupedByWeek = this.groupByWeek(this.daysOfMonth);
         this.setTodayAsDefaultSelectedDate();
@@ -58,6 +65,7 @@ export var DatePicker = (function () {
         return groupedDaysOfMonth;
     };
     DatePicker.prototype.selectDate = function (day) {
+
         if (!day.isEnabled)
             return;
         if (this.selectedDateItem && this.selectedDateItem.isSelected) {
@@ -69,10 +77,20 @@ export var DatePicker = (function () {
     };
     DatePicker.prototype.setTodayAsDefaultSelectedDate = function () {
         var today = Moment().startOf("day");
+
         var foundDates = this.daysOfMonth
             .filter(function (item) { return today.isSame(item.momentDate.clone().startOf("day")); });
         if (foundDates && foundDates.length > 0) {
             this.selectedDateItem = foundDates[0];
+            if (this.setDate) {
+                // var dateItem = {
+                //     isSelected: false,
+                //     momentDate: Moment(this.setDate),
+                //     isEnabled: this.isBelongToThisMonth(immunableStartOfMonth, month)
+                // // };
+                // console.log("Set date",dateItem);
+            }
+          //  console.log("the day is default date", foundDates[0])
             this.selectedDateItem.isSelected = true;
         }
     };
@@ -101,9 +119,23 @@ export var DatePicker = (function () {
     DatePicker.prototype.cancel = function () {
         this.viewCtrl.dismiss();
     };
-    DatePicker.prototype.showCalendar = function () {
+    DatePicker.prototype.showCalendar = function (date) {
         var _this = this;
-        this.calendarModal = this.modalCtrl.create(DatePicker);
+
+        if (date) {
+          //  console.log("this is the shower", date)
+            //console.log("New momnet ",Moment(date))
+            this.currentMoment = Moment(date)
+            
+            //console.log("New currentMoment momnet ",this.currentMoment);
+        }
+        else {
+            console.log("Noda date supplied");
+        }
+       
+        this.calendarModal = this.modalCtrl.create(DatePicker,{"dt":"hello"});
+         _this.currentMoment=Moment(date)
+           console.log("New currentMoment momnet ",this.currentMoment);
         this.calendarModal.onDidDismiss(function (data) {
             if (data) {
                 _this.onDateSelected.emit(data);
@@ -112,21 +144,22 @@ export var DatePicker = (function () {
                 _this.onCancelled.emit();
             }
         });
+        // let dt= DatePicker(this.calendarModal);
         this.calendarModal.present();
     };
     __decorate([
-        Output(), 
+        Output(),
         __metadata('design:type', EventEmitter)
     ], DatePicker.prototype, "onDateSelected", void 0);
     __decorate([
-        Output(), 
+        Output(),
         __metadata('design:type', EventEmitter)
     ], DatePicker.prototype, "onCancelled", void 0);
     DatePicker = __decorate([
         Component({
             selector: "date-picker",
             template: "<div class=\"layout-col horizontal-center\" style=\"background-color:white;height:100%\">\n  <div class=\"layout-col horizontal-center top-banner\">\n    <div class=\"dayofweek padding-5\">{{currentMoment.format('dddd')}}</div>\n    <div class=\"text-center padding-10\">\n      <div class=\"padding-5\">\n        <ion-icon class=\"arrow\" name=\"arrow-back\" (click)=\"setMonthBack()\"></ion-icon>\n        <span class=\"month padding-10\">{{currentMoment.format('MMM')}}</span>\n        <ion-icon class=\"arrow\" name=\"arrow-forward\" (click)=\"setMonthForward()\"></ion-icon>\n      </div>\n      <div class=\"day padding-5\">{{currentMoment.format('D')}}</div>\n      <div class=\"text-center padding-5\">\n        <ion-icon class=\"arrow\" name=\"arrow-back\" (click)=\"setYearBack()\"></ion-icon>\n        <span class=\"year padding-10\">{{currentMoment.format('YYYY')}}</span>\n        <ion-icon class=\"arrow\" name=\"arrow-forward\" (click)=\"setYearForward()\"></ion-icon>\n      </div>\n    </div>\n  </div>\n  <span class=\"month-year\">{{currentMoment.format('MMMM YYYY')}}</span>\n  <div class=\"calendar-item-container\">\n    <div class=\"layout-row day-item-header\" style=\"width:100%;flex-wrap:wrap;text-align:center\">\n    <div>S</div>\n    <div>M</div>\n    <div>T</div>\n    <div>W</div>\n    <div>T</div>\n    <div>F</div>\n    <div>S</div>\n  </div>\n  <div class=\"layout-row\" style=\"width:100%;flex-wrap:wrap;text-align:center\" *ngFor=\"let week of daysGroupedByWeek;\">\n    <div class=\"day-item\" [ngClass]=\"{'selected': day.isSelected, 'disabled': !day.isEnabled}\" *ngFor=\"let day of week;\" (click)=\"selectDate(day)\">{{day.momentDate.date()}}</div>\n  </div>\n  </div>\n  <div class=\"layout-row\" style=\"width:100%;justify-content:Flex-end;margin:10px;\">\n    <button ion-button style=\"color:grey\" clear (click)=\"cancel()\">Cancel</button>\n    <button ion-button clear (click)=\"confirmDateSelection()\">OK</button>\n  </div>\n\n\n</div>"
-        }), 
+        }),
         __metadata('design:paramtypes', [ModalController, ViewController])
     ], DatePicker);
     return DatePicker;

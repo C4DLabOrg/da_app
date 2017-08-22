@@ -5,11 +5,12 @@ export declare class DatePicker {
     viewCtrl: ViewController;
     onDateSelected: EventEmitter<Date>;
     onCancelled: EventEmitter<any>;
-    private currentMoment;
+    public currentMoment;
     private daysGroupedByWeek;
     private selectedDateItem;
     private daysOfMonth;
     private calendarModal;
+    private setDate;
     constructor(modalCtrl: ModalController, viewCtrl: ViewController);
     private renderCalender();
     private generateDaysOfMonth(year, month, day);
@@ -23,5 +24,5 @@ export declare class DatePicker {
     private setYearForward();
     private confirmDateSelection();
     private cancel();
-    showCalendar(): void;
+    showCalendar(date): void;
 }

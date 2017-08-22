@@ -11,13 +11,13 @@ declare var window;
 @Component({
   selector: 'page-about',
   templateUrl: 'reports.html',
-  providers: [ DatePicker ]
+  providers: [DatePicker]
 })
 export class HDReportPage implements OnInit {
   user: any
   index: number = 0
   classes: Classes[]
-  event: string
+  event: string=new Date().toDateString()
   resp: Report
   options: any
   options2: any
@@ -25,9 +25,8 @@ export class HDReportPage implements OnInit {
   if_report: boolean = false
   selectedclass: Classes
   pgnew: boolean = true
- 
-  isonpage:boolean=true
-  absentstudents:any
+  isonpage: boolean = true
+  absentstudents: any
   constructor(public navCtrl: NavController,
     private storage: Storage, private account: AccountService,
     private popoverCtrl: PopoverController,
@@ -37,34 +36,39 @@ export class HDReportPage implements OnInit {
 
   }
 
-  showCalendar(){
-    this.datePicker.showCalendar();
+  showCalendar() {
+    this.datePicker.showCalendar(this.event);
   }
 
   ngOnInit() {
     this.getprofile()
     this.getclasses()
     this.event = new Date().toISOString()
-     this.onClassesChange()
+    this.onClassesChange()
+
+    this.datePicker.onDateSelected.subscribe(
+      (date) => {
+        this.datechange(date)
+      });
   }
   onClassesChange() {
     this.account.newclasslist$.subscribe((data) => {
       this.getclasses()
     });
   }
-   ionViewWillEnter() {
-     this.isonpage=true
-    console.log("I'm alive! ",this.isonpage);
+  ionViewWillEnter() {
+    this.isonpage = true
+    console.log("I'm alive! ", this.isonpage);
   }
   ionViewWillLeave() {
-    this.isonpage=false
-    console.log("bye bye ",this.isonpage);
+    this.isonpage = false
+    console.log("bye bye ", this.isonpage);
   }
   datechange(value) {
-    console.log(this.event)
+    this.event = value
     this.getreports()
   }
- 
+
   showloader(message) {
     this.loader = this.loaderctrl.create({
       content: message
@@ -96,7 +100,7 @@ export class HDReportPage implements OnInit {
       this.if_report = false
       this.showalert("No Reports", "Attendance was not taken for this day")
     }
-    
+
     this.options = {
       chart: { type: 'pie' },
       title: { text: '' },
@@ -146,7 +150,7 @@ export class HDReportPage implements OnInit {
     for (let i = 0; i < this.selectedclass.students.length; i++) {
       this.selectedclass.students[i].status = false
     }
-    if(this.isonpage){
+    if (this.isonpage) {
       this.getreports()
     }
 
@@ -178,7 +182,7 @@ export class HDReportPage implements OnInit {
     })
   }
   showalert(title, message) {
-    
+
     let alert = this.alertctrl.create({
       title: title,
       subTitle: message,
@@ -186,25 +190,31 @@ export class HDReportPage implements OnInit {
     });
     alert.present();
   }
-  stoploader(i){
-    if(i==2){
-      if(this.loader){
+  stoploader(i) {
+    if (i == 2) {
+      if (this.loader) {
         this.loader.dismiss();
         console.log("Loader dismissed")
       }
-      
+
     }
+  }
+  djangodate(date) {
+    let d = new Date(date)
+    let g = d.toLocaleDateString()
+    let f=g.split("/")
+    return f[2]+"-"+f[0]+"-"+f[1]
   }
 
   getreports() {
-    let i=0;
+    let i = 0;
     this.showloader("Generating reports")
     let id: any = this.selectedclass.id
     //IF id ==0 it means it represents all the classes thus set  to ""
     if (id == 0) id = "";
 
     //Getting the aggredates
-    this.account.getreport(id, this.event.split("T")[0]).then((resp) => {
+    this.account.getreport(id, this.djangodate(this.event)).then((resp) => {
       i++
       this.stoploader(i)
       console.log(resp)
@@ -222,17 +232,18 @@ export class HDReportPage implements OnInit {
     })
 
     //Getting the absent students and frequency
-    this.account.getabsentstudents(id,this.event.split("T")[0]).then(resp=>{
-       i++
+  
+    this.account.getabsentstudents(id,this.djangodate(this.event)).then(resp => {
+      i++
       this.stoploader(i)
-      this.absentstudents=resp.results
-    },error=>{
-       i++
+      this.absentstudents = resp.results
+    }, error => {
+      i++
       this.stoploader(i)
       console.log(error)
     })
   }
-   callConfirm(student: any) {
+  callConfirm(student: any) {
     if (student.guardian_phone) {
       let confirm = this.alertctrl.create({
         title: 'Call  Guardian',
@@ -256,16 +267,16 @@ export class HDReportPage implements OnInit {
       confirm.present();
     }
     else {
-      
+
       this.showalert("No Contact Information", "Contact an admin to add the contact information")
 
     }
   }
-   makecall(phone: string) {
-      // this.call.callNumber(phone, true)
-      //   .then(() => console.log('Launched dialer!'))
-      //   .catch(() => console.log('Error launching dialer'));
-       window.location = "tel:"+phone;
+  makecall(phone: string) {
+    // this.call.callNumber(phone, true)
+    //   .then(() => console.log('Launched dialer!'))
+    //   .catch(() => console.log('Error launching dialer'));
+    window.location = "tel:" + phone;
 
   }
 

@@ -84,11 +84,14 @@
     <div class="spacer" style="height:10px;"></div>
 
 
-    <ion-item>
-      <ion-label stacked>Enrollment Date   <ion-icon name='calendar' style="color: #d03e84"></ion-icon></ion-label>
-     
+    <ion-item (click)="showCalendar()">
+      <ion-label stacked>Enrollment Date  <ion-icon name='calendar' style="color: #d03e84"></ion-icon>
+       &nbsp; {{event|date}}
+      </ion-label>
+<!--     
       <ion-datetime [max]="maxdate"  displayFormat="  DD MMMM YYYY"  pickerFormat="DD MMM  YYYY"
-        formControlName="date_enrolled"></ion-datetime>
+        formControlName="date_enrolled"></ion-datetime>-->
+       
     </ion-item>
 
    
