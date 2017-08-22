@@ -67,7 +67,7 @@ export class AddStudentModal {
                 is_oosc: false,
                 guardian_phone: "",
                 guardian_name: "",
-                date_enrolled: ""
+                date_enrolled: this.djangodate(this.event)
             })
 
         }
@@ -92,6 +92,12 @@ export class AddStudentModal {
         //  console.log(this.studform.value)
         let data = this.studform.value
         data.date_enrolled = this.djangodate(this.event)
+        if (isNaN(data.student_id)) {
+            data.student_id = 0
+        }
+        else if (data.student_id == "") {
+            data.student_id = 0
+        }
 
         console.log(data);
         if (this.type == "add") {
