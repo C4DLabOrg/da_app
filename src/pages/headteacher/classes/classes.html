@@ -18,7 +18,7 @@
             <div class="spacer" style="height: 10px;"></div>
             <ion-item *ngFor="let class of classes;let i=index">
                   <ion-label>
-                        <ion-badge item-right>{{i+1}}</ion-badge>{{class.class_name}}
+                        <ion-badge item-right>{{i+1}}</ion-badge>{{class.class_name}} 
                         <div class="spacer" style="height: 4px;"></div>
 
                         <p style="font-size: 13px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {{class.students.length}} Students</p>
@@ -27,7 +27,7 @@
 
                   <a ion-button (click)="presentModal(class,'update')" small item-right>Edit</a>
 
-                  <a ion-button (click)="deleteConfirm()" small item-right color="danger">Delete</a>
+                  <a ion-button (click)="deleteConfirm(class.id)" small item-right color="danger">Delete</a>
                   
               
           </ion-item>

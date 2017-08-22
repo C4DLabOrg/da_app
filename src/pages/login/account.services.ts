@@ -3,6 +3,8 @@ import { Http, Headers } from '@angular/http'
 import { Link } from '../../app/link'
 import { Token } from '../../app/token'
 import 'rxjs'
+import { AlertController } from 'ionic-angular';
+import { Observable } from 'rxjs/Rx';
 import { Storage } from '@ionic/storage'
 import { TakeAttendance } from '../home/takeattendance'
 import { ChangePassword } from '../password/changepassword'
@@ -35,7 +37,8 @@ export class AccountService {
     teacherchange$: EventEmitter<Teacher> = new EventEmitter<Teacher>()
     classeschange$: EventEmitter<Classes> = new EventEmitter<Classes>()
     teacherdelete$: EventEmitter<Teacher> = new EventEmitter<Teacher>()
-    constructor(private http: Http, private toastctrl: ToastController,
+    constructor(private http: Http, private toastctrl: ToastController
+        , private alertcrtl: AlertController,
         private url: Link, private storage: Storage) {
         this.newofflineattendance$ = new EventEmitter()
         this.link = url.uri
@@ -152,6 +155,32 @@ export class AccountService {
             })
             .catch(this.error)
     }
+    private Observableerror(error: any) {
+        console.log("This is ", error);
+        if (!error.url) {
+            return Observable.throw("No internet Connection ");
+        }
+        else if (error.status == 401) {
+            return Observable.throw("Token Expired");
+        }
+        else if (error.json().detail) {
+            return Observable.throw(error.json().detail);
+        }
+        else {
+            return Observable.throw(error.json() || "Error ")
+        }
+        //  this.error(error);
+        // this.presentAlert("Observable Api Error", JSON.stringify(error));
+
+    }
+    presentAlert(title, message) {
+        let alert = this.alertcrtl.create({
+            title: title,
+            subTitle: message,
+            buttons: ['Dismiss']
+        });
+        alert.present();
+    }
     updateclass(id, data: any): Promise<any> {
         return this.http.patch(this.link + "api/streams/" + id, data, { headers: this.jheaders }).toPromise()
             .then((response) => {
@@ -176,6 +205,16 @@ export class AccountService {
                 return resp.json()
             })
             .catch(this.error)
+    }
+    deletestream(id) {
+        return this.http.delete(this.link + "api/streams/" + id)
+            .mergeMap(resp => {
+                return Observable.fromPromise(this.storagedeletestream(id))
+                    .map(resp => {
+                        console.log("deleting class done");
+                    })
+            })
+            .catch(this.Observableerror)
     }
     createteacher(data: any): Promise<any> {
         return this.http.post(this.link + "api/teacher", data, { headers: this.jheaders }).toPromise()
@@ -271,6 +310,17 @@ export class AccountService {
                 this.studentsChange$.emit(student);
             });
 
+        })
+    }
+    storagedeletestream(id) {
+        return this.storage.get("classes").then(data => {
+            let classes = data as Classes[]
+            let streamindex = classes.indexOf(classes.filter(tc => tc.id === id)[0])
+            let stream = classes[streamindex]
+            classes.splice(streamindex, 1)
+            this.storage.set("classes", classes).then(data => {
+                this.classeschange$.emit(stream);
+            })
         })
     }
     storageaddstream(new_stream: Classes) {
