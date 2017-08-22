@@ -37,6 +37,7 @@ export class HDTeachersPage implements OnInit {
   }
   onTeachersChange() {
     this.account.teacherchange$.subscribe((teacher) => {
+
       let teachs = this.teachers.filter(tc => tc.id === teacher.id)
       if (teachs.length > 0) {
         let teachindex = this.teachers.indexOf(this.teachers.filter(tc => tc.id === teacher.id)[0])

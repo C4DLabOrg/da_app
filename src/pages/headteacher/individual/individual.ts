@@ -49,7 +49,7 @@ export class IndividualPage implements OnInit {
                 totalabsent += d["absent"]
                 totalpresent += d["present"]
                 absents.push(d["absent"])
-                categories.push(d["value"])
+                categories.push(new Date(d["value"]).toDateString())
             }
             if (count != 0) {
                 this.presentpercentage = Math.round(totalpresent / (totalabsent + totalpresent) * 100)

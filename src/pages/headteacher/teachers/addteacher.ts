@@ -28,7 +28,7 @@ export class AddTeacherModal implements OnInit {
             gender: ['', Validators.required],
             phone_no: ['', Validators.required],
             teacher_type: ['', Validators.required],
-            headteacher: [false]
+            headteacher: ["",]
         });
         if (this.teacher) {
             this.teachform.setValue({
