@@ -7,37 +7,69 @@
 <ion-content>
   <div class="spacer" style="height:4px;"></div>
   <ion-item>
-   <button ion-button clear>
-           <ion-icon name='calendar' style="color: #d03e84"></ion-icon>
+    <!--<ion-input type="number" (ngModelChange)="onmonthyearchange(month,year)" [(ngModel)]="year"></ion-input>-->
 
-                     <p style="color:#d03e84 ">&nbsp; &nbsp; January 2017</p>
-                        <!--<ion-datetime  style="color:#d03e84 " [min]="mindate" [max]="maxdate" displayFormat="  DD MMMM YYYY" (ionChange)="datechange(event)" pickerFormat="DD MMM  YYYY" [(ngModel)]="event"></ion-datetime>
-                        <ion-note *ngIf="attendancetaken" color="green" item-right><ion-icon name="checkmark-circle"></ion-icon></ion-note>-->
-  </button>
-  
-   <h6><b>Monthly Attendance Report</b></h6>
+    <ion-select [(ngModel)]="year" (ngModelChange)="onmonthyearchange(month,year)" style="color:#d03e84 ">
+      <ion-option value="2016">2016</ion-option>
+      <ion-option value="2017" selected="true">2017</ion-option>
+      <ion-option value="2018">2018</ion-option>
+    </ion-select>
   </ion-item>
-   <div class="spacer" style="height:35px;"></div>
+  <ion-item>
+    <!--<button ion-button clear>
+           <ion-icon name='calendar' style="color: #d03e84"></ion-icon>
+      
+      </button>-->
+    <!--<p >&nbsp; &nbsp; January 2017</p>-->
+    <ion-select [(ngModel)]="month" (ngModelChange)="onmonthyearchange(month,year)" style="color:#d03e84 ">
+      <ion-option value="1" selected="true">January</ion-option>
+      <ion-option value="2">February</ion-option>
+      <ion-option value="3">March</ion-option>
+      <ion-option value="4">April</ion-option>
+      <ion-option value="5">May</ion-option>
+      <ion-option value="6">June</ion-option>
+      <ion-option value="7">July</ion-option>
+      <ion-option value="8">August</ion-option>
+      <ion-option value="9">September</ion-option>
+      <ion-option value="10">Octomber</ion-option>
+      <ion-option value="11">November</ion-option>
+      <ion-option value="12">December</ion-option>
+    </ion-select>
 
-   <chart style="width:95%;height:35%" [options]="options"></chart>
+  </ion-item>
+  <!--<h6><b>Monthly Attendance Report</b></h6>-->
+  <div class="spacer" style="height:35px;"></div>
+  <ion-card color="secondary" *ngIf="!load && presentpercentage =='---'">
 
-   <ion-card>
-     
+    <ion-card-header>
+      No Report to display
+    </ion-card-header>
+
+    <ion-card-content *ngIf="student">
+      <!-- Add card content here! -->
+      No attendance has been taken for {{student.student_name}}
+    </ion-card-content>
+
+  </ion-card>
+  <chart *ngIf="!load && presentpercentage !='---'" style="width:95%;height:35%" [options]="options"></chart>
+
+  <ion-card *ngIf="!load && presentpercentage !='---'">
+
     <ion-item style="background-color: #3f51b5">
       <ion-icon style="color: white" name="done-all" item-left item-start large></ion-icon>
       <h4 style="color: white; font-size: 20px"><b>{{presentpercentage}}%</b></h4>
       <p style="color: white">Attendance Record</p>
     </ion-item>
 
-     <div class="spacer" style="height:4px;"></div>
-      
+    <div class="spacer" style="height:4px;"></div>
+
     <ion-item style="background-color: #d03e84">
       <ion-icon style="color: white" name="alert" item-left item-start large></ion-icon>
-      <h4 style="color: white; font-size: 20px"><b>{{100-presentpercentage}}%</b></h4>
+      <h4 style="color: white; font-size: 20px"><b>{{absentpercentage}}%</b></h4>
       <p style="color: white">Dropout Probability Rate</p>
     </ion-item>
 
-    
-   </ion-card>
+
+  </ion-card>
 
 </ion-content>

@@ -3,7 +3,7 @@ import { AccountService } from '../../login/account.services'
 import { TakeAttendance } from '../../home/takeattendance'
 import { Classes } from '../../home/classes'
 import { ClassPopoverPage } from '../../home/classpopover.component'
-import {  AddClassModal} from './addclass'
+import { AddClassModal } from './addclass'
 import { NavController, ToastController, AlertController, PopoverController, ModalController } from 'ionic-angular';
 import { Storage } from '@ionic/storage'
 
@@ -11,12 +11,12 @@ import { Storage } from '@ionic/storage'
 @Component({
   selector: 'page-classes',
   templateUrl: 'classes.html'
-})                                                        
+})
 export class HDClassesPage implements OnInit {
 
   content: any
   text: any
-  classes:Classes[]
+  classes: Classes[]
   load: boolean = false
   index: number = 0
   event: string
@@ -31,9 +31,10 @@ export class HDClassesPage implements OnInit {
   }
   ngOnInit() {
     this.getclasses()
+    this.classchangeslisteners()
     this.event = new Date().toISOString()
   }
-    onStudentsChange() {
+  onStudentsChange() {
     this.account.studentsChange$.subscribe((student) => {
       let clindex = this.classes.indexOf(this.classes.filter(cl => cl.id === student.class_id)[0])
       let theclass = this.classes[clindex]
@@ -48,7 +49,6 @@ export class HDClassesPage implements OnInit {
 
       this.classes[clindex] = theclass
     });
-
     this.account.studentDelete$.subscribe((student) => {
       console.log("removing from ...")
       let clindex = this.classes.indexOf(this.classes.filter(cl => cl.id === student.class_id)[0])
@@ -60,25 +60,32 @@ export class HDClassesPage implements OnInit {
     this.account.newclasslist$.subscribe((data) => {
       this.getclasses()
     });
+
+  }
+
+  classchangeslisteners() {
+    this.account.classeschange$.subscribe((data) => {
+      this.getclasses()
+    });
   }
   datechange(value) {
     console.log(this.event)
   }
-  presentModal(student, type) {
-    // if (student == 'a') {
-    //   let modal = this.modalctrl.create(AddTeacherModal, { type: type,class:this.selectedclass.id });
-    //    modal.present();
-    // } else {
-    //   let modal = this.modalctrl.create(AddTeacherModal, { student: student, type: type,class:this.selectedclass.id });
-    //    modal.present();
-    // }
-   
-  }
+  // presentModal(student, type) {
+  //   // if (student == 'a') {
+  //   //   let modal = this.modalctrl.create(AddTeacherModal, { type: type,class:this.selectedclass.id });
+  //   //    modal.present();
+  //   // } else {
+  //   //   let modal = this.modalctrl.create(AddTeacherModal, { student: student, type: type,class:this.selectedclass.id });
+  //   //    modal.present();
+  //   // }
+
+  // }
   showtoast(name: string, status: boolean) {
     if (this.toast) {
       this.toast.dismiss()
     }
-    let message =name
+    let message = name
     if (status) {
       message = name + "  is Present";
     }
@@ -105,8 +112,19 @@ export class HDClassesPage implements OnInit {
       this.classes = data
     })
   }
+  presentModal(stream, type) {
+    this.storage.get("profile").then(data => {
+      if (stream == 'new') {
+        let modal = this.modalctrl.create(AddClassModal, { stream: null, type: type, school: data.school });
+        modal.present();
+      } else {
+        let modal = this.modalctrl.create(AddClassModal, { stream: stream, type: type, school: data.school });
+        modal.present();
+      }
+    });
 
 
+  }
 
   attendance() {
 

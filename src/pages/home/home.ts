@@ -75,9 +75,12 @@ export class AttendancePage implements OnInit {
       theclass.students.splice(studindex, 1)
       this.classes[clindex] = theclass
     })
-    this.account.newclasslist$.subscribe((data)=>{
+    this.account.newclasslist$.subscribe((data) => {
       this.getclasses()
       console.log("new list");
+    });
+    this.account.classeschange$.subscribe((data) => {
+      this.getclasses()
     });
   }
   getclassattendance() {
@@ -122,10 +125,10 @@ export class AttendancePage implements OnInit {
   getclasses() {
     this.storage.get("classes").then((data) => {
       this.classes = data
-      if(this.classes.length>0){
-          this.selectclass(0)
+      if (this.classes.length > 0) {
+        this.selectclass(0)
       }
-    
+
     })
   }
   selectclass(id) {
@@ -133,38 +136,41 @@ export class AttendancePage implements OnInit {
     this.clearattendance()
   }
   clearattendance() {
-    if(this.classes.length>0){
-  this.storage.get(this.selectedclass.class_name).then((data: TakeAttendance[]) => {
-      data == null ? data = [] : data = data;
-      let takenattendances = data.filter(att => att.date == this.event.split("T")[0]).filter(att => att.class_name == this.selectedclass.class_name)
-      if (takenattendances.length > 0) {
-        this.attendancetaken=true
-        let attend=takenattendances[0] as TakeAttendance
-         for (let i = 0; i < this.selectedclass.students.length; i++) {
-          let student=this.selectedclass.students[i]
-          let index=attend.present.indexOf(student.id)
-          if( index== -1){
-             this.selectedclass.students[i].status = false
-           }
-           else{
+    if (this.classes.length > 0) {
+      this.storage.get(this.selectedclass.class_name).then((data: TakeAttendance[]) => {
+        data == null ? data = [] : data = data;
+        let takenattendances = data.filter(att => att.date == this.event.split("T")[0]).filter(att => att.class_name == this.selectedclass.class_name)
+        if (takenattendances.length > 0) {
+          this.attendancetaken = true
+          let attend = takenattendances[0] as TakeAttendance
+          for (let i = 0; i < this.selectedclass.students.length; i++) {
+            let student = this.selectedclass.students[i]
+            let index = attend.present.indexOf(student.id)
+            if (index == -1) {
+              this.selectedclass.students[i].status = false
+            }
+            else {
               this.selectedclass.students[i].status = true
-           }       
-         
+            }
 
-        } 
 
-      }
-      else {
-        this.attendancetaken=false
-        for (let i = 0; i < this.selectedclass.students.length; i++) {
-          this.selectedclass.students[i].status = false
+          }
+
         }
-      }
+        else {
+          this.attendancetaken = false
+          if (this.selectedclass.students) {
+            for (let i = 0; i < this.selectedclass.students.length; i++) {
+              this.selectedclass.students[i].status = false
+            }
+          }
+
+        }
 
 
-    })
+      })
     }
-  
+
 
   }
   presentPopover(myEvent) {
@@ -247,8 +253,8 @@ export class AttendancePage implements OnInit {
       this.account.takeattendance(this.takeattendance).then((response) => {
 
         this.load = false
-        this.attendancetaken=true
-       // this.clearattendance()
+        this.attendancetaken = true
+        // this.clearattendance()
         //   console.log(response)
         this.navCtrl.push(ResultPage, { "attendance": this.takeattendance, "response": response })
       }, (error) => {

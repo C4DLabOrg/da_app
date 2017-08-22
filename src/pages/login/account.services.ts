@@ -23,7 +23,7 @@ export class AccountService {
     totalrequests: number = 0
     completedrequests: number = 0
     errorrequests: number = 0
-    showattendanceprogress:boolean=false
+    showattendanceprogress: boolean = false
     nonetnotification: boolean = true
     private headers = new Headers({ "Content-Type": "application/x-www-form-urlencoded" })
     jheaders: Headers
@@ -33,6 +33,7 @@ export class AccountService {
     updateStatus$: EventEmitter<string> = new EventEmitter<string>()
     newclasslist$: EventEmitter<any> = new EventEmitter()
     teacherchange$: EventEmitter<Teacher> = new EventEmitter<Teacher>()
+    classeschange$: EventEmitter<Classes> = new EventEmitter<Classes>()
     teacherdelete$: EventEmitter<Teacher> = new EventEmitter<Teacher>()
     constructor(private http: Http, private toastctrl: ToastController,
         private url: Link, private storage: Storage) {
@@ -120,12 +121,12 @@ export class AccountService {
                 this.attendancelocalnot()
                 this.saveattendancehistory(data)
                 this.completedrequests++;
-                 if(this.showattendanceprogress){
-                     let per=(this.completedrequests+this.errorrequests)/this.totalrequests
-                    this.updateStatus$.emit(Math.round(per*100)+" %");
-                 }
+                if (this.showattendanceprogress) {
+                    let per = (this.completedrequests + this.errorrequests) / this.totalrequests
+                    this.updateStatus$.emit(Math.round(per * 100) + " %");
+                }
                 return respose.json()
-               
+
             })
             .catch((error) => this.handleattendance(error, data))
     }
@@ -151,10 +152,27 @@ export class AccountService {
             })
             .catch(this.error)
     }
+    updateclass(id, data: any): Promise<any> {
+        return this.http.patch(this.link + "api/streams/" + id, data, { headers: this.jheaders }).toPromise()
+            .then((response) => {
+                this.storageupdateclass(response.json())
+                return response.json()
+            })
+            .catch(this.error)
+    }
+
     createstudent(data: any): Promise<any> {
         return this.http.post(this.link + "api/students", data, { headers: this.jheaders }).toPromise()
             .then(resp => {
                 this.storageaddstudent(resp.json())
+                return resp.json()
+            })
+            .catch(this.error)
+    }
+    createstream(data: any): Promise<any> {
+        return this.http.post(this.link + "api/streams", data, { headers: this.jheaders }).toPromise()
+            .then(resp => {
+                this.storageaddstream(resp.json())
                 return resp.json()
             })
             .catch(this.error)
@@ -193,6 +211,20 @@ export class AccountService {
             teachers[teachindex] = teacher
             this.storage.set("techers", teachers).then(data => {
                 this.teacherchange$.emit(teacher);
+            })
+
+        })
+    }
+    storageupdateclass(stream: Classes) {
+        this.storage.get("classes").then(data => {
+            let classes = data as Classes[]
+            let streamindex = classes.indexOf(classes.filter(tc => tc.id === stream.id)[0])
+
+            //Back up the students list and add it after the update
+            stream.students = classes[streamindex].students
+            classes[streamindex] = stream
+            this.storage.set("classes", classes).then(data => {
+                this.classeschange$.emit(stream);
             })
 
         })
@@ -239,6 +271,20 @@ export class AccountService {
                 this.studentsChange$.emit(student);
             });
 
+        })
+    }
+    storageaddstream(new_stream: Classes) {
+        let stream = new_stream
+        stream.students = []
+        this.storage.get("classes").then((data) => {
+            let classes = data as Classes[]
+            classes.unshift(stream)
+            // let thestud=classes.filter(cl=>cl.id == student.class_id)[0]
+            //                 .students.filter(stud=>stud.id==student.id)[0];
+            this.storage.set("classes", classes).then((data) => {
+                this.classeschange$.emit(stream);
+                console.log("emmitted the new class");
+            });
         })
     }
     storagedeletestudent(student: Student) {
@@ -343,10 +389,10 @@ export class AccountService {
             .then(resp => resp.json())
             .catch(this.error)
     }
-    getstudentweeklyreport(id):Promise<any>{
-        return this.http.get(this.link+"api/attendances/weekly?student="+id).toPromise()
-        .then(resp=>resp.json())
-        .catch(this.error)
+    getstudentweeklyreport(id, start_date, end_date): Promise<any> {
+        return this.http.get(this.link + "api/attendances/weekly?start_date=" + start_date + "&end_date=" + end_date + "&student=" + id).toPromise()
+            .then(resp => resp.json())
+            .catch(this.error)
     }
     showtoast(message: string) {
         if (this.toast) {
@@ -444,6 +490,8 @@ export class AccountService {
                 })
             }
 
+        }, (error) => {
+            console.log(error);
         })
     }
     dosync() {
@@ -452,7 +500,7 @@ export class AccountService {
                 data = []
             }
             else {
-                this.showattendanceprogress=true
+                this.showattendanceprogress = true
                 this.updateStatus$.emit("Attendance Sync Started ...");
             }
             console.log(data)
@@ -494,7 +542,11 @@ export class AccountService {
                 console.log("Eroro")
             }).then(() => {
                 console.log("Done everything");
-                this.showattendanceprogress=false
+                this.showattendanceprogress = false
+                this.storage.set("offline", null)
+                this.storage.set("lastsync", new Date())
+                this.storage.set("lastsyncdata", this.offlines)
+                this.offlines = []
                 this.updateStatus$.emit("Attendance sync Completed");
             });;
             //Close

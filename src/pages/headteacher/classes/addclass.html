@@ -1,17 +1,41 @@
 <ion-header>
   <ion-navbar>
     <ion-title>Add Student</ion-title>
+    <ion-buttons end>
+      <button ion-button small outline (click)="dismiss()">
+      <ion-icon name='arrow-dropleft'></ion-icon> &nbsp;
+         Back
+      </button>
+
+       <!--<button ion-button color="light" icon-left>
+      <ion-icon name='arrow-back'></ion-icon>
+      Back
+    </button>-->
+    </ion-buttons>
   </ion-navbar>
 </ion-header>
 
 <ion-content class="tutorial-page">
-  <span *ngIf="student"> Student:{{student.fstname}}</span>
-  <form [formGroup]="studform" (ngSubmit)="addstud()">
+  <span *ngIf="class"> Student:{{class.class_name}}</span>
+  <form [formGroup]="classform" (ngSubmit)="addclass()">
     <ion-item>
-      <ion-label floating>Firts Name</ion-label>
-      <ion-input type="text" formControlName="fstname"></ion-input>
+      <ion-label>Class</ion-label>
+      <ion-select formControlName="_class">
+        <ion-option value="1">1</ion-option>
+        <ion-option value="2">2</ion-option>
+        <ion-option value="3">3</ion-option>
+        <ion-option value="4">4</ion-option>
+        <ion-option value="5">5</ion-option>
+        <ion-option value="6">6</ion-option>
+        <ion-option value="7">7</ion-option>
+        <ion-option value="8">8</ion-option>
+      </ion-select>
     </ion-item>
     <ion-item>
+      <ion-label floating>Stream Name</ion-label>
+      <ion-input type="text" formControlName="class_name"></ion-input>
+    </ion-item>
+    <!--<ion-item>
       <ion-label floating>Middle Name</ion-label>
       <ion-input formControlName="midname"></ion-input>
     </ion-item>
@@ -19,20 +43,14 @@
       <ion-label floating>last Name</ion-label>
       <ion-input formControlName="lstname"></ion-input>
     </ion-item>
-    <ion-item>
-      <ion-label>Gender</ion-label>
-      <ion-select formControlName="gender">
-        <ion-option value="F" selected="true">Female</ion-option>
-        <ion-option value="M">Male</ion-option>
-      </ion-select>
-    </ion-item>
+    
     <ion-item>
       <ion-label floating>Class</ion-label>
       <ion-input formControlName="class_id"></ion-input>
-    </ion-item>
-    <button ion-button type="submit" [disabled]="!studform.valid"> <span *ngIf="type">{{type}}</span></button>
+    </ion-item>-->
+    <button ion-button full type="submit" [disabled]="!classform.valid"> <span *ngIf="type">{{type}}</span></button>
   </form>
-  <button ion-button (click)="dismiss()">Close</button>
+  <!--<button ion-button (click)="dismiss()">Close</button>-->
 
 
 </ion-content>
