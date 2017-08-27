@@ -25,9 +25,9 @@
       <h2 *ngIf="selectedclass">{{selectedclass.class_name}}</h2>
       <p>{{event|date:'mediumDate'}}</p>
     </ion-item>
-    <chart style="width:90%;height:35%" [options]="options"></chart>
-
+    
     <ion-card-content>
+      <chart [options]="options"></chart>
       <ion-item>
         <ion-icon name='checkmark-circle' item-left style="color: #55acee"></ion-icon>
         <h2>Students Present</h2>
@@ -68,22 +68,22 @@
   </ion-card>
 
   <ion-card color="primary">
-    <ion-card-header >
-      Students Absent<span ></span>
+    <ion-card-header>
+      Students Absent<span></span>
       <ion-badge *ngIf="absentstudents" color="white" style="margin-left: 25%"> {{absentstudents.length}}</ion-badge>
     </ion-card-header>
   </ion-card>
-<div *ngIf="absentstudents">
-  <ion-item  *ngFor="let student of absentstudents;let i=index">
-    <ion-label>
-      <ion-badge item-right>{{i+1}}</ion-badge>&nbsp; &nbsp; {{student.name}}
-      <div class="spacer" style="height: 4px;"></div>
-    </ion-label>
+  <div *ngIf="absentstudents">
+    <ion-item *ngFor="let student of absentstudents;let i=index">
+      <ion-label>
+        <ion-badge item-right>{{i+1}}</ion-badge>&nbsp; &nbsp; {{student.name}}
+        <div class="spacer" style="height: 4px;"></div>
+      </ion-label>
 
-    <ion-icon (click)="callConfirm(student)" item-right style="font-size: 21px" name="call"></ion-icon>
+      <ion-icon (click)="callConfirm(student)" item-right style="font-size: 21px" name="call"></ion-icon>
 
-  </ion-item>
-</div>
+    </ion-item>
+  </div>
 
   <!--<ion-item>
        <ion-label>

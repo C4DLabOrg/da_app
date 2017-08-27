@@ -4,6 +4,7 @@ import { ViewController, NavParams } from 'ionic-angular'
 import { Student, Classes } from '../../home/classes'
 import { Validators, FormBuilder, FormGroup } from '@angular/forms';
 import { AccountService } from '../../login/account.services'
+import { DatePicker } from '@ionic-native/date-picker';
 // import { DatePicker } from "../../ionic2-date-picker/date-picker";
 @Component({
     selector: 'add-student',
@@ -19,9 +20,9 @@ export class AddStudentModal {
     load: boolean = false
     maxdate: string = new Date().toISOString()
     constructor(private viewCtrl: ViewController, private params: NavParams
-        , private formBuilder: FormBuilder, private account: AccountService, 
-        // public datePicker: DatePicker
-        ) {
+        , private formBuilder: FormBuilder, private account: AccountService,
+        public datePicker: DatePicker
+    ) {
         this.type = this.params.get("type")
         this.student = this.params.get("student")
         this.class_id = this.params.get("class")
@@ -89,6 +90,10 @@ export class AddStudentModal {
         let data = { 'foo': 'bar' };
         this.viewCtrl.dismiss(data);
     }
+    datechange(value) {
+        let d = new Date(value)
+        this.event = d.toDateString()
+    }
     addstud(type) {
         //  console.log(this.studform.value)
         let data = this.studform.value
@@ -108,12 +113,27 @@ export class AddStudentModal {
             this.updatestudent(data)
         }
     }
+    addDays(theDate, days) {
 
+        return new Date(theDate.getTime() - days * 24 * 60 * 60 * 1000).toISOString();
+    }
     showCalendar() {
         let date = new Date().toDateString()
         if (this.student) {
             date = this.student.date_enrolled
         }
+        this.datePicker.show({
+            date: new Date(date),
+            mode: 'date',
+            maxDate: Date.parse(this.addDays(new Date(), -1)),
+            androidTheme: this.datePicker.ANDROID_THEMES.THEME_DEVICE_DEFAULT_LIGHT
+        }).then(
+            date => {
+                console.log('Got date: ', date)
+                this.datechange(date)
+            },
+            err => console.log('Error occurred while getting date: ', err)
+            );
         // this.datePicker.showCalendar(date);
     }
 

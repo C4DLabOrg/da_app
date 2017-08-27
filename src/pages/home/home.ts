@@ -1,4 +1,4 @@
-import  Moment  from 'moment';
+import Moment from 'moment';
 // import { Moment } from 'moment';
 import { Component, OnInit } from '@angular/core';
 import { NavController, PopoverController, ToastController, AlertController } from 'ionic-angular';
@@ -31,7 +31,7 @@ export class AttendancePage implements OnInit {
   confirm: any
   attendancetaken: boolean = false
   mindate: string = this.addDays(new Date(), 14)
-  maxdate: string = new Date().toISOString()
+  maxdate: string = this.addDays( new Date(),-1)
   constructor(public navCtrl: NavController,
     private popoverCtrl: PopoverController,
     private storage: Storage, private account: AccountService,
@@ -298,17 +298,20 @@ export class AttendancePage implements OnInit {
   showCalendar() {
     // this.datePicker.showCalendar(this.djangodate(this.event));
     // alert(this.mindate+" "+this.maxdate);
-    let mindate= Moment(this.mindate).locale('de').toDate();
+    let mindate = Moment(this.mindate).locale('de').toDate();
     let maxdate = Moment(this.maxdate).locale('de').toDate();
     this.datePicker.show({
-      date: this.maxdate,
+      date: new Date(this.event),
       mode: 'date',
-      minDate: mindate,
-      maxDate: maxdate,
-      titleText: "Class Attendance Date Select ",
+      minDate: Date.parse(this.mindate),
+      maxDate: new Date(this.maxdate).valueOf(),
+      // titleText: "Class Attendance Date Select ",
       androidTheme: this.datePicker.ANDROID_THEMES.THEME_DEVICE_DEFAULT_LIGHT
     }).then(
-      date => console.log('Got date: ', date),
+      date => {
+        this.datechange(date)
+        console.log('Got date: ', date)
+      },
       err => console.log('Error occurred while getting date: ', err)
       );
 

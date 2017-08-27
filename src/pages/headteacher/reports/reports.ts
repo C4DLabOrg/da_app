@@ -38,12 +38,15 @@ export class HDReportPage implements OnInit {
 
   showCalendar() {
     // this.datePicker.showCalendar(this.event);
-     this.datePicker.show({
+    this.datePicker.show({
       date: new Date(this.event),
       mode: 'date',
-      androidTheme: this.datePicker.ANDROID_THEMES.THEME_HOLO_DARK
+      androidTheme: this.datePicker.ANDROID_THEMES.THEME_DEVICE_DEFAULT_LIGHT
     }).then(
-      date => console.log('Got date: ', date),
+      date => {
+        this.datechange(date)
+        console.log('Got date: ', date)
+      },
       err => console.log('Error occurred while getting date: ', err)
       );
   }
@@ -73,7 +76,8 @@ export class HDReportPage implements OnInit {
     console.log("bye bye ", this.isonpage);
   }
   datechange(value) {
-    this.event = value
+    let d = new Date(value)
+    this.event = d.toISOString()
     this.getreports()
   }
 
