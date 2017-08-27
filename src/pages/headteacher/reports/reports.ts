@@ -5,19 +5,19 @@ import { Storage } from '@ionic/storage'
 import { AccountService } from '../../login/account.services'
 import { Classes } from '../../home/classes'
 import { Report } from './report'
-import { DatePicker } from "../../ionic2-date-picker/date-picker";
+import { DatePicker } from '@ionic-native/date-picker';
+// import { DatePicker } from "../../ionic2-date-picker/date-picker";
 
 declare var window;
 @Component({
   selector: 'page-about',
-  templateUrl: 'reports.html',
-  providers: [DatePicker]
+  templateUrl: 'reports.html'
 })
 export class HDReportPage implements OnInit {
   user: any
   index: number = 0
   classes: Classes[]
-  event: string=new Date().toDateString()
+  event: string = new Date().toDateString()
   resp: Report
   options: any
   options2: any
@@ -30,14 +30,22 @@ export class HDReportPage implements OnInit {
   constructor(public navCtrl: NavController,
     private storage: Storage, private account: AccountService,
     private popoverCtrl: PopoverController,
-    private loaderctrl: LoadingController
-    , public datePicker: DatePicker,
+    private loaderctrl: LoadingController,
+    public datePicker: DatePicker,
     private alertctrl: AlertController) {
 
   }
 
   showCalendar() {
-    this.datePicker.showCalendar(this.event);
+    // this.datePicker.showCalendar(this.event);
+     this.datePicker.show({
+      date: new Date(this.event),
+      mode: 'date',
+      androidTheme: this.datePicker.ANDROID_THEMES.THEME_HOLO_DARK
+    }).then(
+      date => console.log('Got date: ', date),
+      err => console.log('Error occurred while getting date: ', err)
+      );
   }
 
   ngOnInit() {
@@ -46,10 +54,10 @@ export class HDReportPage implements OnInit {
     this.event = new Date().toISOString()
     this.onClassesChange()
 
-    this.datePicker.onDateSelected.subscribe(
-      (date) => {
-        this.datechange(date)
-      });
+    // this.datePicker.onDateSelected.subscribe(
+    //   (date) => {
+    //     this.datechange(date)
+    //   });
   }
   onClassesChange() {
     this.account.newclasslist$.subscribe((data) => {
@@ -202,8 +210,8 @@ export class HDReportPage implements OnInit {
   djangodate(date) {
     let d = new Date(date)
     let g = d.toLocaleDateString()
-    let f=g.split("/")
-    return f[2]+"-"+f[0]+"-"+f[1]
+    let f = g.split("/")
+    return f[2] + "-" + f[0] + "-" + f[1]
   }
 
   getreports() {
@@ -232,8 +240,8 @@ export class HDReportPage implements OnInit {
     })
 
     //Getting the absent students and frequency
-  
-    this.account.getabsentstudents(id,this.djangodate(this.event)).then(resp => {
+
+    this.account.getabsentstudents(id, this.djangodate(this.event)).then(resp => {
       i++
       this.stoploader(i)
       this.absentstudents = resp.results

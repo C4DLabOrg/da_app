@@ -1,5 +1,8 @@
+import { Directive } from '@angular/core';
 import { EventEmitter } from "@angular/core";
 import { ModalController, ViewController } from "ionic-angular";
+
+@Directive({})
 export declare class DatePicker {
     modalCtrl: ModalController;
     viewCtrl: ViewController;
@@ -24,5 +27,6 @@ export declare class DatePicker {
     private setYearForward();
     private confirmDateSelection();
     private cancel();
+    
     showCalendar(date): void;
 }

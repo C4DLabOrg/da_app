@@ -4,11 +4,10 @@ import { ViewController, NavParams } from 'ionic-angular'
 import { Student, Classes } from '../../home/classes'
 import { Validators, FormBuilder, FormGroup } from '@angular/forms';
 import { AccountService } from '../../login/account.services'
-import { DatePicker } from "../../ionic2-date-picker/date-picker";
+// import { DatePicker } from "../../ionic2-date-picker/date-picker";
 @Component({
     selector: 'add-student',
-    templateUrl: 'addstudent.html',
-    providers: [DatePicker]
+    templateUrl: 'addstudent.html'
 })
 export class AddStudentModal {
     student: Student
@@ -20,7 +19,9 @@ export class AddStudentModal {
     load: boolean = false
     maxdate: string = new Date().toISOString()
     constructor(private viewCtrl: ViewController, private params: NavParams
-        , private formBuilder: FormBuilder, private account: AccountService, public datePicker: DatePicker) {
+        , private formBuilder: FormBuilder, private account: AccountService, 
+        // public datePicker: DatePicker
+        ) {
         this.type = this.params.get("type")
         this.student = this.params.get("student")
         this.class_id = this.params.get("class")
@@ -71,11 +72,11 @@ export class AddStudentModal {
             })
 
         }
-        this.datePicker.onDateSelected.subscribe(
-            (date) => {
-                this.event = date
-                //  console.log("Date changed ", date);
-            });
+        // this.datePicker.onDateSelected.subscribe(
+        //     (date) => {
+        //         this.event = date
+        //         //  console.log("Date changed ", date);
+        //     });
     }
     djangodate(date) {
         let d = new Date(date)
@@ -113,7 +114,7 @@ export class AddStudentModal {
         if (this.student) {
             date = this.student.date_enrolled
         }
-        this.datePicker.showCalendar(date);
+        // this.datePicker.showCalendar(date);
     }
 
     newstudent(data) {

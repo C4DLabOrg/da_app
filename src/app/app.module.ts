@@ -1,6 +1,7 @@
 import { NgModule, ErrorHandler } from '@angular/core';
 import { IonicApp, IonicModule, IonicErrorHandler } from 'ionic-angular';
 import { MyApp } from './app.component';
+import { IonicStorageModule } from '@ionic/storage';
 import { AboutPage } from '../pages/about/about';
 import { ContactPage } from '../pages/contact/contact';
 import { AttendancePage } from '../pages/home/home';
@@ -9,9 +10,10 @@ import {LoginPage} from '../pages/login/login.component';
 import {PasswordPage} from '../pages/password/password.component';
 import {ResultPage} from '../pages/result/result.component';
 import {AbsencePage} from '../pages/absence/absence.component';
-import {Storage} from '@ionic/storage';
 import {AccountService} from '../pages/login/account.services';
 import {Link} from './link';
+import {BrowserModule} from '@angular/platform-browser'
+import {HttpModule} from '@angular/http'
 import {ClassPopoverPage} from '../pages/home/classpopover.component';
 import { ChartModule, } from 'angular2-highcharts';
 import { HDTabsPage } from '../pages/headteacher/tabs/tabs';
@@ -28,7 +30,9 @@ import {HDSync} from '../pages/sync/sync'
 import { IndividualPage} from '../pages/headteacher/individual/individual';
 import {StudentSearch} from '../pipes/student-search'
 import { Ng2OrderModule } from 'ng2-order-pipe';
-import {DatePicker  } from "../pages/ionic2-date-picker/date-picker";
+// import {DatePicker  } from "../pages/ionic2-date-picker/date-picker";
+import { DatePicker } from '@ionic-native/date-picker';
+
 //import {require} from '@types/node'
 //declare var require: any;
 
@@ -56,11 +60,11 @@ import {DatePicker  } from "../pages/ionic2-date-picker/date-picker";
     HDTeachersPage,
     IndividualPage,
     HelpPage,
-    HDSync,StudentSearch,
-    DatePicker
+    HDSync,StudentSearch
+    // ,DatePicker
 
   ],
-  imports: [ ChartModule,Ng2OrderModule,
+  imports: [ ChartModule,Ng2OrderModule, IonicStorageModule.forRoot(),BrowserModule,HttpModule,
     IonicModule.forRoot(MyApp)
   ],
   bootstrap: [IonicApp],
@@ -86,10 +90,10 @@ import {DatePicker  } from "../pages/ionic2-date-picker/date-picker";
     HDTeachersPage,
     IndividualPage,
     HelpPage,
-    HDSync,
-    DatePicker
+    HDSync
+    // ,DatePicker
 
   ],
-  providers: [{provide: ErrorHandler, useClass: IonicErrorHandler},Storage,AccountService,Link]
+  providers: [{provide: ErrorHandler, useClass: IonicErrorHandler},DatePicker,AccountService,Link]
 })
 export class AppModule {}

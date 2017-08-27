@@ -1,3 +1,5 @@
+import  Moment  from 'moment';
+// import { Moment } from 'moment';
 import { Component, OnInit } from '@angular/core';
 import { NavController, PopoverController, ToastController, AlertController } from 'ionic-angular';
 import { Storage } from '@ionic/storage'
@@ -7,13 +9,14 @@ import { TakeAttendance } from './takeattendance'
 import { AccountService } from '../login/account.services'
 import { ResultPage } from '../result/result.component'
 import { DatePipe } from '@angular/common'
+
 // import { DatePicker } from 'ionic2-date-picker/ionic2-date-picker'
-import { DatePicker} from "../ionic2-date-picker/date-picker";
+// import { DatePicker} from "../ionic2-date-picker/date-picker";
+import { DatePicker } from '@ionic-native/date-picker';
 
 @Component({
   selector: 'page-home',
-  templateUrl: 'home.html',
-  providers: [DatePicker]
+  templateUrl: 'home.html'
 })
 export class AttendancePage implements OnInit {
   content: any
@@ -32,13 +35,15 @@ export class AttendancePage implements OnInit {
   constructor(public navCtrl: NavController,
     private popoverCtrl: PopoverController,
     private storage: Storage, private account: AccountService,
-    private toastctrl: ToastController, private alertctrl: AlertController, public datePicker: DatePicker) {
+    private toastctrl: ToastController, private alertctrl: AlertController,
+    public datePicker: DatePicker
+  ) {
 
   }
   djangodate(date) {
     let d = new Date(date)
     let g = d.toLocaleDateString()
-    let f=g.split("/")
+    let f = g.split("/")
     return f[2] + "-" + f[0] + "-" + f[1]
   }
   addDays(theDate, days) {
@@ -50,11 +55,11 @@ export class AttendancePage implements OnInit {
     this.onStudentsChange()
     this.initiatesync()
 
-    this.datePicker.onDateSelected.subscribe(
-      (date) => {
-        this.datechange(date)
-        console.log("Date changed ", date);
-      });
+    // this.datePicker.onDateSelected.subscribe(
+    //   (date) => {
+    //     this.datechange(date)
+    //     console.log("Date changed ", date);
+    //   });
   }
 
   initiatesync() {
@@ -161,7 +166,7 @@ export class AttendancePage implements OnInit {
     if (this.classes.length > 0) {
       this.storage.get(this.selectedclass.class_name).then((data: TakeAttendance[]) => {
         data == null ? data = [] : data = data;
-        let takenattendances = data.filter(att => att.date == this.djangodate(this.event) ).filter(att => att.class_name == this.selectedclass.class_name)
+        let takenattendances = data.filter(att => att.date == this.djangodate(this.event)).filter(att => att.class_name == this.selectedclass.class_name)
         if (takenattendances.length > 0) {
           this.attendancetaken = true
           let attend = takenattendances[0] as TakeAttendance
@@ -291,7 +296,22 @@ export class AttendancePage implements OnInit {
 
 
   showCalendar() {
-    this.datePicker.showCalendar(this.djangodate(this.event));
+    // this.datePicker.showCalendar(this.djangodate(this.event));
+    // alert(this.mindate+" "+this.maxdate);
+    let mindate= Moment(this.mindate).locale('de').toDate();
+    let maxdate = Moment(this.maxdate).locale('de').toDate();
+    this.datePicker.show({
+      date: this.maxdate,
+      mode: 'date',
+      minDate: mindate,
+      maxDate: maxdate,
+      titleText: "Class Attendance Date Select ",
+      androidTheme: this.datePicker.ANDROID_THEMES.THEME_DEVICE_DEFAULT_LIGHT
+    }).then(
+      date => console.log('Got date: ', date),
+      err => console.log('Error occurred while getting date: ', err)
+      );
+
   }
 
 
