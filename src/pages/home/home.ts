@@ -50,6 +50,7 @@ export class AttendancePage implements OnInit {
     return new Date(theDate.getTime() - days * 24 * 60 * 60 * 1000).toISOString();
   }
   ngOnInit() {
+    //My
     this.getclasses()
     this.event = new Date().toISOString()
     this.onStudentsChange()
