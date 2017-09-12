@@ -22,6 +22,7 @@ export class AccountService {
     offlines: Offline[]
     classes: Classes[]
     clock: any
+    syncstarted: boolean = false
     totalrequests: number = 0
     completedrequests: number = 0
     errorrequests: number = 0
@@ -465,8 +466,6 @@ export class AccountService {
                 offlines = []
                 this.setlocalnot()
                 //Inititate Watchout for internet Connection
-
-
             }
             let offs: Offline[] = offlines as Offline[]
             let off = new Offline()
@@ -476,8 +475,14 @@ export class AccountService {
             offs.push(off)
             this.storage.set("offline", offs).then((data) => {
                 this.newofflineattendance$.emit("new")
-                this.initiatesync()
-
+                if (!this.syncstarted) {
+                   
+                     this.initiatesync()
+                }
+                else{
+                     console.log("Sync Already started");
+                }
+               
             })
 
             this.showtoast("No Internet. Saved Offline")
@@ -516,14 +521,16 @@ export class AccountService {
     }
     initiatesync() {
         // this.nonetnotification=true
+        this.syncstarted = true
         this.storage.get("offline").then((data) => {
             if (data == null) {
                 data = []
                 console.log("No offlines")
+                this.syncstarted = false
             }
             else {
                 this.ping().then((data) => {
-                    this.dosync()
+                    this.performsyncv2()
                 }, (error) => {
                     if (error.url == null) {
                         setTimeout(() => {
@@ -545,62 +552,88 @@ export class AccountService {
         })
     }
     dosync() {
-        this.storage.get("offline").then((data) => {
-            if (data == null) {
-                data = []
+        // this.storage.get("offline").then((data) => {
+        //     if (data == null) {
+        //         data = []
+        //     }
+        //     else {
+        //         this.showattendanceprogress = true
+        //         this.updateStatus$.emit("Attendance Sync Started ...");
+        //     }
+        //     console.log(data)
+        //     this.offlines = data
+        //     let d = this.offlines.length
+        //     let comp = 0
+        //     let compl = 1;
+        //     let promises_array: Array<any> = [];
+
+        //     for (let i = 0; i < this.offlines.length; i++) {
+        //         console.log("Starting ...", i)
+        //         promises_array.push(this.sync(this.offlines[i], i))
+        //     }
+        //     Promise.all(promises_array).then(() => {
+        //         console.log("Done one")
+        //     }, (error) => {
+        //         console.log("Eroro")
+        //     }).then(() => {
+        //         console.log("Done everything");
+        //         this.showattendanceprogress = false
+        //         this.storage.set("offline", null)
+        //         this.storage.set("lastsync", new Date())
+        //         this.storage.set("lastsyncdata", this.offlines)
+        //         this.offlines = []
+        //         this.updateStatus$.emit("Attendance sync Completed");
+        //     });;
+        //     //Close
+        // });
+    }
+    performsyncv2() {
+        console.log("Starting sync ...");
+        this.completedrequests = 0;
+        this.updateStatus$.emit("Attendance Sync Started ...");
+        this.dosyncv2().subscribe(data => {
+            console.log("Sync V2 :", data);
+            if (data.status == 201) {
+                this.completedrequests++;
+                let per = (this.completedrequests) / this.totalrequests
+                this.updateStatus$.emit("Attendance sync at " + Math.round(per * 100) + " %");
             }
-            else {
-                this.showattendanceprogress = true
-                this.updateStatus$.emit("Attendance Sync Started ...");
-            }
-            console.log(data)
-            this.offlines = data
+        }, error => {
+            console.log("error")
+        }, () => {
+            this.showattendanceprogress = false
+            this.syncstarted = false
+            this.storage.set("offline", null)
+            this.storage.set("lastsync", new Date())
+            this.storage.set("lastsyncdata", this.offlines)
+            this.offlines = []
+            this.updateStatus$.emit("Attendance sync Completed");
 
-            let d = this.offlines.length
-            let comp = 0
-            let compl = 1;
-
-            let promises_array: Array<any> = [];
-
-            for (let i = 0; i < this.offlines.length; i++) {
-                console.log("Starting ...", i)
-                promises_array.push(this.sync(this.offlines[i], i))
-                //.then((data) => {
-                //     //this.offlines.splice(i, 1)
-                //     // comp++;
-                //     // if (d == comp) {
-                //     //     this.storage.set("offline", null)
-                //     //     this.storage.set("lastsync", new Date())
-                //     //     this.storage.set("lastsyncdata", this.offlines)
-                //     //     this.offlines = []
-                //     //  //   this.updateStatus$.emit("Attendance sync Completed");
-                //    console.log("Done syncing..", i)
-                //     // }
-
-                // }, (error) => {
-                //     false
-
-                //     if (error.url == null) {
-                //       //  this.updateStatus$.emit("No Internet Connection");
-                //     }
-                //    // console.log(error)
-                // });
-            }
-            Promise.all(promises_array).then(() => {
-                console.log("Done one")
-            }, (error) => {
-                console.log("Eroro")
-            }).then(() => {
-                console.log("Done everything");
-                this.showattendanceprogress = false
-                this.storage.set("offline", null)
-                this.storage.set("lastsync", new Date())
-                this.storage.set("lastsyncdata", this.offlines)
-                this.offlines = []
-                this.updateStatus$.emit("Attendance sync Completed");
-            });;
-            //Close
-        });
+        })
+    }
+    dosyncv2() {
+        return Observable.fromPromise(this.storage.get("offline"))
+            .mergeMap(data => {
+                if (data && data.length > 0) {
+                    this.totalrequests = data.length
+                    let urls = []
+                    data.forEach(at => {
+                        urls.push(this.sync2(at.link, at.attendance))
+                    })
+                    return Observable.from(
+                        urls
+                    ).flatMap(data => data)
+                        .catch(this.error)
+                }
+                return Observable.from([])
+            }).catch(this.error)
+    }
+    sync2(link, attendance) {
+        return this.http.post(link, attendance, { headers: this.jheaders })
+            .map(resp => {
+                return { link: link, class: attendance.class_name, date: attendance.date, resp: resp.json(), status: resp.status }
+            })
+            .catch(this.error);
     }
 
 
