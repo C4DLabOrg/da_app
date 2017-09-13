@@ -114,6 +114,7 @@ export class HDClassesPage implements OnInit {
         {
           text: 'Agree',
           handler: () => {
+            this.load=true;
             this.account.deletestream(id).subscribe(data => {
               console.log(data)
             },

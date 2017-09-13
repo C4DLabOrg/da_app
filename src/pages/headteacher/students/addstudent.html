@@ -1,6 +1,6 @@
 <ion-header>
   <ion-navbar>
-    <ion-title>Add Student</ion-title>
+    <ion-title><span *ngIf="type"> {{type=="add"?'Add':"Update"}}</span> Student</ion-title>
     <ion-buttons end>
       <button ion-button small outline (click)="dismiss()">
       <ion-icon name='arrow-dropleft'></ion-icon> &nbsp;

@@ -20,7 +20,7 @@ export class HDStudentPage implements OnInit {
   classes: Classes[]
   load: boolean = false
   index: number = 0
-  studname:string
+  studname: string
   event: string
   takeattendance = new TakeAttendance()
   selectedclass: Classes
@@ -45,12 +45,23 @@ export class HDStudentPage implements OnInit {
       let theclass = this.classes[clindex]
       let studs = theclass.students.filter(stud => stud.id === student.id)
       if (studs.length > 0) {
-        this.studname=""
+        this.studname = ""
         let studinedx = theclass.students.indexOf(studs[0])
         theclass.students[studinedx] = student
+        theclass.students.sort(function (a, b) {
+          if (a.gender > b.gender) return -1;
+          if (a.gender < b.gender) return 1;
+          return 0;
+        });
+
       }
       else {
         theclass.students.push(student)
+        theclass.students.sort(function (a, b) {
+          if (a.gender > b.gender) return -1;
+          if (a.gender < b.gender) return 1;
+          return 0;
+        });
       }
 
       this.classes[clindex] = theclass
@@ -69,9 +80,9 @@ export class HDStudentPage implements OnInit {
     });
   }
 
-  deletestudent(student: Student,reason:String) {
+  deletestudent(student: Student, reason: String) {
     this.dload = true
-    this.account.deletestudent(student,reason).then((resp) => {
+    this.account.deletestudent(student, reason).then((resp) => {
       this.dload = false
     }, (error) => {
       this.dload = false
@@ -138,7 +149,7 @@ export class HDStudentPage implements OnInit {
       ev: myEvent
     });
     popover.onDidDismiss((data) => {
-       this.studname=""
+      this.studname = ""
       if (data != null) {
         this.index = data.id
         this.selectclass(data.id)
@@ -212,7 +223,7 @@ export class HDStudentPage implements OnInit {
         {
           text: 'Agree',
           handler: () => {
-            this.deletestudent(student,"DROP")
+            this.deletestudent(student, "DROP")
             console.log('Agree clicked');
           }
         }
@@ -229,7 +240,7 @@ export class HDStudentPage implements OnInit {
       type: 'radio',
       label: 'Student transfered school',
       value: 'TRANS',
-      checked:true
+      checked: true
 
     });
 
@@ -245,7 +256,7 @@ export class HDStudentPage implements OnInit {
       value: 'ERR'
     });
 
-     alert.addInput({
+    alert.addInput({
       type: 'text',
       label: 'Other Reason',
       value: 'OTHER'
@@ -255,7 +266,7 @@ export class HDStudentPage implements OnInit {
     alert.addButton({
       text: 'delete',
       handler: data => {
-        this.deletestudent(student,data)
+        this.deletestudent(student, data)
         console.log('Checkbox data:', data);
       }
     });

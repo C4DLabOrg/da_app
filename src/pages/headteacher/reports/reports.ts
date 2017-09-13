@@ -11,7 +11,13 @@ import { DatePicker } from '@ionic-native/date-picker';
 declare var window;
 @Component({
   selector: 'page-about',
-  templateUrl: 'reports.html'
+  templateUrl: 'reports.html',
+  styles: [`
+    chart {
+        display: block;
+    
+    }
+`]
 })
 export class HDReportPage implements OnInit {
   user: any
@@ -66,6 +72,9 @@ export class HDReportPage implements OnInit {
     this.account.newclasslist$.subscribe((data) => {
       this.getclasses()
     });
+    this.account.classeschange$.subscribe((data) => {
+      this.getclasses()
+    });
   }
   ionViewWillEnter() {
     this.isonpage = true
@@ -93,6 +102,7 @@ export class HDReportPage implements OnInit {
     this.storage.get("profile").then((data) => {
       this.user = data
     })
+    
   }
   graph(resp) {
     let data = []
@@ -224,9 +234,10 @@ export class HDReportPage implements OnInit {
     let id: any = this.selectedclass.id
     //IF id ==0 it means it represents all the classes thus set  to ""
     if (id == 0) id = "";
-
+    let school=this.user?this.user.school:''
+    console.log(this.user)
     //Getting the aggredates
-    this.account.getreport(id, this.djangodate(this.event)).then((resp) => {
+    this.account.getreport(id, this.djangodate(this.event),school).then((resp) => {
       i++
       this.stoploader(i)
       console.log(resp)
@@ -245,7 +256,7 @@ export class HDReportPage implements OnInit {
 
     //Getting the absent students and frequency
 
-    this.account.getabsentstudents(id, this.djangodate(this.event)).then(resp => {
+    this.account.getabsentstudents(id, this.djangodate(this.event),school).then(resp => {
       i++
       this.stoploader(i)
       this.absentstudents = resp.results
@@ -280,7 +291,7 @@ export class HDReportPage implements OnInit {
     }
     else {
 
-      this.showalert("No Information", "Please contact your Admin.")
+      this.showalert("No Contact Info", "Please contact your Admin.")
 
     }
   }

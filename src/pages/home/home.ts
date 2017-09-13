@@ -31,7 +31,7 @@ export class AttendancePage implements OnInit {
   confirm: any
   attendancetaken: boolean = false
   mindate: string = this.addDays(new Date(), 14)
-  maxdate: string = this.addDays( new Date(),-1)
+  maxdate: string = this.addDays(new Date(), -1)
   constructor(public navCtrl: NavController,
     private popoverCtrl: PopoverController,
     private storage: Storage, private account: AccountService,
@@ -83,9 +83,19 @@ export class AttendancePage implements OnInit {
       if (studs.length > 0) {
         let studinedx = theclass.students.indexOf(studs[0])
         theclass.students[studinedx] = student
+        theclass.students.sort(function (a, b) {
+          if (a.gender > b.gender) return -1;
+          if (a.gender < b.gender) return 1;
+          return 0;
+        });
       }
       else {
         theclass.students.push(student)
+        theclass.students.sort(function (a, b) {
+          if (a.gender > b.gender) return -1;
+          if (a.gender < b.gender) return 1;
+          return 0;
+        });
       }
 
       this.classes[clindex] = theclass
@@ -113,9 +123,7 @@ export class AttendancePage implements OnInit {
     let d = new Date(value)
     this.event = d.toDateString()
     console.log(d.toDateString(), d.toUTCString(), d.toLocaleDateString());
-
     this.clearattendance()
-
     console.log(this.event)
   }
   showtoast(name: string, status: boolean, position: string) {

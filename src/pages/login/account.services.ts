@@ -304,6 +304,11 @@ export class AccountService {
             let clindex = classes.indexOf(classes.filter(cl => cl.id === student.class_id)[0])
             let theclass = classes[clindex]
             theclass.students.push(student)
+            theclass.students.sort(function (a, b) {
+                if (a.gender < b.gender) return -1;
+                if (a.gender > b.gender) return 1;
+                return 0;
+            });
             classes[clindex] = theclass
             // let thestud=classes.filter(cl=>cl.id == student.class_id)[0]
             //                 .students.filter(stud=>stud.id==student.id)[0];
@@ -330,6 +335,11 @@ export class AccountService {
         this.storage.get("classes").then((data) => {
             let classes = data as Classes[]
             classes.unshift(stream)
+            classes.sort(function (a, b) {
+                if (a.class_name < b.class_name) return -1;
+                if (a.class_name > b.class_name) return 1;
+                return 0;
+            });
             // let thestud=classes.filter(cl=>cl.id == student.class_id)[0]
             //                 .students.filter(stud=>stud.id==student.id)[0];
             this.storage.set("classes", classes).then((data) => {
@@ -372,6 +382,11 @@ export class AccountService {
                 let nwclindex = classes.indexOf(classes.filter(cl => cl.id === newstudent.class_id)[0])
                 let nwtheclass = classes[nwclindex]
                 nwtheclass.students.push(newstudent)
+                nwtheclass.students.sort(function (a, b) {
+                    if (a.gender < b.gender) return -1;
+                    if (a.gender > b.gender) return 1;
+                    return 0;
+                });
                 classes[clindex] = theclass
                 Classes[nwclindex] = nwtheclass
                 changeclass = true;
@@ -435,8 +450,8 @@ export class AccountService {
             console.log("Saved Attendances ", data)
         })
     }
-    getreport(id, date: any): Promise<any> {
-        return this.http.get(this.link + "api/attendances/daily?_class=" + id + "&date=" + date).toPromise()
+    getreport(id, date: any,school): Promise<any> {
+        return this.http.get(this.link + "api/attendances/daily?_class=" + id + "&date=" + date+"&school="+school).toPromise()
             .then(resp => resp.json())
             .catch(this.error)
     }
@@ -476,13 +491,13 @@ export class AccountService {
             this.storage.set("offline", offs).then((data) => {
                 this.newofflineattendance$.emit("new")
                 if (!this.syncstarted) {
-                   
-                     this.initiatesync()
+
+                    this.initiatesync()
                 }
-                else{
-                     console.log("Sync Already started");
+                else {
+                    console.log("Sync Already started");
                 }
-               
+
             })
 
             this.showtoast("No Internet. Saved Offline")
@@ -639,8 +654,8 @@ export class AccountService {
 
 
     ///Get the absent students
-    getabsentstudents(id, date: any): Promise<any> {
-        return this.http.get(this.link + "api/students/absent?_class=" + id + "&date=" + date).toPromise()
+    getabsentstudents(id, date: any,school): Promise<any> {
+        return this.http.get(this.link + "api/students/absent?_class=" + id + "&date=" + date+"&school="+school).toPromise()
             .then(resp => resp.json())
             .catch(this.error)
 
