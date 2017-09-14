@@ -74,7 +74,7 @@ export class AccountService {
                         .catch(this.observableerror)
                 })
                 .catch(error => {
-                    console.log(this.offcreds)
+                    console.log(error)
                     if (error.url == null) {
                         if (this.offcreds) {
                             if (this.offcreds.username == this.username && this.offcreds.password == this.gethash(this.offcreds.access_token, this.password)) {
@@ -83,12 +83,19 @@ export class AccountService {
                                     observer.complete();
                                 })
                             }
-                            return Observable.throw({ title: "Offline Login Failed", message: "Offline credentials available are for  username " + this.offcreds.username })
+                            else if (this.offcreds.username != this.username) {
+                                return Observable.throw({ title: "Offline Login Failed", message: "Offline login only available  to  username " + this.offcreds.username })
+
+                            }
+                            return Observable.throw({ title: "Offline Login Failed", message: "Wrong  password provided for  username " + this.offcreds.username })
                         }
                         else {
-                            return Observable.throw("No internet connection or  offline Credentials found!");
+                            return Observable.throw({ title: "Offline Login Failed", message: "No offline Credentials found!" });
                         }
 
+                    }
+                    else if (error.status > 500) {
+                        return Observable.throw({ title: "Server Offline", message: "Could not connect to server" })
                     }
                     else {
                         return Observable.throw(error)
