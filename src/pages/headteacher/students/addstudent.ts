@@ -146,7 +146,7 @@ export class AddStudentModal {
         },
             (error) => {
                 this.load = false
-                console.log(error)
+                console.log(JSON.stringify(error))
             })
     }
     updatestudent(data) {
@@ -157,7 +157,7 @@ export class AddStudentModal {
             this.dismiss()
         }, (error) => {
             this.load = false
-            console.log(error)
+            console.log(JSON.stringify(error))
         })
     }
 

@@ -250,8 +250,8 @@ export class HDReportPage implements OnInit {
       if (error.url == null) {
         this.showalert("Internet Connection", "No Internet Connection.Turn on your wifi or data.")
       }
-      console.log(error)
-      console.log(error)
+      console.log(JSON.stringify(error))
+      console.log(JSON.stringify(error))
     })
 
     //Getting the absent students and frequency
@@ -263,7 +263,7 @@ export class HDReportPage implements OnInit {
     }, error => {
       i++
       this.stoploader(i)
-      console.log(error)
+      console.log(JSON.stringify(error))
     })
   }
   callConfirm(student: any) {

@@ -86,7 +86,7 @@ export class HDStudentPage implements OnInit {
       this.dload = false
     }, (error) => {
       this.dload = false
-      console.log(error)
+      console.log(JSON.stringify(error))
     })
   }
   datechange(value) {

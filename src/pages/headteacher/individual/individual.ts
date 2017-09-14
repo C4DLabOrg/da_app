@@ -79,7 +79,7 @@ export class IndividualPage implements OnInit {
 
         }), (error) => {
             this.load = false
-            console.log(error)
+            console.log(JSON.stringify(error))
         })
     }
     ngAfterViewInit() {
