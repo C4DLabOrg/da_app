@@ -41,10 +41,11 @@ export class AttendancePage implements OnInit {
 
   }
   djangodate(date) {
-    let d = new Date(date)
-    let g = d.toLocaleDateString()
-    let f = g.split("/")
-    return f[2] + "-" + f[0] + "-" + f[1]
+    // let d = new Date(date)
+    // let g = d.toLocaleDateString()
+    // let f = g.split("/")
+    // return f[2] + "-" + f[0] + "-" + f[1]
+    return Moment(date).format("YYYY-MM-DD")
   }
   addDays(theDate, days) {
     return new Date(theDate.getTime() - days * 24 * 60 * 60 * 1000).toISOString();
@@ -64,7 +65,7 @@ export class AttendancePage implements OnInit {
   }
 
   initiatesync() {
-    this.account.initiatesync()
+    this.account.startsync()
     this.account.updateStatus$.subscribe((message) => {
       console.log(message);
       this.showtoast(message, false, "top")
@@ -72,7 +73,7 @@ export class AttendancePage implements OnInit {
     //  this.account.saveattendancehostory()
   }
   simupdate() {
-    this.account.initiatesync()
+    this.account.startsync()
   }
 
   onStudentsChange() {

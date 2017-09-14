@@ -1,3 +1,5 @@
+import  Moment  from 'moment';
+
 
 import { Component } from '@angular/core'
 import { ViewController, NavParams } from 'ionic-angular'
@@ -35,7 +37,7 @@ export class AddStudentModal {
             midname: [''],
             class_id: ['', Validators.required],
             student_id: [''],
-            gender: [''],
+            gender: ['', Validators.required],
             guardian_name: [''],
             guardian_phone: [''],
             is_oosc: [''],
@@ -80,10 +82,11 @@ export class AddStudentModal {
         //     });
     }
     djangodate(date) {
-        let d = new Date(date)
-        let g = d.toLocaleDateString()
-        let f = g.split("/")
-        return f[2] + "-" + f[0] + "-" + f[1]
+        // let d = new Date(date)
+        // let g = d.toLocaleDateString()
+        // let f = g.split("/")
+        // return f[2] + "-" + f[0] + "-" + f[1]
+        return Moment(date).format("YYYY-MM-DD");
     }
 
     dismiss() {
@@ -92,7 +95,7 @@ export class AddStudentModal {
     }
     datechange(value) {
         let d = new Date(value)
-        this.event = d.toDateString()
+        this.event = Moment(d).format("YYYY-MM-DD")
     }
     addstud(type) {
         //  console.log(this.studform.value)
@@ -105,7 +108,7 @@ export class AddStudentModal {
             data.student_id = 0
         }
 
-        console.log(data);
+        console.log(JSON.stringify(data));
         if (this.type == "add") {
             // console.log("This is ite")
             this.newstudent(data)
@@ -151,6 +154,7 @@ export class AddStudentModal {
     }
     updatestudent(data) {
         this.load = true
+        data.date_enrolled = this.djangodate(this.event)
         this.account.updatestudent(this.student.id, data, this.student).then((resp) => {
             this.load = false
             console.log("Updated student", resp)

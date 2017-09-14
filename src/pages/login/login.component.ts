@@ -30,38 +30,55 @@ export class LoginPage {
     this.loader.present();
   }
   gotoPage(data) {
-    if(data.headteacher){
-          this.navCtrl.setRoot(HDTabsPage)
-    }
-    else{
-          this.navCtrl.setRoot(TabsPage)
-    }
+    this.storage.set('loggedin', true).then(() => {
+      if (data.headteacher) {
+        this.navCtrl.setRoot(HDTabsPage)
+      }
+      else {
+        this.navCtrl.setRoot(TabsPage)
+      }
+    })
+
 
   }
-  
+
   login() {
     this.error = null;
     this.ldpresent("Logging in ...")
     if (this.username && this.password) {
       this.account.getauth()
       this.account.login($.trim(this.username), this.password)
-        .then((response) => {
-          this.storage.set("user", response).then(() => {
-            this.gototab()
-          })
+        .subscribe((response) => {
+          console.log("The response is ", response)
+          if (response == "offline") {
+            this.storage.get("profile").then(data => {
+              this.gotoPage(data);
+            });
+          }
+          else {
+            this.storage.set("user", response).then(() => {
+              this.gototab()
+            })
+          }
+
           // console.log(response)
           this.loader.dismiss();
         }, (error) => {
           console.log(error)
           this.loader.dismiss();
-          if (error.url != null) {
+           if(error.title){
+             this.eheader = error.title
+              this.error=error.message
+            }
+            else if (error.url != null) {
+           
             if (error.json().error_description) {
               this.error = error.json().error_description
             } else {
               this.error = error.json().error.replace("_", " ")
             }
-
             this.eheader = error.statusText
+            
             if (error.url == null) {
               this.error = "Check your internet connection"
             }
@@ -73,34 +90,33 @@ export class LoginPage {
             this.eheader = "No Internet Connection"
             this.error = "Turn on mobile data or wifi"
           }
-
           console.log("haha", error)
-        })
-        .catch((error) => {
-          this.loader.dismiss();
-          if (error != null) {
-            if (error.json().error_description) {
-              this.error = error.json().error_description
-            } else {
-              this.error = error.json().error.replace("_", " ")
-            }
+        });
+      // .catch((error) => {
+      //   this.loader.dismiss();
+      //   if (error != null) {
+      //     if (error.json().error_description) {
+      //       this.error = error.json().error_description
+      //     } else {
+      //       this.error = error.json().error.replace("_", " ")
+      //     }
 
-            this.eheader = error.statusText
-            if (error.url == null) {
-              this.error = "Check your internet connection"
-            }
-            else if (error.status == 400) {
-              this.error = "Confirm email and password"
-            }
-          }
-          else {
-            this.eheader = "No Connection"
-            this.error = "Make sure you have a working internet connection"
-          }
+      //     this.eheader = error.statusText
+      //     if (error.url == null) {
+      //       this.error = "Check your internet connection"
+      //     }
+      //     else if (error.status == 400) {
+      //       this.error = "Confirm email and password"
+      //     }
+      //   }
+      //   else {
+      //     this.eheader = "No Connection"
+      //     this.error = "Make sure you have a working internet connection"
+      //   }
 
-          console.log("haha", error)
+      //   console.log("haha", error)
 
-        })
+      // })
     }
     else {
       console.log("both must be present")
@@ -125,8 +141,8 @@ export class LoginPage {
         //   this.loader.dismiss();
         //   this.gotoPage(data.profile)
         // })
-      },(error)=>{
-           this.loader.dismiss();
+      }, (error) => {
+        this.loader.dismiss();
         console.log("this ***", error)
         if (error != null) {
           if (error.error_description) {

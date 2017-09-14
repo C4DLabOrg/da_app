@@ -1,3 +1,4 @@
+import  Moment  from 'moment';
 import { Component, OnInit } from '@angular/core';
 import { ClassPopoverPage } from '../../home/classpopover.component'
 import { NavController, PopoverController, AlertController, LoadingController } from 'ionic-angular';
@@ -23,7 +24,7 @@ export class HDReportPage implements OnInit {
   user: any
   index: number = 0
   classes: Classes[]
-  event: string = new Date().toDateString()
+  event: string = Moment().format("YYYY-MM-DD")
   resp: Report
   options: any
   options2: any
@@ -60,7 +61,7 @@ export class HDReportPage implements OnInit {
   ngOnInit() {
     this.getprofile()
     this.getclasses()
-    this.event = new Date().toISOString()
+    this.event = Moment().format("YYYY-MM-DD")
     this.onClassesChange()
 
     // this.datePicker.onDateSelected.subscribe(
@@ -86,7 +87,7 @@ export class HDReportPage implements OnInit {
   }
   datechange(value) {
     let d = new Date(value)
-    this.event = d.toISOString()
+    this.event = Moment(d).format("YYYY-MM-DD")
     this.getreports()
   }
 
@@ -222,10 +223,7 @@ export class HDReportPage implements OnInit {
     }
   }
   djangodate(date) {
-    let d = new Date(date)
-    let g = d.toLocaleDateString()
-    let f = g.split("/")
-    return f[2] + "-" + f[0] + "-" + f[1]
+    return Moment(date).format("YYYY-MM-DD")
   }
 
   getreports() {

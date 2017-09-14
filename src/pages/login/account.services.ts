@@ -12,6 +12,8 @@ import { Classes, Student, Teacher } from '../home/classes'
 import { Offline } from './offline'
 import { ToastController } from 'ionic-angular';
 import { LocalNotifications } from 'ionic-native';
+import jsSHA from 'jssha'
+
 
 @Injectable()
 export class AccountService {
@@ -22,10 +24,14 @@ export class AccountService {
     offlines: Offline[]
     classes: Classes[]
     clock: any
+    offcreds: any
     syncstarted: boolean = false
     totalrequests: number = 0
     completedrequests: number = 0
     errorrequests: number = 0
+    username: string
+    password: string
+    access_token: string
     showattendanceprogress: boolean = false
     nonetnotification: boolean = true
     private headers = new Headers({ "Content-Type": "application/x-www-form-urlencoded" })
@@ -47,16 +53,84 @@ export class AccountService {
         this.getauth()
 
     }
-    login(username: string, password: string): Promise<Token> {
-        return this.http.post(this.link + "o/token/",
-            "username=" + username + "&password=" + password + "&grant_type=password&client_id=" + this.client_id,
-            { headers: this.headers })
-            .toPromise()
-            .then(response => response.json() as Token)
-            .catch(this.error)
+    login(username: string, password: string) {
+        return Observable.fromPromise(this.storage.get("offlinecreds")).mergeMap(thecreds => {
+            this.offcreds = thecreds
+            this.password = password
+            this.username = username
+
+            return this.http.post(this.link + "o/token/",
+                "username=" + username + "&password=" + password + "&grant_type=password&client_id=" + this.client_id,
+                { headers: this.headers })
+                .mergeMap(resp => {
+                    let token = resp.json().access_token
+                    let offlinecred: any = {}
+                    offlinecred.username = username
+                    this.access_token = token
+                    offlinecred.password = this.gethash(token, password);
+                    offlinecred.access_token = token
+                    return Observable.fromPromise(this.storage.set("offlinecreds", offlinecred))
+                        .map(() => resp.json())
+                        .catch(this.observableerror)
+                })
+                .catch(error => {
+                    console.log(this.offcreds)
+                    if (error.url == null) {
+                        if (this.offcreds) {
+                            if (this.offcreds.username == this.username && this.offcreds.password == this.gethash(this.offcreds.access_token, this.password)) {
+                                return Observable.create((observer) => {
+                                    observer.next("offline");
+                                    observer.complete();
+                                })
+                            }
+                            return Observable.throw({ title: "Offline Login Failed", message: "Offline credentials available are for  username " + this.offcreds.username })
+                        }
+                        else {
+                            return Observable.throw("No internet connection or  offline Credentials found!");
+                        }
+
+                    }
+                    else {
+                        return Observable.throw(error)
+                    }
+                })
+        })
+    }
+    observableerror(error: any) {
+        return Observable.throw(error)
+    }
+    handleloginerror(error: any) {
+        console.log(error)
+        // console.log(this.offcreds)
+        // if (error.url == null) {
+        //     if (this.offcreds) {
+        //         if (this.offcreds.username == this.username && this.offcreds.password == this.gethash(this.access_token, this.password))
+        //             return Observable.create((observer) => {
+        //                 observer.next({ res: "offf" });
+        //                 observer.complete();
+        //             })
+        //         return Observable.throw("Offline login failed, use the last login username and password")
+        //     }
+        //     else {
+        //         return Observable.throw("No internet connection or  offline Credentials found!");
+        //     }
+
+        // }
+        // else {
+        //     return Observable.throw(error)
+        // }
+
     }
     newclasslist() {
         this.newclasslist$.emit("new list");
+    }
+
+    gethash(password, access_token) {
+        var shaObj = new jsSHA("SHA-256", "TEXT");
+        shaObj.setHMACKey(access_token, "TEXT");
+        shaObj.update(password);
+        var hmac = shaObj.getHMAC("HEX");
+        return hmac
     }
     public getauth() {
         this.storage.get("user").then((data) => {
@@ -99,6 +173,9 @@ export class AccountService {
             .then((response) => this.saveall(response))
             .then(response => response)
             .catch(this.error)
+    }
+    encrypt() {
+
     }
     saveall(response) {
         return new Promise(resolve => {
@@ -450,8 +527,8 @@ export class AccountService {
             console.log("Saved Attendances ", data)
         })
     }
-    getreport(id, date: any,school): Promise<any> {
-        return this.http.get(this.link + "api/attendances/daily?_class=" + id + "&date=" + date+"&school="+school).toPromise()
+    getreport(id, date: any, school): Promise<any> {
+        return this.http.get(this.link + "api/attendances/daily?_class=" + id + "&date=" + date + "&school=" + school).toPromise()
             .then(resp => resp.json())
             .catch(this.error)
     }
@@ -490,13 +567,7 @@ export class AccountService {
             offs.push(off)
             this.storage.set("offline", offs).then((data) => {
                 this.newofflineattendance$.emit("new")
-                if (!this.syncstarted) {
-
-                    this.initiatesync()
-                }
-                else {
-                    console.log("Sync Already started");
-                }
+                this.startsync()
 
             })
 
@@ -505,6 +576,15 @@ export class AccountService {
         }, (error) => {
             console.log(error)
         });
+    }
+    startsync() {
+        if (!this.syncstarted) {
+
+            this.initiatesync()
+        }
+        else {
+            console.log("Sync Already started");
+        }
     }
     sync(data: Offline, index: number): Promise<any> {
         return this.takeattendance(data.attendance).then(data => data).catch(this.error)
@@ -654,8 +734,8 @@ export class AccountService {
 
 
     ///Get the absent students
-    getabsentstudents(id, date: any,school): Promise<any> {
-        return this.http.get(this.link + "api/students/absent?_class=" + id + "&date=" + date+"&school="+school).toPromise()
+    getabsentstudents(id, date: any, school): Promise<any> {
+        return this.http.get(this.link + "api/students/absent?_class=" + id + "&date=" + date + "&school=" + school).toPromise()
             .then(resp => resp.json())
             .catch(this.error)
 
