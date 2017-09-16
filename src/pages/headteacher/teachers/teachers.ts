@@ -1,3 +1,5 @@
+import  Moment  from 'moment';
+import { Classes } from './../../home/classes';
 import { Component, OnInit } from '@angular/core';
 import { AccountService } from '../../login/account.services'
 import { TakeAttendance } from '../../home/takeattendance'
@@ -14,6 +16,7 @@ import { Storage } from '@ionic/storage'
 })
 export class HDTeachersPage implements OnInit {
   school: number
+  classes:Classes[]=[]
   content: any
   text: any
   teachers: Teacher[]
@@ -31,9 +34,23 @@ export class HDTeachersPage implements OnInit {
 
   }
   ngOnInit() {
+    this.getclasses()
     this.getteachers()
-    this.event = new Date().toISOString()
+    this.event = Moment().format("YYYY-MM-DD")
     this.onTeachersChange()
+  }
+  getclasses(){
+    this.storage.get("classes").then(data=>{
+      data.forEach(val=>{
+        let cl:Classes= new Classes()
+        cl._class=val._class
+        cl.class_name=val.class_name
+        cl.id=val.id
+        cl.school=val.school
+        cl.selected=false
+        this.classes.push(cl)
+      });
+    });
   }
   onTeachersChange() {
     this.account.teacherchange$.subscribe((teacher) => {
@@ -56,6 +73,10 @@ export class HDTeachersPage implements OnInit {
     })
     this.account.newclasslist$.subscribe(data=>{
         this.getteachers()
+        this.getclasses()
+    })
+    this.account.classeschange$.subscribe(()=>{
+      this.getclasses()
     })
    
   }
@@ -74,10 +95,10 @@ export class HDTeachersPage implements OnInit {
   }
   presentModal(teacher, type) {
     if (teacher == 'a') {
-      let modal = this.modalctrl.create(AddTeacherModal, { type: type });
+      let modal = this.modalctrl.create(AddTeacherModal, { type: type,classes:this.classes });
       modal.present();
     } else {
-      let modal = this.modalctrl.create(AddTeacherModal, { teacher: teacher, type: type });
+      let modal = this.modalctrl.create(AddTeacherModal, { teacher: teacher, type: type ,classes:this.classes });
       modal.present();
     }
 

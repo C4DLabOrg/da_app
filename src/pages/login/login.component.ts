@@ -148,9 +148,7 @@ export class LoginPage {
           if (error.error_description) {
             this.error = error.data.error_description
           } else {
-            if (error.json().error) {
-              this.error = error.data.error.replace("_", " ")
-            }
+         
 
           }
 
