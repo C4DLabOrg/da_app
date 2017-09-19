@@ -26,8 +26,7 @@ export class MyApp implements OnInit {
   }
 
   gotoApp() {
-    this.storage.get("user").then((val) => {
-     
+    this.storage.get("loggedin").then((val) => {
       console.log(val)
       if (val) {
          this.storage.get("profile").then((profile)=>{

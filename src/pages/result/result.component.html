@@ -13,7 +13,7 @@
      <h2> <b *ngIf="teacher">Thank you, {{teacher.name}}</b></h2>
       </ion-card-header>    
 
-  <chart style="width:90%;height:35%" [options]="options"></chart>
+  <chart style="width:90%;height:44%" [options]="options"></chart>
 
     <ion-card-content>
      
@@ -33,13 +33,13 @@
 
   </ion-card>
 
-   <div class="spacer" style="height: 7px;"></div>
+   <!--<div class="spacer" style="height: 7px;"></div>
    <div *ngIf="absent_students">
    <button [disabled]="absent_students.length==0" ion-button color="primary" outline icon-left style="margin-left: 15%" (click)="absence()">
       <ion-icon name='create' is-active="false"></ion-icon>
       Reason For Absence &nbsp; <ion-badge *ngIf="absent_students" item-right>{{absent_students.length}}</ion-badge>
     </button>
-   </div>
+   </div>-->
 
 
 </ion-content>

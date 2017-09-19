@@ -1,12 +1,12 @@
 <ion-header>
       <ion-navbar color="primary">
-            <ion-title>Classes <small *ngIf="classes">( {{classes.length}})</small> </ion-title>
-
+            <ion-title>Classes </ion-title>
+<!--
             <ion-buttons end>
                   <button ion-button >
                   <ion-icon name="more"></ion-icon>
                   </button>
-            </ion-buttons>
+            </ion-buttons>-->
       </ion-navbar>
 </ion-header>
 
@@ -18,7 +18,7 @@
             <div class="spacer" style="height: 10px;"></div>
             <ion-item *ngFor="let class of classes;let i=index">
                   <ion-label>
-                        <ion-badge item-right>{{i+1}}</ion-badge>{{class.class_name}}
+                        <ion-badge item-right>{{i+1}}</ion-badge>{{class.class_name}} 
                         <div class="spacer" style="height: 4px;"></div>
 
                         <p style="font-size: 13px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {{class.students.length}} Students</p>
@@ -27,7 +27,7 @@
 
                   <a ion-button (click)="presentModal(class,'update')" small item-right>Edit</a>
 
-                  <a ion-button small item-right color="danger">Delete</a>
+                  <a ion-button (click)="deleteConfirm(class.id)" small item-right color="danger">Delete</a>
                   
               
           </ion-item>

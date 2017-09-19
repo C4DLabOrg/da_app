@@ -1,6 +1,6 @@
 <ion-header>
   <ion-navbar>
-    <ion-title>Add Student</ion-title>
+    <ion-title><span *ngIf="type"> {{type=="add"?'Add':"Update"}}</span> Class</ion-title>
     <ion-buttons end>
       <button ion-button small outline (click)="dismiss()">
       <ion-icon name='arrow-dropleft'></ion-icon> &nbsp;
@@ -48,7 +48,8 @@
       <ion-label floating>Class</ion-label>
       <ion-input formControlName="class_id"></ion-input>
     </ion-item>-->
-    <button ion-button full type="submit" [disabled]="!classform.valid"> <span *ngIf="type">{{type}}</span></button>
+     <button ion-button full type="submit" [disabled]="!classform.valid || load"> <span *ngIf="type">{{load?'Loading ...':type}}</span></button>
+    <!--<button ion-button full type="submit" [disabled]="!classform.valid"> <span *ngIf="type">{{type}}</span></button>-->
   </form>
   <!--<button ion-button (click)="dismiss()">Close</button>-->
 

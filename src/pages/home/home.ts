@@ -1,3 +1,5 @@
+import Moment from 'moment';
+// import { Moment } from 'moment';
 import { Component, OnInit } from '@angular/core';
 import { NavController, PopoverController, ToastController, AlertController } from 'ionic-angular';
 import { Storage } from '@ionic/storage'
@@ -7,6 +9,11 @@ import { TakeAttendance } from './takeattendance'
 import { AccountService } from '../login/account.services'
 import { ResultPage } from '../result/result.component'
 import { DatePipe } from '@angular/common'
+
+// import { DatePicker } from 'ionic2-date-picker/ionic2-date-picker'
+// import { DatePicker} from "../ionic2-date-picker/date-picker";
+import { DatePicker } from '@ionic-native/date-picker';
+
 @Component({
   selector: 'page-home',
   templateUrl: 'home.html'
@@ -24,24 +31,41 @@ export class AttendancePage implements OnInit {
   confirm: any
   attendancetaken: boolean = false
   mindate: string = this.addDays(new Date(), 14)
-  maxdate: string = new Date().toISOString()
+  maxdate: string = this.addDays(new Date(), -1)
   constructor(public navCtrl: NavController,
     private popoverCtrl: PopoverController,
     private storage: Storage, private account: AccountService,
-    private toastctrl: ToastController, private alertctrl: AlertController) {
+    private toastctrl: ToastController, private alertctrl: AlertController,
+    public datePicker: DatePicker
+  ) {
 
+  }
+  djangodate(date) {
+    // let d = new Date(date)
+    // let g = d.toLocaleDateString()
+    // let f = g.split("/")
+    // return f[2] + "-" + f[0] + "-" + f[1]
+    return Moment(date).format("YYYY-MM-DD")
   }
   addDays(theDate, days) {
     return new Date(theDate.getTime() - days * 24 * 60 * 60 * 1000).toISOString();
   }
   ngOnInit() {
+    //My
     this.getclasses()
     this.event = new Date().toISOString()
     this.onStudentsChange()
     this.initiatesync()
+
+    // this.datePicker.onDateSelected.subscribe(
+    //   (date) => {
+    //     this.datechange(date)
+    //     console.log("Date changed ", date);
+    //   });
   }
+
   initiatesync() {
-    this.account.initiatesync()
+    this.account.startsync()
     this.account.updateStatus$.subscribe((message) => {
       console.log(message);
       this.showtoast(message, false, "top")
@@ -49,7 +73,7 @@ export class AttendancePage implements OnInit {
     //  this.account.saveattendancehostory()
   }
   simupdate() {
-    this.account.initiatesync()
+    this.account.startsync()
   }
 
   onStudentsChange() {
@@ -60,9 +84,19 @@ export class AttendancePage implements OnInit {
       if (studs.length > 0) {
         let studinedx = theclass.students.indexOf(studs[0])
         theclass.students[studinedx] = student
+        theclass.students.sort(function (a, b) {
+          if (a.gender > b.gender) return -1;
+          if (a.gender < b.gender) return 1;
+          return 0;
+        });
       }
       else {
         theclass.students.push(student)
+        theclass.students.sort(function (a, b) {
+          if (a.gender > b.gender) return -1;
+          if (a.gender < b.gender) return 1;
+          return 0;
+        });
       }
 
       this.classes[clindex] = theclass
@@ -87,6 +121,9 @@ export class AttendancePage implements OnInit {
 
   }
   datechange(value) {
+    let d = new Date(value)
+    this.event = d.toDateString()
+    console.log(d.toDateString(), d.toUTCString(), d.toLocaleDateString());
     this.clearattendance()
     console.log(this.event)
   }
@@ -139,7 +176,7 @@ export class AttendancePage implements OnInit {
     if (this.classes.length > 0) {
       this.storage.get(this.selectedclass.class_name).then((data: TakeAttendance[]) => {
         data == null ? data = [] : data = data;
-        let takenattendances = data.filter(att => att.date == this.event.split("T")[0]).filter(att => att.class_name == this.selectedclass.class_name)
+        let takenattendances = data.filter(att => att.date == this.djangodate(this.event)).filter(att => att.class_name == this.selectedclass.class_name)
         if (takenattendances.length > 0) {
           this.attendancetaken = true
           let attend = takenattendances[0] as TakeAttendance
@@ -248,7 +285,7 @@ export class AttendancePage implements OnInit {
         }
       }
       //  console.log(this.takeattendance)
-      this.takeattendance.date = this.event.split("T")[0]
+      this.takeattendance.date = this.djangodate(this.event)
       this.takeattendance.class_name = this.selectedclass.class_name
       this.account.takeattendance(this.takeattendance).then((response) => {
 
@@ -259,7 +296,7 @@ export class AttendancePage implements OnInit {
         this.navCtrl.push(ResultPage, { "attendance": this.takeattendance, "response": response })
       }, (error) => {
         this.load = false
-        console.log(error)
+        console.log(JSON.stringify(error))
       })
     }
     else {
@@ -268,6 +305,27 @@ export class AttendancePage implements OnInit {
   }
 
 
+  showCalendar() {
+    // this.datePicker.showCalendar(this.djangodate(this.event));
+    // alert(this.mindate+" "+this.maxdate);
+    let mindate = Moment(this.mindate).locale('de').toDate();
+    let maxdate = Moment(this.maxdate).locale('de').toDate();
+    this.datePicker.show({
+      date: new Date(this.event),
+      mode: 'date',
+      minDate: Date.parse(this.mindate),
+      maxDate: new Date(this.maxdate).valueOf(),
+      // titleText: "Class Attendance Date Select ",
+      androidTheme: this.datePicker.ANDROID_THEMES.THEME_DEVICE_DEFAULT_LIGHT
+    }).then(
+      date => {
+        this.datechange(date)
+        console.log('Got date: ', date)
+      },
+      err => console.log('Error occurred while getting date: ', err)
+      );
+
+  }
 
 
 }
