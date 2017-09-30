@@ -511,6 +511,11 @@ export class AccountService {
         }
 
     }
+    // offlineattendance() {
+    //     this.saveoffline(attendance)
+    //     this.attendancelocalnot()
+    //     this.saveattendancehistory(attendance)
+    // }
     saveattendancehistory(attendance: TakeAttendance) {
         this.storage.get(attendance.class_name).then((data: TakeAttendance[]) => {
             data == null ? data = [] : data = data;

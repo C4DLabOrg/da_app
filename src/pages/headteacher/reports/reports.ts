@@ -111,10 +111,12 @@ export class HDReportPage implements OnInit {
     if (resp.length > 0) {
       this.if_report = true
       this.resp = resp[0]
-      data.push({ name: "Present Males", y: this.resp.present_males })
-      data.push({ name: "Absent Males", y: this.resp.absent_males })
-      data.push({ name: "Present Females", y: this.resp.present_females })
-      data.push({ name: "Absent Females", y: this.resp.absent_females })
+      let totalfemales=this.resp.present_females+this.resp.absent_females  
+      let totalmales=this.resp.present_males+this.resp.absent_males 
+      data.push({ name: "Present Males", y: this.resp.present_males*100/totalmales })
+      data.push({ name: "Absent Males", y: this.resp.absent_males*100/totalmales })
+      data.push({ name: "Present Females", y: this.resp.present_females*100/totalfemales })
+      data.push({ name: "Absent Females", y: this.resp.absent_females *100/totalfemales})
       data2.push({ name: "Students Present", y: this.resp.present_females + this.resp.present_males })
       data2.push({ name: "Students Absent", y: this.resp.absent_females + this.resp.absent_males })
       //console.log(data)
@@ -123,13 +125,12 @@ export class HDReportPage implements OnInit {
       this.if_report = false
       this.showalert("No Reports", "Attendance for this day was not taken.")
     }
-
     this.options = {
       chart: { type: 'pie' },
       title: { text: '' },
       series: [{ name: "Attendance", data: data }],
       tooltip: {
-        pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+        pointFormat: '{series.name}: <b>{point.y:.1f}%</b>'
       },
       plotOptions: {
         pie: {
@@ -140,7 +141,7 @@ export class HDReportPage implements OnInit {
             enabled: true,
             distance: -30,
             // format: '<b>{point.name}</b>: {point.percentage:.1f} %',
-            format: '{point.percentage:.1f} %',
+            format: '{point.y:.1f} %',
 
           }
         }
