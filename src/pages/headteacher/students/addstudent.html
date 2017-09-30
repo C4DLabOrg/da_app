@@ -1,6 +1,6 @@
 <ion-header>
   <ion-navbar>
-    <ion-title>Add Student</ion-title>
+    <ion-title><span *ngIf="type"> {{type=="add"?'Add':"Update"}}</span> Student</ion-title>
     <ion-buttons end>
       <button ion-button small outline (click)="dismiss()">
       <ion-icon name='arrow-dropleft'></ion-icon> &nbsp;
@@ -72,15 +72,29 @@
         <ion-option *ngFor="let class of classes" value="{{class.id}}">{{class.class_name}}</ion-option>
       </ion-select>
     </ion-item>
+    
 
     <div class="spacer" style="height:10px;"></div>
 
-    <ion-item>
-      <ion-label stacked>Enrollment Date   <ion-icon name='calendar' style="color: #d03e84"></ion-icon></ion-label>
-     
-      <ion-datetime [max]="maxdate"  displayFormat="  DD MMMM YYYY"  pickerFormat="DD MMM  YYYY"
-        formControlName="date_enrolled"></ion-datetime>
+      <ion-item>
+         <ion-label>Newly Enrolled Student</ion-label>
+      <ion-checkbox formControlName="is_oosc" item-right></ion-checkbox>
     </ion-item>
+
+    <div class="spacer" style="height:10px;"></div>
+
+
+    <ion-item (click)="showCalendar()">
+      <ion-label>Enrollment date &nbsp;
+      <ion-icon name='calendar' style="color: #d03e84"></ion-icon>
+       {{event|date}}
+      </ion-label>
+<!--     
+      <ion-datetime [max]="maxdate"  displayFormat="  DD MMMM YYYY"  pickerFormat="DD MMM  YYYY"
+        formControlName="date_enrolled"></ion-datetime>-->
+    </ion-item>
+
+   
     <button ion-button full type="submit" [disabled]="!studform.valid || load"> <span *ngIf="type">{{load?'Loading ...':type}}</span></button>
     
   </form>

@@ -5,6 +5,7 @@ export class Classes{
     _class:string
     students:Student[]
     school:number
+    selected:boolean
     
 
     
@@ -24,6 +25,7 @@ export class Student{
     date_enrolled:string    
     guardian_name:string
     guardian_phone:string
+    is_oosc:boolean
 
 }
 export class Teacher{
@@ -31,6 +33,7 @@ export class Teacher{
     user:number
     fstname:string
     name:string
+    classes:any
     lstname:string
     phone_no:string
     teacher_type:string

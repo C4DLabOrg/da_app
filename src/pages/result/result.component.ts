@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
 import { NavController,NavParams } from 'ionic-angular';
 import { Storage } from '@ionic/storage'
@@ -8,9 +8,15 @@ import {AbsencePage} from '../absence/absence.component'
 
 @Component({
   selector: 'page-result',
-  templateUrl: 'result.component.html'
+  templateUrl: 'result.component.html',
+    styles: [`
+    chart {
+        display: block;
+        width: auto;
+    }
+`]
 })
-export class ResultPage implements AfterViewInit {
+export class ResultPage  {
   user: any
   options: any
   attendance:TakeAttendance
@@ -30,8 +36,9 @@ export class ResultPage implements AfterViewInit {
   absence(){
     this.navCtrl.push(AbsencePage,{"absent_students":this.absent_students})   
   }
+  
 
-  ngAfterViewInit() {
+  ionViewDidLoad() {
     this.getuser()
     this.attendance=this.navparams.get("attendance");
     this.absent_students=this.navparams.get("response")

@@ -1,5 +1,5 @@
 <ion-header>
-    <ion-navbar>
+  <ion-navbar>
     <ion-title><span *ngIf="type"> {{type=="add"?'Add':"Update"}}</span> Teacher</ion-title>
     <ion-buttons end>
       <button ion-button small outline (click)="dismiss()">
@@ -7,7 +7,7 @@
          Back
       </button>
 
-       <!--<button ion-button color="light" icon-left>
+      <!--<button ion-button color="light" icon-left>
       <ion-icon name='arrow-back'></ion-icon>
       Back
     </button>-->
@@ -18,25 +18,25 @@
 <ion-content class="tutorial-page">
   <span *ngIf="student"> Student:{{student.fstname}}</span>
   <form [formGroup]="teachform" (ngSubmit)="addteach()">
-     <div class="spacer" style="height:5px;"></div>
+    <div class="spacer" style="height:5px;"></div>
     <ion-item>
       <ion-label floating>First Name</ion-label>
       <ion-input type="text" formControlName="fstname"></ion-input>
     </ion-item>
-     <div class="spacer" style="height:5px;"></div>
+    <div class="spacer" style="height:5px;"></div>
     <ion-item>
       <ion-label floating>Last Name</ion-label>
       <ion-input formControlName="lstname"></ion-input>
     </ion-item>
-     <div class="spacer" style="height:5px;"></div>
-      <ion-item>
+    <div class="spacer" style="height:5px;"></div>
+    <ion-item>
       <ion-label>Teacher Type</ion-label>
       <ion-select formControlName="teacher_type">
         <ion-option value="TSC" selected="true">Tsc</ion-option>
-        <ion-option value="BOM">Board of Management</ion-option>
+        <ion-option value="BRD">Board of Management</ion-option>
       </ion-select>
     </ion-item>
-     <div class="spacer" style="height:5px;"></div>
+    <div class="spacer" style="height:5px;"></div>
     <ion-item>
       <ion-label>Gender</ion-label>
       <ion-select formControlName="gender">
@@ -44,17 +44,29 @@
         <ion-option value="M">Male</ion-option>
       </ion-select>
     </ion-item>
-     <div class="spacer" style="height:5px;"></div>
+    <div class="spacer" style="height:5px;"></div>
     <ion-item>
-      <ion-label>Add as Admin</ion-label>
+      <ion-label>{{type=="add"?'Add':"Update"}} as Admin</ion-label>
       <ion-checkbox item-right formControlName="headteacher"></ion-checkbox>
+    </ion-item>
+    <!--<ion-list formArrayName="classes">
+      <ion-item *ngFor="let cl of teachform.get('classes').controls; let i=index" >
+        <ion-label>{{classes[i].class_name}}</ion-label>
+        <ion-checkbox [formControlName]="i" ></ion-checkbox>
+      </ion-item>
+    </ion-list>-->
+    <ion-item *ngIf="!teachform.get('headteacher').value">
+      <ion-label>Classes</ion-label>
+      <ion-select *ngIf="classes" multiple=true  formControlName="classes">
+        <ion-option *ngFor="let cl of classes" value={{cl.id}} >{{cl.class_name}}</ion-option>
+      </ion-select>
     </ion-item>
     <div class="spacer" style="height:5px;"></div>
     <ion-item>
       <ion-label floating>Phone Number</ion-label>
       <ion-input formControlName="phone_no"></ion-input>
     </ion-item>
-     <div class="spacer" style="height:5px;"></div>
+    <div class="spacer" style="height:5px;"></div>
     <button ion-button full type="submit" [disabled]="!teachform.valid"> <span *ngIf="type">{{load?'Submitting ...':type}}</span></button>
   </form>
 </ion-content>

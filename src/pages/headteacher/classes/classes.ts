@@ -71,6 +71,7 @@ export class HDClassesPage implements OnInit {
   datechange(value) {
     console.log(this.event)
   }
+  //iouoioiu
   // presentModal(student, type) {
   //   // if (student == 'a') {
   //   //   let modal = this.modalctrl.create(AddTeacherModal, { type: type,class:this.selectedclass.id });
@@ -79,7 +80,6 @@ export class HDClassesPage implements OnInit {
   //   //   let modal = this.modalctrl.create(AddTeacherModal, { student: student, type: type,class:this.selectedclass.id });
   //   //    modal.present();
   //   // }
-
   // }
   showtoast(name: string, status: boolean) {
     if (this.toast) {
@@ -99,6 +99,36 @@ export class HDClassesPage implements OnInit {
     });
 
     this.toast.present()
+  }
+  deleteConfirm(id) {
+    let confirm = this.alertctrl.create({
+      title: 'Delete Class',
+      message: 'Make sure the class has no students.',
+      buttons: [
+        {
+          text: 'Disagree',
+          handler: () => {
+            console.log('Disagree clicked');
+          }
+        },
+        {
+          text: 'Agree',
+          handler: () => {
+            this.load=true;
+            this.account.deletestream(id).subscribe(data => {
+              console.log(data)
+            },
+              error => {
+                if (typeof error == "string") {
+                  this.account.presentAlert("Delete Failed", error);
+                }
+              });
+            console.log('Agree clicked');
+          }
+        }
+      ]
+    });
+    confirm.present();
   }
   onchange(val, name) {
     console.log(val)
