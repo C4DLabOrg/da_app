@@ -1,0 +1,145 @@
+<!--
+  Generated template for the PromotePage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+  <ion-navbar color = "primary">
+    <ion-title>Promote / Move </ion-title>
+
+     <ion-buttons end>
+      <button ion-button (click)="presentPopover($event)">
+                  <ion-icon name="more"></ion-icon>
+                  </button>
+    </ion-buttons>
+  </ion-navbar>
+
+</ion-header>
+
+
+
+<ion-content color="primary">
+
+      <!--<div class="spacer" style="height: 2px;"></div>
+      <ion-list *ngIf="classes">
+            <ion-item-divider color="primary">Student Details
+
+            </ion-item-divider>
+            <div class="spacer" style="height: 10px;"></div>
+            <button ion-button clear (click)="showCalendar()">
+                  <ion-icon name='calendar' style="color: #d03e84"></ion-icon>
+
+                         <p style="color:#d03e84 ">&nbsp; &nbsp; 30th January 2017</p>
+                        <ion-datetime  style="color:#d03e84 " [min]="mindate" [max]="maxdate" displayFormat="  DD MMMM YYYY" (ionChange)="datechange(event)" pickerFormat="DD MMM  YYYY" [(ngModel)]="event"></ion-datetime>
+                          &nbsp; &nbsp; {{event|date}}  &nbsp; &nbsp;
+                             <ion-note *ngIf="attendancetaken" color="green" item-right><ion-icon name="checkmark-circle"></ion-icon></ion-note>
+            </button>
+            <div *ngIf="classes.length>0">
+            <ion-item   *ngFor="let stud of classes[index].students|orderBy:'gender':true;let i=index">
+                  <ion-label>
+                        <ion-badge item-right>{{i+1}}</ion-badge>{{stud.student_name}}
+                        <div class="spacer" style="height: 4px;"></div>
+
+                        <p style="font-size: 13px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {{stud.student_id}}</p>
+
+                  </ion-label>
+
+                  <ion-checkbox (ngModelChange)="onchange($event,stud.student_name)" item-right [(ngModel)]="stud.status"></ion-checkbox>
+            </ion-item>
+            </div>-->
+<div class="spacer" style="height: 2px;"></div>
+ <ion-list>
+
+    <ion-item-divider color="primary">Student Details</ion-item-divider>
+
+    <div class="spacer" style="height: 10px;"></div>
+
+    <div>
+      <ion-item-sliding>
+
+        <ion-item>
+            <ion-checkbox item-left color="primary"></ion-checkbox>
+
+             <ion-label><b>Tick All</b></ion-label>
+        </ion-item>
+
+      <ion-item>
+             <ion-label>Daenerys Targaryen
+             <div class="spacer" style="height: 4px;"></div>
+             <p style="font-size: 13px;">201439001</p></ion-label>
+
+             <ion-checkbox item-left color="primary" checked="false"></ion-checkbox>
+       </ion-item>
+
+        <ion-item>
+             <ion-label>Daenerys Targaryen
+             <div class="spacer" style="height: 4px;"></div>
+             <p style="font-size: 13px;">201439001</p></ion-label>
+
+             <ion-checkbox item-left color="primary" checked="false"></ion-checkbox>
+       </ion-item>
+
+        <ion-item>
+             <ion-label>Daenerys Targaryen
+             <div class="spacer" style="height: 4px;"></div>
+             <p style="font-size: 13px;">201439001</p></ion-label>
+
+             <ion-checkbox item-left color="primary" checked="false"></ion-checkbox>
+       </ion-item>
+
+        <ion-item>
+             <ion-label>Daenerys Targaryen
+             <div class="spacer" style="height: 4px;"></div>
+             <p style="font-size: 13px;">201439001</p></ion-label>
+
+             <ion-checkbox item-left color="primary" checked="false"></ion-checkbox>
+       </ion-item>
+
+        <ion-item>
+             <ion-label>Daenerys Targaryen
+             <div class="spacer" style="height: 4px;"></div>
+             <p style="font-size: 13px;">201439001</p></ion-label>
+
+             <ion-checkbox item-left color="primary" checked="false"></ion-checkbox>
+       </ion-item>
+
+        <ion-item>
+             <ion-label>Daenerys Targaryen
+             <div class="spacer" style="height: 4px;"></div>
+             <p style="font-size: 13px;">201439001</p></ion-label>
+
+             <ion-checkbox item-left color="primary" checked="false"></ion-checkbox>
+       </ion-item>
+
+        <ion-item>
+             <ion-label>Daenerys Targaryen
+             <div class="spacer" style="height: 4px;"></div>
+             <p style="font-size: 13px;">201439001</p></ion-label>
+
+             <ion-checkbox item-left color="primary" checked="false"></ion-checkbox>
+       </ion-item>
+
+        <ion-item>
+             <ion-label>Daenerys Targaryen
+             <div class="spacer" style="height: 4px;"></div>
+             <p style="font-size: 13px;">201439001</p></ion-label>
+
+             <ion-checkbox item-left color="primary" checked="false"></ion-checkbox>
+       </ion-item>
+      </ion-item-sliding>
+    </div>
+</ion-list>
+
+<div>
+<button ion-button block  (click)="doRadio()">Promote / Move</button>
+</div>
+
+      <!--<diV *ngIf="classes">
+      <button *ngIf="!attendancetaken " [disabled]="load || classes.length<=0" ion-button block (click)="confirmattendance()">{{  load==false ? 'Submit' : 'Submitting ...' }}</button>
+      </diV>
+       <button *ngIf="attendancetaken" [disabled]="load" ion-button block (click)="confirmattendance()">{{  load==false ? 'Update Attendance' : 'Updating ...' }}</button>
+      <div class="spacer" style="height: 20px;"></div>-->
+
+</ion-content>

@@ -264,7 +264,7 @@ export class HDStudentPage implements OnInit {
 
     alert.addButton('Cancel');
     alert.addButton({
-      text: 'delete',
+      text: 'Delete',
       handler: data => {
         this.deletestudent(student, data)
         console.log('Checkbox data:', data);

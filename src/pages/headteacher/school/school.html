@@ -34,15 +34,23 @@
     </ion-card-header>
 
     <ion-list>
+
       <button (click)="students()" ion-item>
       <ion-icon name="add-circle" item-left></ion-icon>
-      Add/Edit Students
+      Add / Edit Students
+    </button>
+
+     <button (click)="promotestudents()" ion-item>
+      <ion-icon name="arrow-dropup-circle" item-left></ion-icon>
+      Promote / Move Students
     </button>
 
       <button (click)="studentdetails()" ion-item>
       <ion-icon name="list-box" item-left></ion-icon>
       View Student details
     </button>
+
+
     </ion-list>
   </ion-card>
 
