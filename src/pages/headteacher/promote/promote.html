@@ -50,27 +50,30 @@
             </ion-item>
             </div>-->
       <div class="spacer" style="height: 2px;"></div>
-      <ion-list>
 
-            <ion-item-divider color="primary">Student Details</ion-item-divider>
 
-            <div class="spacer" style="height: 10px;"></div>
+      <ion-item-divider color="primary">Student Details</ion-item-divider>
 
-            <div>
-                  <ion-item-sliding *ngIf="classes">
-                        <ion-item>
-                              <ion-checkbox item-left color="primary"></ion-checkbox>
+      <div class="spacer" style="height: 10px;"></div>
 
-                              <ion-label><b>Tick All</b></ion-label>
-                        </ion-item>
-                        <ion-item *ngFor="let stud of classes[index].students|orderBy:'gender':true|student:studname;let i=index">
-                              <ion-label>{{stud.student_name}}
-                                    <div class="spacer" style="height: 4px;"></div>
-                                    <p style="font-size: 13px;">{{stud.student_id}}</p>
-                              </ion-label>
-                              <ion-checkbox item-left color="primary" checked="false" [(ngModel)]="stud.status"></ion-checkbox>
-                        </ion-item>
-                        <!-- <ion-item>
+      <div>
+            <ion-list *ngIf="classes">
+                  <ion-item>
+                        <ion-checkbox (ionChange)="markstatuschange(markstatus)" [(ngModel)]="markstatus" item-left color="primary"></ion-checkbox>
+                        <ion-label><b>{{markstatus?'Unmark':'Mark'}} All</b></ion-label>
+                  </ion-item>
+                  <ion-item *ngFor="let stud of classes[index].students|orderBy:'gender':true|student:studname;let i=index">
+                        <ion-label>{{stud.student_name}}
+                              <!--<div class="spacer" style="height: 4px;"></div>-->
+                              <p style="font-size: 13px;">{{stud.student_id}}</p>
+                        </ion-label>
+                        <ion-checkbox item-left color="primary" checked="false" [(ngModel)]="stud.status"></ion-checkbox>
+                  </ion-item>
+                  
+                  <ion-item *ngIf="selectedclass && selectedclass.students.length == 0">
+                        <h3>No Students</h3>
+                  </ion-item>
+                  <!-- <ion-item>
                               <ion-label>Daenerys Targaryen
                                     <div class="spacer" style="height: 4px;"></div>
                                     <p style="font-size: 13px;">201439001</p>
@@ -131,18 +134,18 @@
 
                               <ion-checkbox item-left color="primary" checked="false"></ion-checkbox>
                         </ion-item>-->
-                        <!--<ion-item >
+                  <!--<ion-item >
                               <ion-label>Classes</ion-label>
                               <ion-select *ngIf="classes" multiple=true >
                                     <ion-option *ngFor="let cl of classes" value={{cl.id}}>{{cl.class_name}}</ion-option>
                               </ion-select>
                         </ion-item>-->
-                  </ion-item-sliding>
-            </div>
-      </ion-list>
+            </ion-list>
+      </div>
+
 
       <div>
-            <button [disabled]="load"  ion-button block (click)="promote()">{{load?'Moving students ...':'Promote / Move'}}  </button>
+            <button [disabled]="load" ion-button block (click)="promote()">{{load?'Moving students ...':'Promote / Move'}}  </button>
       </div>
 
       <!--<diV *ngIf="classes">

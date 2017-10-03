@@ -28,7 +28,8 @@ export class PromotePage implements OnInit {
   classes: Classes[]
   index: number = 0
   toast: any
-  load:boolean=false
+  load: boolean = false
+  markstatus: boolean = false
 
   constructor(public navCtrl: NavController,
     private account: AccountService, private storage: Storage,
@@ -43,7 +44,7 @@ export class PromotePage implements OnInit {
     this.onStudentsChange()
   }
   doRadio(students) {
-    if (this.classes && students.length >0) {
+    if (this.classes && students.length > 0) {
       let alert = this.alerCtrl.create();
       alert.setTitle(' Move/Promote  students to Class ?');
       // alert.addInput({
@@ -81,9 +82,18 @@ export class PromotePage implements OnInit {
         this.testRadioOpen = true;
       });
     }
-    else{
-      this.account.presentAlert("No Students","Select atleast one student.")
+    else {
+      this.account.presentAlert("No Students", "Select atleast one student.")
     }
+  }
+  onchange(val, name) {
+
+    console.log(val)
+
+  }
+  markstatuschange(val) {
+    this.markstudents(val)
+    // console.log(val)
   }
   promoteconfirm(students, _class: Classes) {
 
@@ -102,13 +112,13 @@ export class PromotePage implements OnInit {
           text: 'Agree',
           handler: () => {
             let data = { "students": students, "class_id": _class.id }
-            this.load=true
+            this.load = true
             this.account.movestudents(data).subscribe(resp => {
-              this.load=false
+              this.load = false
               console.log(resp)
-            },error=>{
-              this.load=false
-              console.log("error",error)
+            }, error => {
+              this.load = false
+              console.log("error", error)
             })
             console.log('Agree clicked');
           }
@@ -150,11 +160,15 @@ export class PromotePage implements OnInit {
 
     })
   }
-  selectclass(id) {
-    this.selectedclass = this.classes[id]
+  markstudents(status) {
     for (let i = 0; i < this.selectedclass.students.length; i++) {
-      this.selectedclass.students[i].status = false
+      this.selectedclass.students[i].status = status
     }
+  }
+  selectclass(id) {
+    this.markstatus=false
+    this.selectedclass = this.classes[id]
+    this.markstudents(false);
   }
   getprofile() {
     this.storage.get("profile").then((data) => {

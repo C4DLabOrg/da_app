@@ -1,16 +1,16 @@
 import { NgModule } from '@angular/core';
 import { IonicModule } from 'ionic-angular';
-import { PromotePage } from './promote';
+// import { PromotePage } from './promote';
 
 @NgModule({
   declarations: [
-    PromotePage,
+    // PromotePage,
   ],
   imports: [
 
   ],
   exports: [
-    PromotePage
+    // PromotePage
   ]
 })
 export class PromotePageModule {}
