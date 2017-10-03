@@ -39,7 +39,7 @@ export class ContactPage implements OnInit {
       let us: any = {}
       this.storage.set("classes", data.classes).then(() => {
         this.load = false
-        this.account.newclasslist()
+        
         this.showalert("Success", "Class list up to date")
       })
     }).catch((error) => {

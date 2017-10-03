@@ -176,15 +176,35 @@ export class AccountService {
     }
     profile(): Promise<any> {
         //this.jheaders = new Headers({ "Content-Type": "application/json", "Authorization": "Bearer " + token })
-        return this.http.get(this.link + "api/teacher", { headers: this.jheaders }).toPromise()
+        return this.http.get(this.link + "api/teacher", { headers: this.jheaders })
+            .toPromise()
             .then((response) => this.saveall(response))
             .then(response => response)
             .catch(this.error)
+    }
+    profilev2(){
+        return this.http.get(this.link + "api/teacher", { headers: this.jheaders })
+        .mergeMap(resp =>{
+            return Observable.fromPromise(this.saveall(resp))
+            .map(res=> resp.json())
+            .catch(this.error)
+        })
+        .catch(this.observableerror)
     }
     encrypt() {
 
     }
     saveall(response) {
+        let data = response.json() as any
+        console.log(data.classes)
+        // return Promise.all([
+        //     this.storage.set("profile", data.profile),
+        //     this.storage.set("subjects", data.subjects),
+        //     this.storage.set("reasons", data.reasons),
+        //     this.storage.set("teachers", data.teachers),
+        //     this.storage.set("schoolinfo", data.schoolinfo),
+        //     this.storage.set("classes", data.classes)
+        // ])
         return new Promise(resolve => {
             console.log("saving all ");
             let data = response.json() as any
@@ -195,11 +215,9 @@ export class AccountService {
             this.storage.set("schoolinfo", data.schoolinfo)
             this.storage.set("classes", data.classes).then(() => {
                 console.log("done saving them")
+                this.newclasslist()
                 resolve(response.json())
             })
-
-
-
         });
     }
     takeattendance(data: TakeAttendance): Promise<any> {
@@ -327,6 +345,16 @@ export class AccountService {
                 return resp.json()
             })
             .catch(this.error)
+    }
+    movestudents(data) {
+        return this.http.post(this.link + "api/students/bulkmove", data, { headers: this.jheaders })
+            .mergeMap(resp=>{
+                return this.profilev2()
+                .map(res=>resp.json())
+                .catch(this.observableerror)
+            })
+            // .map(resp => resp.json())
+            .catch(this.observableerror)
     }
     storageupdateteacher(teacher: Teacher) {
         this.storage.get("teachers").then(data => {
@@ -626,6 +654,7 @@ export class AccountService {
             .then((resp) => resp.json())
             .catch(this.error)
     }
+
     initiatesync() {
         // this.nonetnotification=true
         this.syncstarted = true

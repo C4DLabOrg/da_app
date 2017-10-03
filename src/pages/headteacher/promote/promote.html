@@ -6,15 +6,15 @@
 -->
 <ion-header>
 
-  <ion-navbar color = "primary">
-    <ion-title>Promote / Move </ion-title>
+      <ion-navbar color="primary">
+            <ion-title>Promote / Move <small *ngIf="selectedclass">({{selectedclass.class_name}})</small> </ion-title>
 
-     <ion-buttons end>
-      <button ion-button (click)="presentPopover($event)">
+            <ion-buttons end>
+                  <button ion-button (click)="presentPopover($event)">
                   <ion-icon name="more"></ion-icon>
                   </button>
-    </ion-buttons>
-  </ion-navbar>
+            </ion-buttons>
+      </ion-navbar>
 
 </ion-header>
 
@@ -49,92 +49,101 @@
                   <ion-checkbox (ngModelChange)="onchange($event,stud.student_name)" item-right [(ngModel)]="stud.status"></ion-checkbox>
             </ion-item>
             </div>-->
-<div class="spacer" style="height: 2px;"></div>
- <ion-list>
+      <div class="spacer" style="height: 2px;"></div>
+      <ion-list>
 
-    <ion-item-divider color="primary">Student Details</ion-item-divider>
+            <ion-item-divider color="primary">Student Details</ion-item-divider>
 
-    <div class="spacer" style="height: 10px;"></div>
+            <div class="spacer" style="height: 10px;"></div>
 
-    <div>
-      <ion-item-sliding>
+            <div>
+                  <ion-item-sliding *ngIf="classes">
+                        <ion-item>
+                              <ion-checkbox item-left color="primary"></ion-checkbox>
 
-        <ion-item>
-            <ion-checkbox item-left color="primary"></ion-checkbox>
+                              <ion-label><b>Tick All</b></ion-label>
+                        </ion-item>
+                        <ion-item *ngFor="let stud of classes[index].students|orderBy:'gender':true|student:studname;let i=index">
+                              <ion-label>{{stud.student_name}}
+                                    <div class="spacer" style="height: 4px;"></div>
+                                    <p style="font-size: 13px;">{{stud.student_id}}</p>
+                              </ion-label>
+                              <ion-checkbox item-left color="primary" checked="false" [(ngModel)]="stud.status"></ion-checkbox>
+                        </ion-item>
+                        <!-- <ion-item>
+                              <ion-label>Daenerys Targaryen
+                                    <div class="spacer" style="height: 4px;"></div>
+                                    <p style="font-size: 13px;">201439001</p>
+                              </ion-label>
+                              <ion-checkbox item-left color="primary" checked="false"></ion-checkbox>
+                        </ion-item>
 
-             <ion-label><b>Tick All</b></ion-label>
-        </ion-item>
+                        <ion-item>
+                              <ion-label>Daenerys Targaryen
+                                    <div class="spacer" style="height: 4px;"></div>
+                                    <p style="font-size: 13px;">201439001</p>
+                              </ion-label>
 
-      <ion-item>
-             <ion-label>Daenerys Targaryen
-             <div class="spacer" style="height: 4px;"></div>
-             <p style="font-size: 13px;">201439001</p></ion-label>
+                              <ion-checkbox item-left color="primary" checked="false"></ion-checkbox>
+                        </ion-item>
 
-             <ion-checkbox item-left color="primary" checked="false"></ion-checkbox>
-       </ion-item>
+                        <ion-item>
+                              <ion-label>Daenerys Targaryen
+                                    <div class="spacer" style="height: 4px;"></div>
+                                    <p style="font-size: 13px;">201439001</p>
+                              </ion-label>
 
-        <ion-item>
-             <ion-label>Daenerys Targaryen
-             <div class="spacer" style="height: 4px;"></div>
-             <p style="font-size: 13px;">201439001</p></ion-label>
+                              <ion-checkbox item-left color="primary" checked="false"></ion-checkbox>
+                        </ion-item>
 
-             <ion-checkbox item-left color="primary" checked="false"></ion-checkbox>
-       </ion-item>
+                        <ion-item>
+                              <ion-label>Daenerys Targaryen
+                                    <div class="spacer" style="height: 4px;"></div>
+                                    <p style="font-size: 13px;">201439001</p>
+                              </ion-label>
 
-        <ion-item>
-             <ion-label>Daenerys Targaryen
-             <div class="spacer" style="height: 4px;"></div>
-             <p style="font-size: 13px;">201439001</p></ion-label>
+                              <ion-checkbox item-left color="primary" checked="false"></ion-checkbox>
+                        </ion-item>
 
-             <ion-checkbox item-left color="primary" checked="false"></ion-checkbox>
-       </ion-item>
+                        <ion-item>
+                              <ion-label>Daenerys Targaryen
+                                    <div class="spacer" style="height: 4px;"></div>
+                                    <p style="font-size: 13px;">201439001</p>
+                              </ion-label>
 
-        <ion-item>
-             <ion-label>Daenerys Targaryen
-             <div class="spacer" style="height: 4px;"></div>
-             <p style="font-size: 13px;">201439001</p></ion-label>
+                              <ion-checkbox item-left color="primary" checked="false"></ion-checkbox>
+                        </ion-item>
 
-             <ion-checkbox item-left color="primary" checked="false"></ion-checkbox>
-       </ion-item>
+                        <ion-item>
+                              <ion-label>Daenerys Targaryen
+                                    <div class="spacer" style="height: 4px;"></div>
+                                    <p style="font-size: 13px;">201439001</p>
+                              </ion-label>
 
-        <ion-item>
-             <ion-label>Daenerys Targaryen
-             <div class="spacer" style="height: 4px;"></div>
-             <p style="font-size: 13px;">201439001</p></ion-label>
+                              <ion-checkbox item-left color="primary" checked="false"></ion-checkbox>
+                        </ion-item>
 
-             <ion-checkbox item-left color="primary" checked="false"></ion-checkbox>
-       </ion-item>
+                        <ion-item>
+                              <ion-label>Daenerys Targaryen
+                                    <div class="spacer" style="height: 4px;"></div>
+                                    <p style="font-size: 13px;">201439001</p>
+                              </ion-label>
 
-        <ion-item>
-             <ion-label>Daenerys Targaryen
-             <div class="spacer" style="height: 4px;"></div>
-             <p style="font-size: 13px;">201439001</p></ion-label>
+                              <ion-checkbox item-left color="primary" checked="false"></ion-checkbox>
+                        </ion-item>-->
+                        <!--<ion-item >
+                              <ion-label>Classes</ion-label>
+                              <ion-select *ngIf="classes" multiple=true >
+                                    <ion-option *ngFor="let cl of classes" value={{cl.id}}>{{cl.class_name}}</ion-option>
+                              </ion-select>
+                        </ion-item>-->
+                  </ion-item-sliding>
+            </div>
+      </ion-list>
 
-             <ion-checkbox item-left color="primary" checked="false"></ion-checkbox>
-       </ion-item>
-
-        <ion-item>
-             <ion-label>Daenerys Targaryen
-             <div class="spacer" style="height: 4px;"></div>
-             <p style="font-size: 13px;">201439001</p></ion-label>
-
-             <ion-checkbox item-left color="primary" checked="false"></ion-checkbox>
-       </ion-item>
-
-        <ion-item>
-             <ion-label>Daenerys Targaryen
-             <div class="spacer" style="height: 4px;"></div>
-             <p style="font-size: 13px;">201439001</p></ion-label>
-
-             <ion-checkbox item-left color="primary" checked="false"></ion-checkbox>
-       </ion-item>
-      </ion-item-sliding>
-    </div>
-</ion-list>
-
-<div>
-<button ion-button block  (click)="doRadio()">Promote / Move</button>
-</div>
+      <div>
+            <button [disabled]="load"  ion-button block (click)="promote()">{{load?'Moving students ...':'Promote / Move'}}  </button>
+      </div>
 
       <!--<diV *ngIf="classes">
       <button *ngIf="!attendancetaken " [disabled]="load || classes.length<=0" ion-button block (click)="confirmattendance()">{{  load==false ? 'Submit' : 'Submitting ...' }}</button>
