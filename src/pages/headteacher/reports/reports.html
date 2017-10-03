@@ -75,7 +75,7 @@
   </ion-card>
   <div *ngIf="absentstudents">
     <ion-item *ngFor="let student of absentstudents;let i=index">
-      <ion-label>
+      <ion-label (click)="reasonAbsence()">
         <ion-badge item-right>{{i+1}}</ion-badge>&nbsp; &nbsp; {{student.name}}
         <div class="spacer" style="height: 4px;"></div>
       </ion-label>

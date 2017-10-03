@@ -302,5 +302,48 @@ export class HDReportPage implements OnInit {
 
   }
 
+  reasonAbsence() {
+    
+    let alert = this.alertctrl.create();
+
+    alert.setTitle('Reason for Absence');
+    alert.addInput({
+      type: 'radio',
+      label: 'Sickness',
+      value: 'SICK',
+      checked: true
+
+    });
+    
+
+    alert.addInput({
+      type: 'radio',
+      label: 'Distance To School',
+      value: 'DISTANCE'
+    });
+
+    alert.addInput({
+      type: 'radio',
+      label: 'Lack of Food',
+      value: 'FOOD'
+    });
+
+    alert.addInput({
+      type: 'text',
+      label: 'Other Reason',
+      value: 'OTHER'
+    });
+
+    alert.addButton('Cancel');
+    alert.addButton({
+      text: 'Submit',
+      handler: data => {
+        
+        console.log('Checkbox data:', data);
+      }
+    });
+    alert.present();
+  }
+
 
 }

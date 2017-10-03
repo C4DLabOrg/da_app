@@ -22,6 +22,7 @@
       <ion-input color="primary" [(ngModel)]="studname" type="text" placeholder="Enter Student Name"></ion-input>
       <ion-icon name="search" item-left></ion-icon>
     </ion-item-divider>
+    
     <div class="spacer" style="height: 10px;"></div>
     <div *ngIf="classes.length>0">
     <ion-item-sliding #item *ngFor="let stud of classes[index].students|orderBy:'gender':true|student:studname;let i=index">
