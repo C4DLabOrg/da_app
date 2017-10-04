@@ -1,0 +1,16 @@
+cd platforms/android/build/outputs/apk/
+pwd
+
+jarsigner -verbose -sigalg SHA1withRSA -tsa http://timestamp.digicert.com  -digestalg SHA1 -keystore oosc.keystore android-release-unsigned.apk oosc
+
+
+echo "Signing finiished"
+
+rm oosc.apk 
+
+ $ANDROID_HOME/build-tools/25.0.2/zipalign -v 4 android-release-unsigned.apk oosc.apk
+
+
+ls -lh
+
+adb install -r oosc.apk
