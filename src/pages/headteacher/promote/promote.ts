@@ -25,6 +25,7 @@ export class PromotePage implements OnInit {
   user: any
   takeattendance = new TakeAttendance()
   selectedclass: Classes
+  selectedclassid: any
   classes: Classes[]
   index: number = 0
   toast: any
@@ -148,7 +149,7 @@ export class PromotePage implements OnInit {
       this.classes[clindex] = theclass
     });
     this.account.newclasslist$.subscribe(data => {
-      this.getclasses()
+      this.justgetclasses()
     });
   }
   getclasses() {
@@ -160,14 +161,22 @@ export class PromotePage implements OnInit {
 
     })
   }
+  justgetclasses() {
+    this.storage.get("classes").then((data) => {
+      this.classes = data
+      this.selectedclass=this.classes[this.selectedclassid]
+      this.markstatus=false
+    })
+  }
   markstudents(status) {
     for (let i = 0; i < this.selectedclass.students.length; i++) {
       this.selectedclass.students[i].status = status
     }
   }
   selectclass(id) {
-    this.markstatus=false
+    this.markstatus = false
     this.selectedclass = this.classes[id]
+    this.selectedclassid=id
     this.markstudents(false);
   }
   getprofile() {

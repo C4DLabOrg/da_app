@@ -4,12 +4,12 @@ import { HelpPage } from './help';
 
 @NgModule({
   declarations: [
-    HelpPage,
+    // HelpPage,
   ],
   imports: [
   ],
   exports: [
-    HelpPage
+    // HelpPage
   ]
 })
 export class HelpPageModule {}
