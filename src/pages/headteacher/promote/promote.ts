@@ -116,10 +116,15 @@ export class PromotePage implements OnInit {
             this.load = true
             this.account.movestudents(data).subscribe(resp => {
               this.load = false
+              this.account.presentAlert("Move Successful",resp.updated+" students moved to "+_class.class_name)
               console.log(resp)
             }, error => {
               this.load = false
-              console.log("error", error)
+              console.log("eror", error)
+              let d=error.json()?error.json():{}
+              if(d.class_id){
+                this.account.presentAlert("Class Error","Download the latest class list from the profile page.")
+              }
             })
             console.log('Agree clicked');
           }
