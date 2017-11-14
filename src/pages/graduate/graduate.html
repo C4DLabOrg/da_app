@@ -6,101 +6,100 @@
 -->
 <ion-header>
 
-  <ion-navbar color="primary">
-    <ion-title>Promote Students</ion-title>
-
-    <ion-buttons end>
-        <button ion-button>
+      <ion-navbar color="primary">
+            <ion-title>Promote Students</ion-title>
+<!--
+            <ion-buttons end>
+                  <button ion-button>
         <ion-icon name="more"></ion-icon>
         </button>
-  </ion-buttons>
+            </ion-buttons>-->
 
-  </ion-navbar>
+      </ion-navbar>
 
 </ion-header>
 
 
 <ion-content color="primary">
 
-    <div class="spacer" style="height: 2px;"></div>
-    <ion-list>
-          <ion-item-divider color="primary">Classes Details </ion-item-divider>
-          <div class="spacer" style="height: 10px;"></div>
+      <div class="spacer" style="height: 2px;"></div>
+      <ion-list>
+            <ion-item-divider color="primary">Classes Details </ion-item-divider>
+            <div class="spacer" style="height: 10px;"></div>
 
-          <ion-item>
-                <ion-label>
-                      <ion-badge item-right>1</ion-badge>Class 1
-                      <div class="spacer" style="height: 4px;"></div>
+            <ion-item *ngFor="let cl of classes;let i=index">
+                  <ion-label>
+                        <ion-badge item-right>{{i+1}}</ion-badge>{{cl.class_name}}
+                        <div class="spacer" style="height: 4px;"></div>
 
-                      <p style="font-size: 13px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 10 Students</p>
+                        <p style="font-size: 13px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {{cl.students.length}} Students</p>
 
-                </ion-label>
+                  </ion-label>
 
-                <a ion-button small item-right outline (click) = "showCheckbox()">Promote</a>
+                  <a ion-button small item-right outline (click)="showCheckbox(i)"><ion-icon  *ngIf="cl.next_class" name="checkmark"></ion-icon>&nbsp; Promote to&nbsp;&nbsp;  <span *ngIf="cl.next_class">{{cl.next_class.class_name}}  </span></a>
+            </ion-item>
 
-            
-        </ion-item>
+            <!--<ion-item>
+                  <ion-label>
+                        <ion-badge item-right>2</ion-badge>Class 2
+                        <div class="spacer" style="height: 4px;"></div>
 
-        <ion-item>
-            <ion-label>
-                  <ion-badge item-right>2</ion-badge>Class 2
-                  <div class="spacer" style="height: 4px;"></div>
+                        <p style="font-size: 13px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 7 Students</p>
 
-                  <p style="font-size: 13px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 7 Students</p>
+                  </ion-label>
 
-            </ion-label>
+                  <a ion-button small item-right outline (click)="showCheckbox()">Promote</a>
 
-            <a ion-button small item-right outline (click) = "showCheckbox()">Promote</a>
-            
-        </ion-item>
+            </ion-item>
 
-        <ion-item>
-            <ion-label>
-                  <ion-badge item-right>3</ion-badge>Class 3
-                  <div class="spacer" style="height: 4px;"></div>
+            <ion-item>
+                  <ion-label>
+                        <ion-badge item-right>3</ion-badge>Class 3
+                        <div class="spacer" style="height: 4px;"></div>
 
-                  <p style="font-size: 13px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 14 Students</p>
+                        <p style="font-size: 13px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 14 Students</p>
 
-            </ion-label>
+                  </ion-label>
 
-            <a ion-button small item-right outline (click) = "showConfirm()"><ion-icon name="checkmark"></ion-icon>&nbsp; Promoted to Class 4</a>
-        
-      </ion-item>
+                  <a ion-button small item-right outline (click)="showConfirm()">
+                        <ion-icon name="checkmark"></ion-icon>&nbsp; Promoted to Class 4</a>
 
-
-      <ion-item>
-          <ion-label>
-                <ion-badge item-right>4</ion-badge>Class 4
-                <div class="spacer" style="height: 4px;"></div>
-
-                <p style="font-size: 13px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 12 Students</p>
-
-          </ion-label>
-
-          <a ion-button small item-right outline (click) = "showCheckbox()">Promote</a>
-          
-      </ion-item>
-
-      <ion-item>
-          <ion-label>
-                <ion-badge item-right>5</ion-badge>Class 5
-                <div class="spacer" style="height: 4px;"></div>
-
-                <p style="font-size: 13px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 3 Students</p>
-
-          </ion-label>
-
-          <a ion-button small item-right outline (click) = "showCheckbox()">Promote</a>
-          
-      </ion-item>
+            </ion-item>
 
 
-    </ion-list>
+            <ion-item>
+                  <ion-label>
+                        <ion-badge item-right>4</ion-badge>Class 4
+                        <div class="spacer" style="height: 4px;"></div>
 
-    <!-- <div class="spacer" style="height: 10px;"></div> -->
+                        <p style="font-size: 13px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 12 Students</p>
 
-    <button ion-button block>Complete Promotion</button>
-    
-    
+                  </ion-label>
+
+                  <a ion-button small item-right outline (click)="showCheckbox()">Promote</a>
+
+            </ion-item>
+
+            <ion-item>
+                  <ion-label>
+                        <ion-badge item-right>5</ion-badge>Class 5
+                        <div class="spacer" style="height: 4px;"></div>
+
+                        <p style="font-size: 13px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 3 Students</p>
+
+                  </ion-label>
+
+                  <a ion-button small item-right outline (click)="showCheckbox()">Promote</a>
+
+            </ion-item>-->
+
+
+      </ion-list>
+
+      <!-- <div class="spacer" style="height: 10px;"></div> -->
+
+      <button ion-button block>Complete Promotion</button>
+
+
 
 </ion-content>

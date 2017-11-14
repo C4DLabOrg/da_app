@@ -7,7 +7,7 @@
          Back
       </button>
 
-       <!--<button ion-button color="light" icon-left>
+      <!--<button ion-button color="light" icon-left>
       <ion-icon name='arrow-back'></ion-icon>
       Back
     </button>-->
@@ -35,6 +35,10 @@
       <ion-label floating>Stream Name</ion-label>
       <ion-input type="text" formControlName="class_name"></ion-input>
     </ion-item>
+    <!--<p>
+       {{classform.get("_class").value}} {{classform.get("class_name").value}} 
+    </p>-->
+
     <!--<ion-item>
       <ion-label floating>Middle Name</ion-label>
       <ion-input formControlName="midname"></ion-input>
@@ -48,7 +52,7 @@
       <ion-label floating>Class</ion-label>
       <ion-input formControlName="class_id"></ion-input>
     </ion-item>-->
-     <button ion-button full type="submit" [disabled]="!classform.valid || load"> <span *ngIf="type">{{load?'Loading ...':type}}</span></button>
+    <button ion-button full type="submit" [disabled]="!classform.valid || load"> <span *ngIf="type">{{load?'Loading ...':type}}</span></button>
     <!--<button ion-button full type="submit" [disabled]="!classform.valid"> <span *ngIf="type">{{type}}</span></button>-->
   </form>
   <!--<button ion-button (click)="dismiss()">Close</button>-->

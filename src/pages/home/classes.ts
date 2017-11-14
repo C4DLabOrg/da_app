@@ -6,8 +6,7 @@ export class Classes{
     students:Student[]
     school:number
     selected:boolean
-    
-
+    next_class:any
     
 }
 
