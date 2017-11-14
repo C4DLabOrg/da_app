@@ -25,6 +25,9 @@ import {AddTeacherModal} from '../pages/headteacher/teachers/addteacher'
 import { HDTeachersPage} from '../pages/headteacher/teachers/teachers'
 import { PromotePage} from '../pages/headteacher/promote/promote'
 import { HelpPage} from '../pages/help/help'
+
+import { GraduatePage } from './../pages/graduate/graduate';
+
 // import { HelpPage} from '../pages/headteacher/help/help'
 import {AddClassModal} from '../pages/headteacher/classes/addclass'
 import { HDClassesPage} from '../pages/headteacher/classes/classes'
@@ -63,6 +66,7 @@ import { DatePicker } from '@ionic-native/date-picker';
     IndividualPage,
     PromotePage,
     HelpPage,
+    GraduatePage,
     HDSync,StudentSearch
     // ,DatePicker
 
@@ -94,6 +98,7 @@ import { DatePicker } from '@ionic-native/date-picker';
     IndividualPage,
     PromotePage,
     HelpPage,
+    GraduatePage,
     HDSync
     // ,DatePicker
 
