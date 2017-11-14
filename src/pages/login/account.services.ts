@@ -1,3 +1,4 @@
+import  Moment  from 'moment';
 import { Injectable, EventEmitter } from '@angular/core'
 import { Http, Headers } from '@angular/http'
 import { Link } from '../../app/link'
@@ -160,18 +161,21 @@ export class AccountService {
             title: "Digital Attendance",
             text: "Please sync your attendance",
             at: new Date(new Date().getTime() + 1 * 1000 * 60 * 60 * 24 * 5),
-            every: "everyday"
+            every: "day"
         })
 
     }
     attendancelocalnot() {
+        var dat= Moment().set({'second':0,'minute':0,'hour':8}).toISOString()
+        let  date =new Date(dat)
         LocalNotifications.schedule({
             id: 3,
             title: "Digital Attendance",
             text: "Please Remember to Take Attendance",
-            at: new Date(new Date().getTime() + 1 * 1000 * 60 * 60 * 24 * 1),
-            every: "everyday"
-        });
+            // at: new Date(new Date().getTime() + 1 * 1000 * 60 * 60 * 24 * 1),
+            at: new Date(date.getTime() + 1 * 1000 * 60 * 60 * 24 * 1),
+            every: "day"
+        }) ;
 
     }
     profile(): Promise<any> {
