@@ -1,4 +1,4 @@
-import  Moment  from 'moment';
+import Moment from 'moment';
 import { Injectable, EventEmitter } from '@angular/core'
 import { Http, Headers } from '@angular/http'
 import { Link } from '../../app/link'
@@ -105,7 +105,7 @@ export class AccountService {
         })
     }
     observableerror(error: any) {
-        return Observable.throw(error)
+        return Observable.throw(error.json())
     }
     handleloginerror(error: any) {
         console.log(error)
@@ -166,8 +166,8 @@ export class AccountService {
 
     }
     attendancelocalnot() {
-        var dat= Moment().set({'second':0,'minute':0,'hour':8}).toISOString()
-        let  date =new Date(dat)
+        var dat = Moment().set({ 'second': 0, 'minute': 0, 'hour': 8 }).toISOString()
+        let date = new Date(dat)
         LocalNotifications.schedule({
             id: 3,
             title: "Digital Attendance",
@@ -175,7 +175,7 @@ export class AccountService {
             // at: new Date(new Date().getTime() + 1 * 1000 * 60 * 60 * 24 * 1),
             at: new Date(date.getTime() + 1 * 1000 * 60 * 60 * 24 * 1),
             every: "day"
-        }) ;
+        });
 
     }
     profile(): Promise<any> {
@@ -186,17 +186,48 @@ export class AccountService {
             .then(response => response)
             .catch(this.error)
     }
-    profilev2(){
+    profilev2() {
         return this.http.get(this.link + "api/teacher", { headers: this.jheaders })
-        .mergeMap(resp =>{
-            return Observable.fromPromise(this.saveall(resp))
-            .map(res=> resp.json())
-            .catch(this.error)
-        })
-        .catch(this.observableerror)
+            .mergeMap(resp => {
+                return Observable.fromPromise(this.saveall(resp))
+                    .map(res => resp.json())
+                    .catch(this.error)
+            })
+            .catch(this.observableerror)
     }
     encrypt() {
 
+    }
+    createpromotion(promotion) {
+        return this.http.post(this.link + "api/schools/promote", promotion, { headers: this.jheaders })
+            .mergeMap(resp => {
+                return Observable.fromPromise(this.storagesavepromotion(resp.json()))
+                    .map(res => resp.json())
+                    .catch(this.observableerror)
+            })
+            .catch(this.observableerror)
+        // .map(resp => resp.json())
+    }
+     updatepromotion(id,promotion) {
+        return this.http.patch(this.link + "api/schools/promote/"+id, promotion, { headers: this.jheaders })
+            .mergeMap(resp => {
+                return Observable.fromPromise(this.storagesavepromotion(resp.json()))
+                    .map(res => resp.json())
+                    .catch(this.observableerror)
+            })
+            .catch(this.observableerror)
+        // .map(resp => resp.json())
+    }
+
+    storagesavepromotion(promotion) {
+        return this.storage.set("promotion", promotion)
+    }
+      storagegetpromotion() {
+        return this.storage.get("promotion")
+    }
+
+    storagetprofile() {
+        return this.storage.get("profile")
     }
     saveall(response) {
         let data = response.json() as any
@@ -352,10 +383,10 @@ export class AccountService {
     }
     movestudents(data) {
         return this.http.post(this.link + "api/students/bulkmove", data, { headers: this.jheaders })
-            .mergeMap(resp=>{
+            .mergeMap(resp => {
                 return this.profilev2()
-                .map(res=>resp.json())
-                .catch(this.observableerror)
+                    .map(res => resp.json())
+                    .catch(this.observableerror)
             })
             // .map(resp => resp.json())
             .catch(this.observableerror)

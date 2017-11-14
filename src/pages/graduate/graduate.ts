@@ -1,5 +1,7 @@
+import Moment from 'moment';
+import { AccountService } from './../login/account.services';
 import { Storage } from '@ionic/storage';
-import { Classes } from './../home/classes';
+import { Classes, PromoteStream } from './../home/classes';
 import { Component, OnInit } from '@angular/core';
 import { IonicPage, NavController, NavParams, AlertController } from 'ionic-angular';
 
@@ -19,10 +21,13 @@ export class GraduatePage implements OnInit {
   testRadioOpen: boolean;
   testRadioResult;
   classes: Classes[]
-
-
+  profile: any
+  config_saved: boolean = false
+  promote_school: any
+  year: any = Moment().subtract(6, "months").year()
   constructor(public navCtrl: NavController,
     private storage: Storage,
+    private account: AccountService,
     public navParams: NavParams, public alertCtrl: AlertController) {
   }
   ngOnInit() {
@@ -49,7 +54,7 @@ export class GraduatePage implements OnInit {
     for (var c in cls) {
       var ths = cls[c]
       // ch=  c == '0'?true:false
-      let nx ={} as any
+      let nx = {} as any
       nx._class = ths._class
       nx.id = ths.id
       nx.class_name = ths.class_name
@@ -70,7 +75,13 @@ export class GraduatePage implements OnInit {
         handler: data => {
           // this.testRadioOpen = false;
           // this.testRadioResult = data;
-          this.classes[ind].next_class = JSON.parse(data)
+          var nxt = JSON.parse(data);
+          let next_c = {} as any
+          ///Class selected in the radio button value 
+          next_c.next_class = nxt.id
+          next_c.next_class_name = nxt.class_name
+          next_c.prev_class = this.classes[ind].id
+          this.classes[ind].next_class = next_c
 
         }
       });
@@ -108,6 +119,110 @@ export class GraduatePage implements OnInit {
     this.storage.get("classes").then((data) => {
       this.classes = data
     })
+    this.account.storagetprofile().then(data => {
+      this.profile = data
+    })
+    this.account.storagegetpromotion().then(data => {
+      if (data.year == this.year) {
+        this.promote_school = data
+        this.updateclassesnext(data.stream_promotions)
+      }
+    });
+  }
+  promote(status) {
+    let schoolpromote = {} as any
+    schoolpromote.school = this.profile.school
+    schoolpromote.year = Moment().subtract(6, "months").year()
+    schoolpromote.stream_promotions = []
+    var notselected = []
+    for (var i in this.classes) {
+      let cl = this.classes[i]
+      if (cl.next_class) {
+        var promotestream = new PromoteStream()
+        promotestream = cl.next_class
+        // promotestream.prev_class = cl.id
+        schoolpromote.stream_promotions.push(promotestream)
+      }
+      else {
+        //Ignore class 8 Streams
+        if (cl._class != "8") {
+          notselected.push(cl)
+        }
+
+      }
+
+    }
+    if (notselected.length < 1) {
+      if (status == "new") {
+        this.dopromote(schoolpromote)
+      }
+      else if (status == "update") {
+        console.log(schoolpromote)
+        this.doupdate(schoolpromote)
+      }
+
+    }
+    else {
+      this.account.presentAlert("Not Complete", "Some classes have not been selected for promotion.");
+    }
+
+    console.log(schoolpromote);
+
+  }
+  updateclassesnext(resp) {
+    for (var i in this.classes) {
+      var cl = this.classes[i]
+      var updated = resp.filter(c => c.prev_class == cl.id)
+      if (updated.length > 0) {
+        console.log(updated)
+        this.classes[i].next_class = updated[0]
+      }
+    }
+  }
+  doupdate(schoolpromote) {
+    this.account.updatepromotion(this.promote_school.id, schoolpromote).subscribe(resp => {
+      console.log(resp)
+      this.promote_school = resp
+      this.updateclassesnext(resp.stream_promotions)
+      this.account.presentAlert("Successful", "Update was successful")
+
+    }, error => {
+      console.log(error)
+      if (error.url = null) {
+        this.account.presentAlert("No Internet Connection", "Turn on Wifi or Data")
+      }
+      else if (error.detail) {
+        this.account.presentAlert("Failed", error.detail)
+      }
+      else {
+        this.account.presentAlert("Failed", "Make sure you an internet connection.")
+      }
+    });
+
+  }
+  dopromote(schoolpromote) {
+    this.account.createpromotion(schoolpromote).subscribe(resp => {
+      console.log(resp)
+      this.promote_school = resp
+      this.updateclassesnext(resp.stream_promotions)
+      this.account.presentAlert("Confirmation", "Promotions look ok. If no update is required , Complete promotion")
+
+    }, error => {
+      console.log(error)
+      if (error.url = null) {
+        this.account.presentAlert("No Internet Connection", "Turn on Wifi or Data")
+      }
+      else if (error.non_field_errors) {
+        this.account.presentAlert("Failed", error.non_field_errors)
+      }
+      else {
+        this.account.presentAlert("Failed", "Make sure you an internet connection.")
+      }
+    });
+
+  }
+  docomplete(id) {
+
   }
 
 }

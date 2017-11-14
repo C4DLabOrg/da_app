@@ -8,7 +8,7 @@
 
       <ion-navbar color="primary">
             <ion-title>Promote Students</ion-title>
-<!--
+            <!--
             <ion-buttons end>
                   <button ion-button>
         <ion-icon name="more"></ion-icon>
@@ -36,7 +36,8 @@
 
                   </ion-label>
 
-                  <a ion-button small item-right outline (click)="showCheckbox(i)"><ion-icon  *ngIf="cl.next_class" name="checkmark"></ion-icon>&nbsp; Promote to&nbsp;&nbsp;  <span *ngIf="cl.next_class">{{cl.next_class.class_name}}  </span></a>
+                  <a ion-button small item-right outline (click)="showCheckbox(i)">
+                        <ion-icon *ngIf="cl.next_class || cl._class =='8' " name="checkmark"></ion-icon>&nbsp;<span *ngIf="cl._class !== '8'"> Promote to </span>&nbsp;&nbsp; <span *ngIf="cl.next_class || cl._class == '8'"> {{ cl._class == '8' ?'Graduate Class': cl.next_class.next_class_name}}  </span></a>
             </ion-item>
 
             <!--<ion-item>
@@ -98,7 +99,14 @@
 
       <!-- <div class="spacer" style="height: 10px;"></div> -->
 
-      <button ion-button block>Complete Promotion</button>
+      <button *ngIf="!promote_school" (click)="promote('new')" ion-button block>Confirm Promotion</button>
+
+      <ion-item>
+            <button *ngIf="promote_school" (click)="promote('update')" ion-button >Update Promotion</button>
+            <button *ngIf="promote_school" (click)="promote('execute')" ion-button >Complete Promotion</button>
+
+      </ion-item>
+
 
 
 

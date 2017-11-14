@@ -10,6 +10,13 @@ export class Classes{
     
 }
 
+export class PromoteStream{
+    id:number
+    next_class:number
+    prev_class:number
+    completed:boolean
+    promote_school:number
+}
 export class Student{
     emis_code:number
     id:number
