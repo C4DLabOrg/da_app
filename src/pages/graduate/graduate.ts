@@ -188,13 +188,16 @@ export class GraduatePage implements OnInit {
     }
   }
   doupdate(schoolpromote) {
+    this.account.loaderpresent("")
     this.account.updatepromotion(this.promote_school.id, schoolpromote).subscribe(resp => {
       console.log(resp)
+       this.account.loaderdismiss()
       this.promote_school = resp
       this.updateclassesnext(resp.stream_promotions)
       this.account.presentAlert("Successful", "Update was successful")
 
     }, error => {
+       this.account.loaderdismiss()
       console.log(error)
       if (error.url = null) {
         this.account.presentAlert("No Internet Connection", "Turn on Wifi or Data")
@@ -209,13 +212,16 @@ export class GraduatePage implements OnInit {
 
   }
   dopromote(schoolpromote) {
+    this.account.loaderpresent("")
     this.account.createpromotion(schoolpromote).subscribe(resp => {
       console.log(resp)
+       this.account.loaderdismiss()
       this.promote_school = resp
       this.updateclassesnext(resp.stream_promotions)
       this.account.presentAlert("Confirmation", "Promotions looks ok. If no update is required , Complete promotion")
 
     }, error => {
+       this.account.loaderdismiss()
       console.log(error)
       if (error.url = null) {
         this.account.presentAlert("No Internet Connection", "Turn on Wifi or Data")
