@@ -4,7 +4,7 @@ import { Http, Headers } from '@angular/http'
 import { Link } from '../../app/link'
 import { Token } from '../../app/token'
 import 'rxjs'
-import { AlertController } from 'ionic-angular';
+import { AlertController, LoadingController } from 'ionic-angular';
 import { Observable } from 'rxjs/Rx';
 import { Storage } from '@ionic/storage'
 import { TakeAttendance } from '../home/takeattendance'
@@ -32,6 +32,7 @@ export class AccountService {
     errorrequests: number = 0
     username: string
     password: string
+    private loader:any
     access_token: string
     showattendanceprogress: boolean = false
     nonetnotification: boolean = true
@@ -45,7 +46,9 @@ export class AccountService {
     teacherchange$: EventEmitter<Teacher> = new EventEmitter<Teacher>()
     classeschange$: EventEmitter<Classes> = new EventEmitter<Classes>()
     teacherdelete$: EventEmitter<Teacher> = new EventEmitter<Teacher>()
-    constructor(private http: Http, private toastctrl: ToastController
+    constructor(private http: Http,
+    private loadctrl:LoadingController,
+     private toastctrl: ToastController
         , private alertcrtl: AlertController,
         private url: Link, private storage: Storage) {
         this.newofflineattendance$ = new EventEmitter()
@@ -103,6 +106,14 @@ export class AccountService {
                     }
                 })
         })
+    }
+    loaderpresent(message: string) {
+        this.loader = this.loadctrl.create({ content: message })
+        this.loader.present();
+    }
+    loaderdismiss(){
+        if (this.loader)
+          this.loader.dismiss();
     }
     observableerror(error: any) {
         return Observable.throw(error.json())
@@ -208,11 +219,25 @@ export class AccountService {
             .catch(this.observableerror)
         // .map(resp => resp.json())
     }
-     updatepromotion(id,promotion) {
-        return this.http.patch(this.link + "api/schools/promote/"+id, promotion, { headers: this.jheaders })
+    updatepromotion(id, promotion) {
+        return this.http.patch(this.link + "api/schools/promote/" + id, promotion, { headers: this.jheaders })
             .mergeMap(resp => {
                 return Observable.fromPromise(this.storagesavepromotion(resp.json()))
                     .map(res => resp.json())
+                    .catch(this.observableerror)
+            })
+            .catch(this.observableerror)
+        // .map(resp => resp.json())
+    }
+    completepromotion(id, action) {
+        return this.http.post(this.link + "api/schools/promote/" + id + "/complete", action, { headers: this.jheaders })
+            .mergeMap(resp => {
+                return Observable.fromPromise(this.storagesavepromotion(resp.json()))
+                    .mergeMap(res => {
+                        return this.profilev2()
+                            .map(r => resp.json())
+                            .catch(this.observableerror)
+                    })
                     .catch(this.observableerror)
             })
             .catch(this.observableerror)
@@ -222,7 +247,7 @@ export class AccountService {
     storagesavepromotion(promotion) {
         return this.storage.set("promotion", promotion)
     }
-      storagegetpromotion() {
+    storagegetpromotion() {
         return this.storage.get("promotion")
     }
 

@@ -32,12 +32,14 @@
                         <ion-badge item-right>{{i+1}}</ion-badge>{{cl.class_name}}
                         <div class="spacer" style="height: 4px;"></div>
 
-                        <p style="font-size: 13px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {{cl.students.length}} Students</p>
+                        <p style="font-size: 13px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {{cl.students.length}} <span *ngIf="promote_school && promote_school.completed" >New</span> Students</p>
 
                   </ion-label>
 
                   <a ion-button small item-right outline (click)="showCheckbox(i)">
-                        <ion-icon *ngIf="cl.next_class || cl._class =='8' " name="checkmark"></ion-icon>&nbsp;<span *ngIf="cl._class !== '8'"> Promote to </span>&nbsp;&nbsp; <span *ngIf="cl.next_class || cl._class == '8'"> {{ cl._class == '8' ?'Graduate Class': cl.next_class.next_class_name}}  </span></a>
+                        <ion-icon *ngIf="(cl.next_class || cl._class =='8')&& !(promote_school && promote_school.completed)" name="checkmark"></ion-icon>
+                        <ion-icon color="green" *ngIf="promote_school && promote_school.completed" name="checkmark-circle"></ion-icon>
+                       &nbsp; &nbsp;<span *ngIf="cl._class !== '8'"> Promote<span *ngIf="promote_school && promote_school.completed">d</span> to   </span>&nbsp;&nbsp; <span *ngIf="cl.next_class || cl._class == '8'"> {{ cl._class == '8' ?'Graduate Class': cl.next_class.next_class_name}}  </span></a>
             </ion-item>
 
             <!--<ion-item>
@@ -102,8 +104,9 @@
       <button *ngIf="!promote_school" (click)="promote('new')" ion-button block>Confirm Promotion</button>
 
       <ion-item>
-            <button *ngIf="promote_school" (click)="promote('update')" ion-button >Update Promotion</button>
-            <button *ngIf="promote_school" (click)="promote('execute')" ion-button >Complete Promotion</button>
+            <button *ngIf="promote_school && !promote_school.completed" (click)="promote('update')" ion-button >Update Promotion</button>
+            <button *ngIf="promote_school && !promote_school.completed" (click)="completeConfirm('Complete')" ion-button >Complete Promotion</button>
+            <button *ngIf="promote_school && promote_school.completed" (click)="completeConfirm('Undo')" ion-button >Undo Promotion</button>
 
       </ion-item>
 

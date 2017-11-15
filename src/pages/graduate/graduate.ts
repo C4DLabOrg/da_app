@@ -27,6 +27,7 @@ export class GraduatePage implements OnInit {
   year: any = Moment().subtract(6, "months").year()
   constructor(public navCtrl: NavController,
     private storage: Storage,
+    private alertctrl: AlertController,
     private account: AccountService,
     public navParams: NavParams, public alertCtrl: AlertController) {
   }
@@ -34,6 +35,7 @@ export class GraduatePage implements OnInit {
     //Called after the constructor, initializing input properties, and the first call to ngOnChanges.
     //Add 'implements OnInit' to the class.
     this.getclasses()
+    this.initmethods()
   }
 
   showCheckbox(ind) {
@@ -122,12 +124,18 @@ export class GraduatePage implements OnInit {
     this.account.storagetprofile().then(data => {
       this.profile = data
     })
+
+  }
+  initmethods() {
+
     this.account.storagegetpromotion().then(data => {
-      if (data.year == this.year) {
+      if (data && data.year == this.year) {
         this.promote_school = data
+
         this.updateclassesnext(data.stream_promotions)
       }
     });
+
   }
   promote(status) {
     let schoolpromote = {} as any
@@ -221,7 +229,54 @@ export class GraduatePage implements OnInit {
     });
 
   }
-  docomplete(id) {
+  completeConfirm(action) {
+    let confirm = this.alertctrl.create({
+      title: action + ' Promotions',
+      message: 'This might not be reversible',
+      buttons: [
+        {
+          text: 'Disagree',
+          handler: () => {
+            console.log('Disagree clicked');
+          }
+        },
+        {
+          text: 'Agree',
+          handler: () => {
+            this.docomplete(action)
+          }
+        }
+      ]
+    });
+    confirm.present();
+  }
+  docomplete(action) {
+    this.account.loaderpresent("")
+    this.account.completepromotion(this.promote_school.id, { "action": action })
+      .subscribe(resp => {
+        this.account.loaderdismiss()
+        this.promote_school = resp
+        this.storage.get("classes").then(data => {
+          this.classes = data
+          this.updateclassesnext(resp.stream_promotions)
+        });
+
+      }, error => {
+        this.account.loaderdismiss()
+        console.log(error)
+        if (error.url = null) {
+          this.account.presentAlert("No Internet Connection", "Turn on Wifi or Data")
+        }
+        else if (error.non_field_errors) {
+          this.account.presentAlert("Failed", error.non_field_errors)
+        }
+        else if (error.detail) {
+          this.account.presentAlert("Failed", error.detail)
+        }
+        else {
+          this.account.presentAlert("Failed", "Make sure you an internet connection.")
+        }
+      });
 
   }
 
