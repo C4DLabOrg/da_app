@@ -32,7 +32,7 @@ export class AccountService {
     errorrequests: number = 0
     username: string
     password: string
-    private loader:any
+    private loader: any
     access_token: string
     showattendanceprogress: boolean = false
     nonetnotification: boolean = true
@@ -47,8 +47,8 @@ export class AccountService {
     classeschange$: EventEmitter<Classes> = new EventEmitter<Classes>()
     teacherdelete$: EventEmitter<Teacher> = new EventEmitter<Teacher>()
     constructor(private http: Http,
-    private loadctrl:LoadingController,
-     private toastctrl: ToastController
+        private loadctrl: LoadingController,
+        private toastctrl: ToastController
         , private alertcrtl: AlertController,
         private url: Link, private storage: Storage) {
         this.newofflineattendance$ = new EventEmitter()
@@ -111,9 +111,9 @@ export class AccountService {
         this.loader = this.loadctrl.create({ content: message })
         this.loader.present();
     }
-    loaderdismiss(){
+    loaderdismiss() {
         if (this.loader)
-          this.loader.dismiss();
+            this.loader.dismiss();
     }
     observableerror(error: any) {
         return Observable.throw(error.json())
@@ -272,6 +272,7 @@ export class AccountService {
             this.storage.set("subjects", data.subjects)
             this.storage.set("reasons", data.reasons)
             this.storage.set("teachers", data.teachers)
+            this.storage.set("promotion", data.promotion)
             this.storage.set("schoolinfo", data.schoolinfo)
             this.storage.set("classes", data.classes).then(() => {
                 console.log("done saving them")
