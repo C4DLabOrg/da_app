@@ -213,7 +213,7 @@ export class GraduatePage implements OnInit {
       console.log(resp)
       this.promote_school = resp
       this.updateclassesnext(resp.stream_promotions)
-      this.account.presentAlert("Confirmation", "Promotions look ok. If no update is required , Complete promotion")
+      this.account.presentAlert("Confirmation", "Promotions looks ok. If no update is required , Complete promotion")
 
     }, error => {
       console.log(error)
