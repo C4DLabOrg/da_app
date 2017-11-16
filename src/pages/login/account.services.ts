@@ -219,6 +219,24 @@ export class AccountService {
             .catch(this.observableerror)
         // .map(resp => resp.json())
     }
+    updateandcompletepromotion(id , promotion) {
+        return this.http.patch(this.link + "api/schools/promote/" + id, promotion, { headers: this.jheaders })
+            .mergeMap(respu => {
+                return this.http.post(this.link + "api/schools/promote/" + id + "/complete", {"action":"complete"}, { headers: this.jheaders })
+                    .mergeMap(resp => {
+                        return Observable.fromPromise(this.storagesavepromotion(resp.json()))
+                            .mergeMap(res => {
+                                return this.profilev2()
+                                    .map(r => resp.json())
+                                    .catch(this.observableerror)
+                            })
+                            .catch(this.observableerror)
+                    })
+                    .catch(this.observableerror)
+            })
+            .catch(this.observableerror)
+
+    }
     updatepromotion(id, promotion) {
         return this.http.patch(this.link + "api/schools/promote/" + id, promotion, { headers: this.jheaders })
             .mergeMap(resp => {

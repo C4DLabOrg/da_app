@@ -168,6 +168,9 @@ export class GraduatePage implements OnInit {
         console.log(schoolpromote)
         this.doupdate(schoolpromote)
       }
+      else if (status=="updateandcomplete"){
+        this.doupdateandcomplete(schoolpromote) 
+      }
 
     }
     else {
@@ -191,13 +194,13 @@ export class GraduatePage implements OnInit {
     this.account.loaderpresent("")
     this.account.updatepromotion(this.promote_school.id, schoolpromote).subscribe(resp => {
       console.log(resp)
-       this.account.loaderdismiss()
+      this.account.loaderdismiss()
       this.promote_school = resp
       this.updateclassesnext(resp.stream_promotions)
       this.account.presentAlert("Successful", "Update was successful")
 
     }, error => {
-       this.account.loaderdismiss()
+      this.account.loaderdismiss()
       console.log(error)
       if (error.url = null) {
         this.account.presentAlert("No Internet Connection", "Turn on Wifi or Data")
@@ -215,13 +218,13 @@ export class GraduatePage implements OnInit {
     this.account.loaderpresent("")
     this.account.createpromotion(schoolpromote).subscribe(resp => {
       console.log(resp)
-       this.account.loaderdismiss()
+      this.account.loaderdismiss()
       this.promote_school = resp
       this.updateclassesnext(resp.stream_promotions)
       this.account.presentAlert("Confirmation", "Promotions looks ok. If no update is required , Complete promotion")
 
     }, error => {
-       this.account.loaderdismiss()
+      this.account.loaderdismiss()
       console.log(error)
       if (error.url = null) {
         this.account.presentAlert("No Internet Connection", "Turn on Wifi or Data")
@@ -259,6 +262,35 @@ export class GraduatePage implements OnInit {
   docomplete(action) {
     this.account.loaderpresent("")
     this.account.completepromotion(this.promote_school.id, { "action": action })
+      .subscribe(resp => {
+        this.account.loaderdismiss()
+        this.promote_school = resp
+        this.storage.get("classes").then(data => {
+          this.classes = data
+          this.updateclassesnext(resp.stream_promotions)
+        });
+
+      }, error => {
+        this.account.loaderdismiss()
+        console.log(error)
+        if (error.url = null) {
+          this.account.presentAlert("No Internet Connection", "Turn on Wifi or Data")
+        }
+        else if (error.non_field_errors) {
+          this.account.presentAlert("Failed", error.non_field_errors)
+        }
+        else if (error.detail) {
+          this.account.presentAlert("Failed", error.detail)
+        }
+        else {
+          this.account.presentAlert("Failed", "Make sure you an internet connection.")
+        }
+      });
+
+  }
+  doupdateandcomplete(schoolpromote) {
+    this.account.loaderpresent("")
+    this.account.updateandcompletepromotion(this.promote_school.id,schoolpromote )
       .subscribe(resp => {
         this.account.loaderdismiss()
         this.promote_school = resp

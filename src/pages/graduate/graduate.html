@@ -103,7 +103,7 @@
 
       <button *ngIf="!promote_school" (click)="promote('new')" ion-button block>Confirm Promotion</button>
    <!-- <button *ngIf="promote_school && !promote_school.completed" (click)="promote('update')" ion-button >Update Promotion</button> -->
-            <button *ngIf="promote_school && !promote_school.completed" (click)="completeConfirm('Complete')" ion-button block>Complete Promotion</button>
+            <button *ngIf="promote_school && !promote_school.completed" (click)="promote('updateandcomplete')" ion-button block>Complete Promotion</button>
             <button *ngIf="promote_school && promote_school.completed" (click)="completeConfirm('Undo')" ion-button block>Undo Promotion</button>
 
 
