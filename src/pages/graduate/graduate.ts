@@ -135,7 +135,9 @@ export class GraduatePage implements OnInit {
         this.updateclassesnext(data.stream_promotions)
       }
     });
-
+    this.account.classeschange$.subscribe(data=>{
+      this.getclasses()
+    });
   }
   promote(status) {
     let schoolpromote = {} as any

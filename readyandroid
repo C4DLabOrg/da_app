@@ -1,4 +1,5 @@
 cd platforms/android/build/outputs/apk/
+cp ~/Downloads/oosc.keystore .
 pwd
 
 jarsigner -verbose -sigalg SHA1withRSA -tsa http://timestamp.digicert.com  -digestalg SHA1 -keystore oosc.keystore android-release-unsigned.apk oosc
