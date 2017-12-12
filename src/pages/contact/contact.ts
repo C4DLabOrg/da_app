@@ -34,15 +34,16 @@ export class ContactPage implements OnInit {
   }
   downloadlist() {
     this.load = true
-    this.account.profile().then((data) => {
+    this.account.profilev2().subscribe((data) => {
       console.log("dumm", data);
       let us: any = {}
-      this.storage.set("classes", data.classes).then(() => {
         this.load = false
-        
-        this.showalert("Success", "Class list up to date")
-      })
-    }).catch((error) => {
+           this.showalert("Success", "Class list up to date")
+      // this.storage.set("classes", data.classes).then(() => {
+      //   this.load = false
+      //   this.showalert("Success", "Class list up to date")
+      // })
+    },error=>{
       this.load = false
       console.log("this ***", error)
       if (error != null) {

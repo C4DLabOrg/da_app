@@ -3,8 +3,8 @@
             <div *ngIf="classes">
             <ion-title>Students<small *ngIf="classes.length>0">&nbsp;( {{classes[index].class_name}})</small> </ion-title>
             </div>
-            <ion-buttons end>
-                  <button ion-button (click)="presentPopover($event)">
+            <ion-buttons (click)="presentPopover($event)" end>
+                  <button ion-button >
                   <ion-icon name="more"></ion-icon>
                   </button>
             </ion-buttons>
