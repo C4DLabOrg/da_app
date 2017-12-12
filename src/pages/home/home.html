@@ -31,7 +31,7 @@
             <div *ngIf="classes.length>0">
             <ion-item   *ngFor="let stud of classes[index].students|orderBy:'gender':true;let i=index">
                   <ion-label>
-                        <div><ion-badge item-right>{{i+1}} <br><div class = "circle"></div></ion-badge>{{stud.student_name}}</div>             
+                        <div><ion-badge item-right>{{i+1}} <br></ion-badge>{{stud.student_name}} &nbsp;<ion-icon name='person-add' style="color: #3f51b5;font-size:16px;"></ion-icon></div>             
                         <div class="spacer" style="height: 4px;"></div>
 
                         <p style="font-size: 13px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {{stud.student_id}}</p>
