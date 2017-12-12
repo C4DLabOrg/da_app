@@ -47,7 +47,7 @@ export class PromotePage implements OnInit {
   doRadio(students) {
     if (this.classes && students.length > 0) {
       let alert = this.alerCtrl.create();
-      alert.setTitle(' Move/Promote  students to Class ?');
+      alert.setTitle(' Move students to Class ?');
       // alert.addInput({
       //   type: 'radio',
       //   label: '1 East',

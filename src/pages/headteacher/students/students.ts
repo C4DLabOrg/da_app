@@ -1,3 +1,4 @@
+import { DeleteReasonPage } from './../../delete-reason/delete-reason';
 import { Component, OnInit } from '@angular/core';
 import { AccountService } from '../../login/account.services'
 import { TakeAttendance } from '../../home/takeattendance'
@@ -261,6 +262,7 @@ export class HDStudentPage implements OnInit {
       label: 'Other Reason',
       value: 'OTHER'
     });
+    
 
     alert.addButton('Cancel');
     alert.addButton({
@@ -272,6 +274,12 @@ export class HDStudentPage implements OnInit {
     });
     alert.present();
   }
+
+  deletereason(student) {
+    this.navCtrl.push(DeleteReasonPage,{"student":student});
+  }
+
+
 }
 
 
