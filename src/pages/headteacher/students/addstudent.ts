@@ -108,7 +108,7 @@ export class AddStudentModal {
             data.student_id = 0
         }
 
-        console.log(JSON.stringify(data));
+        // console.log(JSON.stringify(data));
         if (this.type == "add") {
             // console.log("This is ite")
             this.newstudent(data)
@@ -145,6 +145,9 @@ export class AddStudentModal {
         this.account.createstudent(data).then((resp) => {
             this.load = false
             console.log(resp)
+            if (resp.status && resp.status =="offline"){
+                this.account.presentAlert("No Internet","Student will appear in the list once you have internet connection")
+            }
             this.dismiss()
         },
             (error) => {
