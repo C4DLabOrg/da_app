@@ -359,7 +359,7 @@ export class AccountService {
         let alert = this.alertcrtl.create({
             title: title,
             subTitle: message,
-            buttons: ['Dismiss']
+            buttons: ['Ok']
         });
         alert.present();
     }
