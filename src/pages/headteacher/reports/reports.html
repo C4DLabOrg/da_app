@@ -2,8 +2,8 @@
   <ion-navbar color="primary">
     <ion-title>Attendance Report <small *ngIf="classes">( {{classes[index].class_name}})</small> </ion-title>
 
-    <ion-buttons end>
-      <button ion-button (click)="presentPopover($event)">
+    <ion-buttons (click)="presentPopover($event)" end>
+      <button ion-button >
                   <ion-icon name="more"></ion-icon>
                   </button>
     </ion-buttons>

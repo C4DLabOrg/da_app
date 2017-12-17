@@ -55,7 +55,7 @@ export class HDSync implements OnInit {
     this.alert = this.alertctrl.create({
       title: title,
       subTitle: message,
-      buttons: ['Dismiss']
+      buttons: ['Ok']
     });
     this.alert.present();
   }

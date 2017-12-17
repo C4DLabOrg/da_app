@@ -210,7 +210,7 @@ export class HDReportPage implements OnInit {
     let alert = this.alertctrl.create({
       title: title,
       subTitle: message,
-      buttons: ['Dismiss']
+      buttons: ['Ok']
     });
     alert.present();
   }

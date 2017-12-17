@@ -219,10 +219,10 @@ export class AccountService {
             .catch(this.observableerror)
         // .map(resp => resp.json())
     }
-    updateandcompletepromotion(id , promotion) {
+    updateandcompletepromotion(id, promotion) {
         return this.http.patch(this.link + "api/schools/promote/" + id, promotion, { headers: this.jheaders })
             .mergeMap(respu => {
-                return this.http.post(this.link + "api/schools/promote/" + id + "/complete", {"action":"complete"}, { headers: this.jheaders })
+                return this.http.post(this.link + "api/schools/promote/" + id + "/complete", { "action": "complete" }, { headers: this.jheaders })
                     .mergeMap(resp => {
                         return Observable.fromPromise(this.storagesavepromotion(resp.json()))
                             .mergeMap(res => {
@@ -359,7 +359,7 @@ export class AccountService {
         let alert = this.alertcrtl.create({
             title: title,
             subTitle: message,
-            buttons: ['Dismiss']
+            buttons: ['Ok']
         });
         alert.present();
     }
@@ -378,7 +378,7 @@ export class AccountService {
                 this.storageaddstudent(resp.json())
                 return resp.json()
             })
-            .catch(this.error)
+            .catch(error => this.createstudenterror(error, data))
     }
     createstream(data: any): Promise<any> {
         return this.http.post(this.link + "api/streams", data, { headers: this.jheaders }).toPromise()
@@ -387,6 +387,125 @@ export class AccountService {
                 return resp.json()
             })
             .catch(this.error)
+    }
+    createstudenterror(error: any, student) {
+        console.log("This is ", error);
+        if (!error.url) {
+            console.log("Offline no internet.")
+            return this.storageaddstudentoffline(student)
+                .toPromise()
+                .catch(this.error)
+            //  return Promise.resolve(["data stuff "])
+
+        }
+        else if (error.status == 401) {
+            return Observable.throw("Token Expired");
+        }
+        else if (error.json().detail) {
+            return Observable.throw(error.json().detail);
+        }
+        else {
+            return Observable.throw(error.json() || "Error ")
+        }
+
+    }
+    storageaddstudentoffline(student) {
+        return Observable.fromPromise(this.storage.get("offlinestudents"))
+            .mergeMap(data => {
+                var offline_id = new Date().getTime().toString()
+                student.offline_id = offline_id
+                let offlines = data == null ? [] : data
+                let off: any = {}
+                off.date = new Date()
+                off.data = student
+                off.offline_id = offline_id
+                off.link = this.link + "api/students"
+                offlines.push(off)
+                this.startsync()
+                return Observable.fromPromise(this.storage.set("offlinestudents", offlines))
+                    .map(() => {
+                        student.status = "offline"
+                        return student
+                    })
+                    .catch(this.throwerror)
+            })
+            .catch(this.throwerror);
+    }
+    dostudentsync() {
+        console.log("starting students sync ...");
+        this.storage.get("offlinestudents").then(data => {
+            let dt = data == null ? [] : data
+            if (dt.length > 0) {
+                this.dostudentsofflinesync()
+            }
+        });
+    }
+    removeofflinestudent(student) {
+        this.storage.get("offlinestudents").then(data => {
+            let offs = data == null ? [] : data
+            var studoffs = offs.filter(off => off.offline_id == student.offline_id)
+            console.log("original offs ", offs)
+            console.log("studoffs ", studoffs)
+            if (studoffs.length == 1) {
+                var ind = offs.indexOf(studoffs[0])
+                offs.splice(ind, 1)
+                console.log("new offlines ", offs)
+            }
+
+        });
+    }
+    dostudentsofflinesync() {
+        console.log("Starting sync ...");
+        // this.completedrequests = 0;
+        // this.updateStatus$.emit("Students registration Started ...");
+        this.syncofflinestudents().subscribe(data => {
+            console.log("Sync Students :", data);
+            if (data.status == 201) {
+                this.storageaddstudent(data.resp)
+                //   this.removeofflinestudent(data.resp)
+                // this.completedrequests++;
+                // let per = (this.completedrequests) / this.totalrequests
+                // this.updateStatus$.emit("Attendance sync at " + Math.round(per * 100) + " %");
+            }
+        }, error => {
+            console.log("error")
+        }, () => {
+            this.storage.set("offlinestudents", null)
+             this.syncstarted =false
+
+        })
+    }
+    private throwerror(error: any) {
+        return Observable.throw("Failed to save student offline")
+    }
+    syncofflinestudents() {
+        return Observable.fromPromise(this.storage.get("offlinestudents"))
+            .mergeMap(data => {
+                if (data && data.length > 0) {
+                    this.totalrequests = data.length
+                    let urls = []
+                    data.forEach(at => {
+
+                        urls.push(this.studentsoffline(at.link, at.data))
+                    })
+                    return Observable.from(
+                        urls
+                    ).flatMap(data => {
+
+                        console.log("creating ..", data)
+                        return data
+                    })
+                        .catch(this.error)
+                }
+                return Observable.from([])
+            }).catch(this.error)
+    }
+    studentsoffline(link, offstudent) {
+        return this.http.post(link, offstudent, { headers: this.jheaders })
+            .map(resp => {
+                return { link: link, resp: resp.json(), status: resp.status }
+            })
+            .catch(this.error);
     }
     deletestream(id) {
         return this.http.delete(this.link + "api/streams/" + id)
@@ -670,6 +789,7 @@ export class AccountService {
         });
         this.toast.present()
     }
+
     saveoffline(data: TakeAttendance) {
         this.storage.get("offline").then((offlines) => {
             console.log(data)
@@ -733,19 +853,43 @@ export class AccountService {
             .then((resp) => resp.json())
             .catch(this.error)
     }
+    getallofflines() {
+        return Observable.fromPromise(this.storage.get("offline"))
+            .mergeMap(offs => {
+                return Observable.fromPromise(this.storage.get("offlinestudents"))
+                    .map(studs => {
+                        return { studs: studs, offs: offs }
+                    })
+            })
+    }
 
     initiatesync() {
         // this.nonetnotification=true
         this.syncstarted = true
-        this.storage.get("offline").then((data) => {
-            if (data == null) {
-                data = []
+        var attendanace = false
+        var students = false
+        this.getallofflines().subscribe(resp => {
+            var offs = resp.offs
+            var studs = resp.studs
+            if (offs == null && studs == null) {
+                offs = []
+                attendanace = false
                 console.log("No offlines")
                 this.syncstarted = false
             }
             else {
                 this.ping().then((data) => {
-                    this.performsyncv2()
+                    offs = offs == null ? [] : offs
+                    studs = studs == null ? [] : studs
+                    if (offs.length > 0) {
+                        this.performsyncv2()
+                    }
+                    if (studs.length > 0) {
+                        this.dostudentsync()
+
+                    }
+
+
                 }, (error) => {
                     if (error.url == null) {
                         setTimeout(() => {
@@ -761,10 +905,11 @@ export class AccountService {
                     }
                 })
             }
-
-        }, (error) => {
-            console.log(error);
         })
+
+
+
+
     }
     dosync() {
         // this.storage.get("offline").then((data) => {
@@ -826,6 +971,7 @@ export class AccountService {
 
         })
     }
+
     dosyncv2() {
         return Observable.fromPromise(this.storage.get("offline"))
             .mergeMap(data => {
@@ -843,6 +989,7 @@ export class AccountService {
                 return Observable.from([])
             }).catch(this.error)
     }
+
     sync2(link, attendance) {
         return this.http.post(link, attendance, { headers: this.jheaders })
             .map(resp => {
