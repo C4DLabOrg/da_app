@@ -19,8 +19,8 @@
   <span *ngIf="class"> Student:{{class.class_name}}</span>
   <form [formGroup]="classform" (ngSubmit)="addclass()">
     <ion-item>
-      <ion-label>Class</ion-label>
-      <ion-select formControlName="_class">
+      <ion-label stacked class = "mylabels">Class</ion-label>
+      <ion-select formControlName="_class" class = "addinput">
         <ion-option value="1">1</ion-option>
         <ion-option value="2">2</ion-option>
         <ion-option value="3">3</ion-option>
@@ -32,8 +32,8 @@
       </ion-select>
     </ion-item>
     <ion-item>
-      <ion-label floating>Stream Name</ion-label>
-      <ion-input type="text" formControlName="class_name"></ion-input>
+      <ion-label stacked class = "mylabels">Stream Name</ion-label>
+      <ion-input type="text" formControlName="class_name" class = "addinput"></ion-input>
     </ion-item>
     <!--<p>
        {{classform.get("_class").value}} {{classform.get("class_name").value}} 

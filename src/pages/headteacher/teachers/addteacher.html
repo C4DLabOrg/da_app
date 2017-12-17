@@ -20,35 +20,31 @@
   <form [formGroup]="teachform" (ngSubmit)="addteach()">
     <div class="spacer" style="height:5px;"></div>
     <ion-item>
-      <ion-label floating>First Name</ion-label>
-      <ion-input type="text" formControlName="fstname"></ion-input>
+      <ion-label stacked class = "mylabels">First Name</ion-label>
+      <ion-input type="text" formControlName="fstname" class = "addinput"></ion-input>
     </ion-item>
     <div class="spacer" style="height:5px;"></div>
     <ion-item>
-      <ion-label floating>Last Name</ion-label>
-      <ion-input formControlName="lstname"></ion-input>
+      <ion-label stacked class = "mylabels">Last Name</ion-label>
+      <ion-input formControlName="lstname" class = "addinput"></ion-input>
     </ion-item>
     <div class="spacer" style="height:5px;"></div>
     <ion-item>
-      <ion-label>Teacher Type</ion-label>
-      <ion-select formControlName="teacher_type">
+      <ion-label stacked class = "mylabels">Teacher Type</ion-label>
+      <ion-select formControlName="teacher_type" class = "addinput">
         <ion-option value="TSC" selected="true">Tsc</ion-option>
         <ion-option value="BRD">Board of Management</ion-option>
       </ion-select>
     </ion-item>
     <div class="spacer" style="height:5px;"></div>
     <ion-item>
-      <ion-label>Gender</ion-label>
-      <ion-select formControlName="gender">
+      <ion-label stacked class = "mylabels">Gender</ion-label>
+      <ion-select formControlName="gender" class = "addinput">
         <ion-option value="F" selected="true">Female</ion-option>
         <ion-option value="M">Male</ion-option>
       </ion-select>
     </ion-item>
     <div class="spacer" style="height:5px;"></div>
-    <ion-item>
-      <ion-label>{{type=="add"?'Add':"Update"}} as Admin</ion-label>
-      <ion-checkbox item-right formControlName="headteacher"></ion-checkbox>
-    </ion-item>
     <!--<ion-list formArrayName="classes">
       <ion-item *ngFor="let cl of teachform.get('classes').controls; let i=index" >
         <ion-label>{{classes[i].class_name}}</ion-label>
@@ -56,15 +52,21 @@
       </ion-item>
     </ion-list>-->
     <ion-item *ngIf="!teachform.get('headteacher').value">
-      <ion-label>Classes</ion-label>
-      <ion-select *ngIf="classes" multiple=true  formControlName="classes">
+      <ion-label stacked class = "mylabels">Classes</ion-label>
+      <ion-select *ngIf="classes" multiple=true  formControlName="classes" class = "addinput">
         <ion-option *ngFor="let cl of classes" value={{cl.id}} >{{cl.class_name}}</ion-option>
       </ion-select>
     </ion-item>
     <div class="spacer" style="height:5px;"></div>
     <ion-item>
-      <ion-label floating>Phone Number (Used to login)</ion-label>
-      <ion-input formControlName="phone_no"></ion-input>
+      <ion-label stacked class = "mylabels">Phone Number (Used to login)</ion-label>
+      <ion-input formControlName="phone_no" class = "addinput"></ion-input>
+    </ion-item>
+    <br>
+    <div class="spacer" style="height:5px;"></div>
+    <ion-item>
+      <ion-label stacked class = "mylabels">{{type=="add"?'Add':"Update"}} as Admin</ion-label>
+      <ion-checkbox item-right formControlName="headteacher"></ion-checkbox>
     </ion-item>
     <div class="spacer" style="height:5px;"></div>
     <button ion-button full type="submit" [disabled]="!teachform.valid"> <span *ngIf="type">{{load?'Submitting ...':type}}</span></button>
