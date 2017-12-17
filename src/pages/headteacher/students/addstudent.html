@@ -21,32 +21,41 @@
 
  <div class="spacer" style="height:5px;"></div>
     <ion-item>
-      <ion-label stacked>First Name</ion-label>
-      <ion-input type="text" formControlName="fstname"></ion-input>
+      <ion-label stacked class = "mylabels">First Name</ion-label>
+      <ion-input type="text" formControlName="fstname" class = "addinput"></ion-input>
     </ion-item>
     
  <div class="spacer" style="height:10px;"></div>
     <ion-item>
-      <ion-label stacked>Middle Name</ion-label>
-      <ion-input formControlName="midname"></ion-input>
+      <ion-label stacked class = "mylabels">Middle Name</ion-label>
+      <ion-input formControlName="midname" class = "addinput"></ion-input>
     </ion-item>
 
    <div class="spacer" style="height:10px;"></div>
     <ion-item>
-      <ion-label stacked>Last Name</ion-label>
-      <ion-input formControlName="lstname"></ion-input>
+      <ion-label stacked class = "mylabels">Last Name</ion-label>
+      <ion-input formControlName="lstname" class = "addinput"></ion-input>
+    </ion-item>
+
+    <div class="spacer" style="height:10px;"></div>
+    <ion-item (click)="showCalendar()">
+      <ion-label class = "mylabels" style="font-size:14px;">Date of Birth
+      <ion-icon name='calendar' style="color: #d03e84; margin-left:33%" ></ion-icon>
+       &nbsp; {{event|date}} <br>
+      </ion-label>
+      <br><br>
     </ion-item>
 
     <div class="spacer" style="height:10px;"></div>
     <ion-item>
-      <ion-label stacked>Student ID</ion-label>
-      <ion-input type="number" formControlName="student_id"></ion-input>
+      <ion-label stacked class = "mylabels">Student ID</ion-label>
+      <ion-input type="number" formControlName="student_id" class = "addinput"></ion-input>
     </ion-item>
 
   <div class="spacer" style="height:10px;"></div>
     <ion-item>
-      <ion-label stacked>Student Gender</ion-label>
-      <ion-select formControlName="gender">
+      <ion-label stacked class = "mylabels">Student Gender</ion-label>
+      <ion-select formControlName="gender" class = "addinput">
         <ion-option value="F" selected="true">Female</ion-option>
         <ion-option value="M">Male</ion-option>
       </ion-select>
@@ -54,21 +63,21 @@
 
   <div class="spacer" style="height:10px;"></div>
    <ion-item>
-      <ion-label stacked>Guardian Name</ion-label>
-      <ion-input formControlName="guardian_name"></ion-input>
+      <ion-label stacked class = "mylabels">Guardian Name</ion-label>
+      <ion-input formControlName="guardian_name" class = "addinput"></ion-input>
     </ion-item>
 
   <div class="spacer" style="height:10px;"></div>
    <ion-item>
-      <ion-label stacked>Guardian Phone</ion-label>
-      <ion-input formControlName="guardian_phone"></ion-input>
+      <ion-label stacked class = "mylabels">Guardian Phone</ion-label>
+      <ion-input formControlName="guardian_phone" class = "addinput"></ion-input>
     </ion-item>
 
   <div class="spacer" style="height:10px;"></div>
 
     <ion-item>
-      <ion-label stacked>Class</ion-label>
-      <ion-select *ngIf="classes" formControlName="class_id">
+      <ion-label stacked class = "mylabels">Class</ion-label>
+      <ion-select *ngIf="classes" formControlName="class_id" class = "addinput">
         <ion-option *ngFor="let class of classes" value="{{class.id}}">{{class.class_name}}</ion-option>
       </ion-select>
     </ion-item>
@@ -77,7 +86,7 @@
     <div class="spacer" style="height:10px;"></div>
 
       <ion-item>
-         <ion-label>Newly Enrolled Student</ion-label>
+         <ion-label class = "mylabels" style="font-size:14px;">Newly Enrolled Student</ion-label>
       <ion-checkbox formControlName="is_oosc" item-right></ion-checkbox>
     </ion-item>
 
@@ -85,13 +94,10 @@
 
 
     <ion-item (click)="showCalendar()">
-      <ion-label>Enrollment date &nbsp;
-      <ion-icon name='calendar' style="color: #d03e84"></ion-icon>
-       {{event|date}}
+      <ion-label class = "mylabels" style="font-size:14px;">Enrollment date
+      <ion-icon name='calendar' style="color: #d03e84; margin-left:25%" ></ion-icon>
+       &nbsp; {{event|date}}
       </ion-label>
-<!--     
-      <ion-datetime [max]="maxdate"  displayFormat="  DD MMMM YYYY"  pickerFormat="DD MMM  YYYY"
-        formControlName="date_enrolled"></ion-datetime>-->
     </ion-item>
 
    
