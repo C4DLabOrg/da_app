@@ -1,3 +1,4 @@
+
 import  Moment  from 'moment';
 
 
@@ -18,7 +19,9 @@ export class AddStudentModal {
     studform: FormGroup
     class_id: number
     classes: Classes[]
+    nodobchange:boolean=true
     event: string = new Date().toDateString()
+    dob: string = new Date(this.addDays(new Date(), +1825)).toDateString()
     load: boolean = false
     maxdate: string = new Date().toISOString()
     constructor(private viewCtrl: ViewController, private params: NavParams
@@ -41,11 +44,16 @@ export class AddStudentModal {
             guardian_name: [''],
             guardian_phone: [''],
             is_oosc: [''],
+            date_of_birth:['',],
             date_enrolled: ['', Validators.required]
         });
         if (this.student) {
+            console.log(this.student)
             if (this.student.date_enrolled) {
                 this.event = new Date(this.student.date_enrolled).toDateString()
+            }
+            if (this.student.date_of_birth) {
+                this.dob = new Date(this.student.date_of_birth).toDateString()
             }
             this.studform.setValue({
                 fstname: this.student.fstname,
@@ -57,7 +65,8 @@ export class AddStudentModal {
                 gender: this.student.gender,
                 guardian_phone: this.student.guardian_phone,
                 guardian_name: this.student.guardian_name,
-                date_enrolled: this.student.date_enrolled
+                date_enrolled: this.student.date_enrolled,
+                date_of_birth:this.student.date_of_birth != null?this.student.date_of_birth:this.djangodate(this.dob)
             })
         }
         else {
@@ -71,7 +80,8 @@ export class AddStudentModal {
                 is_oosc: false,
                 guardian_phone: "",
                 guardian_name: "",
-                date_enrolled: this.djangodate(this.event)
+                date_enrolled: this.djangodate(this.event),
+                date_of_birth:this.djangodate(this.dob)
             })
 
         }
@@ -97,10 +107,20 @@ export class AddStudentModal {
         let d = new Date(value)
         this.event = Moment(d).format("YYYY-MM-DD")
     }
+    dobchange(value) {
+        let d = new Date(value)
+        this.dob = Moment(d).format("YYYY-MM-DD")
+    }
     addstud(type) {
         //  console.log(this.studform.value)
         let data = this.studform.value
-        data.date_enrolled = this.djangodate(this.event)
+        console.log(data)
+        data.date_enrolled = this.djangodate(this.event) 
+        data.date_of_birth =  this.djangodate(this.dob)
+        if (this.nodobchange)
+            delete data["date_of_birth"]
+        
+        console.log(data)
         if (isNaN(data.student_id)) {
             data.student_id = 0
         }
@@ -125,6 +145,7 @@ export class AddStudentModal {
         if (this.student) {
             date = this.student.date_enrolled
         }
+        console.log(date)
         this.datePicker.show({
             date: new Date(date),
             mode: 'date',
@@ -139,14 +160,36 @@ export class AddStudentModal {
             );
         // this.datePicker.showCalendar(date);
     }
+     showdobCalendar() {
+        let date = new Date(this.addDays(new Date(), +1825)).toDateString()
+        if (this.student) {
+            date = this.student.date_of_birth
+        }
+          console.log(date)
+        this.datePicker.show({
+            date: new Date(date),
+            mode: 'date',
+            maxDate: Date.parse(this.addDays(new Date(), +1825)),
+            androidTheme: this.datePicker.ANDROID_THEMES.THEME_DEVICE_DEFAULT_LIGHT
+        }).then(
+            date => {
+                console.log('Got date: ', date)
+                this.nodobchange=false
+                this.dobchange(date)
+            },
+            err => console.log('Error occurred while getting date: ', JSON.stringify(err))
+            );
+        // this.datePicker.showCalendar(date);
+    }
 
     newstudent(data) {
         this.load = true
         this.account.createstudent(data).then((resp) => {
             this.load = false
+            this.nodobchange=true
             console.log(resp)
             if (resp.status && resp.status =="offline"){
-                this.account.presentAlert("No Internet","Student will appear in the list once you have internet connection")
+                this.account.presentAlert("No Internet","You will be able to view student details once you connect to the internet")
             }
             this.dismiss()
         },
@@ -161,6 +204,7 @@ export class AddStudentModal {
         this.account.updatestudent(this.student.id, data, this.student).then((resp) => {
             this.load = false
             console.log("Updated student", resp)
+            this.nodobchange=true
             this.dismiss()
         }, (error) => {
             this.load = false

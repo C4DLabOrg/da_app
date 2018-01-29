@@ -24,6 +24,7 @@ export class Student{
     lstname:string
     midname:string
     class_id:number
+    date_of_birth:string
     gender:string
     student_name:string
     student_id:number

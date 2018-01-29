@@ -1,9 +1,9 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="com.c4dlab.sisitechoosc" version="2.1.5" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget id="com.c4dlab.sisitechoosc" version="2.1.6" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>Digital Attendance</name>
     <description>Out Of School Children Digital Attendance</description>
     <author email="hi@ionicframework" href="http://ionicframework.com/">Ionic Framework Team</author>
-    <content src="index.html" />
+    <content original-src="index.html" src="http://192.168.0.172:8101" />
     <access origin="*" />
     <access launch-external="yes" origin="tel:*" />
     <allow-intent href="http://*/*" />
@@ -82,6 +82,8 @@
     <allow-navigation href="http://192.168.0.11:8100" />
     <allow-navigation href="http://172.20.10.10:8100" />
     <allow-navigation href="http://192.168.43.164:8100" />
+    <allow-navigation href="http://192.168.43.164:8101" />
+    <allow-navigation href="http://192.168.0.172:8101" />
     <engine name="android" spec="^6.2.3" />
     <engine name="browser" spec="^4.1.0" />
     <plugin name="cordova-plugin-console" spec="^1.0.5" />
