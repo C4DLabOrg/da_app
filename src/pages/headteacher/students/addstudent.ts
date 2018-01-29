@@ -1,9 +1,11 @@
 
+import { Addsection2Page } from './../../addsection2/addsection2';
+
 import  Moment  from 'moment';
 
 
 import { Component } from '@angular/core'
-import { ViewController, NavParams } from 'ionic-angular'
+import { ViewController, NavParams, NavController } from 'ionic-angular'
 import { Student, Classes } from '../../home/classes'
 import { Validators, FormBuilder, FormGroup } from '@angular/forms';
 import { AccountService } from '../../login/account.services'
@@ -26,7 +28,7 @@ export class AddStudentModal {
     maxdate: string = new Date().toISOString()
     constructor(private viewCtrl: ViewController, private params: NavParams
         , private formBuilder: FormBuilder, private account: AccountService,
-        public datePicker: DatePicker
+        public datePicker: DatePicker,public navCtrl: NavController 
     ) {
         this.type = this.params.get("type")
         this.student = this.params.get("student")
@@ -191,7 +193,8 @@ export class AddStudentModal {
             if (resp.status && resp.status =="offline"){
                 this.account.presentAlert("No Internet","You will be able to view student details once you connect to the internet")
             }
-            this.dismiss()
+             this.studsection2(resp)
+            // this.dismiss()
         },
             (error) => {
                 this.load = false
@@ -205,11 +208,17 @@ export class AddStudentModal {
             this.load = false
             console.log("Updated student", resp)
             this.nodobchange=true
-            this.dismiss()
+            this.studsection2(resp)
+            // this.dismiss()
         }, (error) => {
             this.load = false
             console.log(JSON.stringify(error))
         })
+    }
+
+    studsection2(student){
+
+        this.navCtrl.push(Addsection2Page,{student:student});
     }
 
 }
