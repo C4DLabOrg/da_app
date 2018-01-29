@@ -1,3 +1,4 @@
+import { Addsection2Page } from './../pages/addsection2/addsection2';
 import { NgModule, ErrorHandler } from '@angular/core';
 import { IonicApp, IonicModule, IonicErrorHandler } from 'ionic-angular';
 import { MyApp } from './app.component';
@@ -69,7 +70,8 @@ import { DatePicker } from '@ionic-native/date-picker';
     GraduatePage,
     HDSync,
     StudentSearch,
-    DeleteReasonPage
+    DeleteReasonPage,
+    Addsection2Page
     // ,DatePicker
 
   ],
@@ -103,6 +105,7 @@ import { DatePicker } from '@ionic-native/date-picker';
     GraduatePage,
     HDSync,
     DeleteReasonPage,
+    Addsection2Page
     // ,DatePicker
 
   ],

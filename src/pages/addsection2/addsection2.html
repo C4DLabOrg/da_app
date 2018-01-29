@@ -1,0 +1,68 @@
+<ion-header>
+  <ion-navbar color="primary">
+    <ion-title>Next Section </ion-title>
+    <ion-buttons end>
+  
+       <!--<button ion-button color="light" icon-left>
+      <ion-icon name='arrow-back'></ion-icon>
+      Back
+    </button>-->
+    </ion-buttons>
+  </ion-navbar>
+
+</ion-header>
+
+<ion-content class="tutorial-page">
+  <form>
+
+ <div class="spacer" style="height:5px;"></div>
+    <ion-item>
+      <ion-label stacked class = "mylabels">Mode of Transport</ion-label>
+      <ion-select class = "addinput">
+        <ion-option value="vehicle" selected="true">Personal Vehicle</ion-option>
+        <ion-option value="bus">School Bus</ion-option>
+        <ion-option value="foot">By Foot</ion-option>
+      </ion-select>
+    </ion-item>
+    
+ <div class="spacer" style="height:10px;"></div>
+ <ion-item>
+  <ion-label stacked class = "mylabels">Time taken to reach school</ion-label>
+  <ion-select class = "addinput">
+    <ion-option value="0.5hours" selected="true">Less than 1/2 hour</ion-option>
+    <ion-option value="1hour">1 hour</ion-option>
+    <ion-option value="morethan1hour">More than 1 hour</ion-option>
+  </ion-select>
+</ion-item>
+
+
+   <div class="spacer" style="height:10px;"></div>
+   <ion-item>
+    <ion-label stacked class = "mylabels">Whom do you stay with?</ion-label>
+    <ion-select class = "addinput">
+      <ion-option value="parents" selected="true">Parents</ion-option>
+      <ion-option value="guardians">Guardians</ion-option>
+      <ion-option value="alone">Alone</ion-option>
+    </ion-select>
+  </ion-item>
+
+    <div class="spacer" style="height:10px;"></div>
+    <ion-item>
+      <ion-label stacked class = "mylabels">Number of people in household</ion-label>
+      <ion-input type="number" class = "addinput"></ion-input>
+    </ion-item>
+
+  <div class="spacer" style="height:10px;"></div>
+  <ion-item>
+    <ion-label stacked class = "mylabels">Number of meals/day</ion-label>
+    <ion-input type="number" class = "addinput"></ion-input>
+  </ion-item>
+
+
+    <button ion-button full type="submit">Complete</button>
+   
+    <!-- <button ion-button full type="submit" [disabled]="!studform.valid || load"> <span *ngIf="type">{{load?'Loading ...':type}}</span></button> -->
+    
+  </form>
+
+</ion-content>
