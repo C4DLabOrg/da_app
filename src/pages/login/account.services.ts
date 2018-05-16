@@ -73,6 +73,7 @@ export class AccountService {
                     this.access_token = token
                     offlinecred.password = this.gethash(token, password);
                     offlinecred.access_token = token
+                    // this.storage.set("tokena",token);
                     return Observable.fromPromise(this.storage.set("offlinecreds", offlinecred))
                         .map(() => resp.json())
                         .catch(this.observableerror)
@@ -116,7 +117,14 @@ export class AccountService {
             this.loader.dismiss();
     }
     observableerror(error: any) {
+        try{
         return Observable.throw(error.json())
+            
+        }catch(e){
+            console.log("Not a http error")
+        return Observable.throw(error)
+            
+        }
     }
     handleloginerror(error: any) {
         console.log(error)

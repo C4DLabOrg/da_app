@@ -4,13 +4,13 @@ import { Addsection2Page } from './addsection2';
 
 @NgModule({
   declarations: [
-    Addsection2Page,
+    // Addsection2Page,
   ],
   imports: [
   
   ],
   exports: [
-    Addsection2Page
+    // Addsection2Page
   ]
 })
 export class Addsection2PageModule {}

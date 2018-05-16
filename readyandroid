@@ -9,7 +9,7 @@ echo "Signing finiished"
 
 rm oosc.apk 
 
- $ANDROID_HOME/build-tools/25.0.2/zipalign -v 4 android-release-unsigned.apk oosc.apk
+ $ANDROID_HOME/build-tools/26.0.2/zipalign -v 4 android-release-unsigned.apk oosc.apk
 
 
 ls -lh
