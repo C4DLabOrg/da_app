@@ -34,15 +34,16 @@ export class ContactPage implements OnInit {
   }
   downloadlist() {
     this.load = true
-    this.account.profile().then((data) => {
+    this.account.profilev2().subscribe((data) => {
       console.log("dumm", data);
       let us: any = {}
-      this.storage.set("classes", data.classes).then(() => {
         this.load = false
-        this.account.newclasslist()
-        this.showalert("Success", "Class list up to date")
-      })
-    }).catch((error) => {
+           this.showalert("Success", "Class list up to date")
+      // this.storage.set("classes", data.classes).then(() => {
+      //   this.load = false
+      //   this.showalert("Success", "Class list up to date")
+      // })
+    },error=>{
       this.load = false
       console.log("this ***", error)
       if (error != null) {
@@ -60,7 +61,7 @@ export class ContactPage implements OnInit {
     let alert = this.alertctrl.create({
       title: title,
       subTitle: message,
-      buttons: ['Dismiss']
+      buttons: ['Ok']
     });
     alert.present();
   }

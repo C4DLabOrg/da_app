@@ -1,0 +1,69 @@
+<ion-header>
+  <ion-navbar color="primary">
+    <ion-title>Next Section </ion-title>
+    <ion-buttons end>
+
+      <!--<button ion-button color="light" icon-left>
+      <ion-icon name='arrow-back'></ion-icon>
+      Back
+    </button>-->
+    </ion-buttons>
+  </ion-navbar>
+
+</ion-header>
+
+<ion-content class="tutorial-page">
+  <form [formGroup]="updateform" (ngSubmit)="updatestudent()">
+
+    <div class="spacer" style="height:5px;"></div>
+    <ion-item>
+      <ion-label stacked class="mylabels">Mode of Transport</ion-label>
+      <ion-select formControlName="mode_of_transport" class="addinput">
+        <ion-option value="NS">Not Set</ion-option>
+        <ion-option value="PERSONAL" selected="true">Personal Vehicle</ion-option>
+        <ion-option value="BUS">School Bus</ion-option>
+        <ion-option value="FOOT">By Foot</ion-option>
+      </ion-select>
+    </ion-item>
+
+    <div class="spacer" style="height:10px;"></div>
+    <ion-item>
+      <ion-label stacked class="mylabels">Time taken to reach school</ion-label>
+      <ion-select formControlName="time_to_school" class="addinput">
+        <ion-option value="NS">Not Set</ion-option>
+        <ion-option value="-0.5HR" selected="true">Less than 1/2 hour</ion-option>
+        <ion-option value="1HR">1 hour</ion-option>
+        <ion-option value="+1HR">More than 1 hour</ion-option>
+      </ion-select>
+    </ion-item>
+    <div class="spacer" style="height:10px;"></div>
+    <ion-item>
+      <ion-label stacked class="mylabels">Whom do you stay with?</ion-label>
+      <ion-select formControlName="stay_with" class="addinput">
+        <ion-option value="NS">Not Set</ion-option>
+        <ion-option value="P" selected="true">Parents</ion-option>
+        <ion-option value="G">Guardians</ion-option>
+        <ion-option value="A">Alone</ion-option>
+      </ion-select>
+    </ion-item>
+
+    <div class="spacer" style="height:10px;"></div>
+    <ion-item>
+      <ion-label stacked class="mylabels">Number of people in household</ion-label>
+      <ion-input formControlName="household" type="number" class="addinput"></ion-input>
+    </ion-item>
+
+    <div class="spacer" style="height:10px;"></div>
+    <ion-item>
+      <ion-label  stacked class="mylabels">Number of meals/day</ion-label>
+      <ion-input formControlName="meals_per_day" type="number" class="addinput"></ion-input>
+    </ion-item>
+
+
+    <button ion-button full [disabled]="!updateform.valid || load" type="submit">{{load?'Updating ...':'Complete'}} </button>
+
+    <!-- <button ion-button full type="submit" [disabled]="!studform.valid || load"> <span *ngIf="type">{{load?'Loading ...':type}}</span></button> -->
+
+  </form>
+
+</ion-content>

@@ -29,20 +29,35 @@
   </ion-row>-->
   <ion-card color="primary">
     <ion-card-header>
-      Students
-      <ion-badge *ngIf="schoolinfo" color="white" style="margin-left: 65%">{{schoolinfo.students}}</ion-badge>
+      Students &nbsp;
+      <ion-badge *ngIf="schoolinfo" color="white"> Males:{{schoolinfo.studs.total_males}} Females:{{schoolinfo.studs.total_females}} Total:{{schoolinfo.students}}</ion-badge>
     </ion-card-header>
 
     <ion-list>
-      <button (click)="students()" ion-item>
+
+      <button *ngIf="is_headteacher"  (click)="students()" ion-item>
       <ion-icon name="add-circle" item-left></ion-icon>
-      Add/Edit Students
+      Add / Edit Students
     </button>
 
-      <button (click)="studentdetails()" ion-item>
+    <button (click)="studentdetails()" ion-item>
       <ion-icon name="list-box" item-left></ion-icon>
       View Student details
     </button>
+
+     <button *ngIf="is_headteacher" (click)="movestudents()" ion-item>
+      <ion-icon name="md-swap" item-left></ion-icon>
+     Move Students
+    </button>
+
+    <button *ngIf="is_headteacher" (click)="promotestudents()" ion-item>
+      <ion-icon name="arrow-dropup-circle" item-left></ion-icon>
+      Promote Students
+    </button>
+
+    
+
+
     </ion-list>
   </ion-card>
 

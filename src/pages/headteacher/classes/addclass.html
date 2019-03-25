@@ -7,7 +7,7 @@
          Back
       </button>
 
-       <!--<button ion-button color="light" icon-left>
+      <!--<button ion-button color="light" icon-left>
       <ion-icon name='arrow-back'></ion-icon>
       Back
     </button>-->
@@ -19,8 +19,8 @@
   <span *ngIf="class"> Student:{{class.class_name}}</span>
   <form [formGroup]="classform" (ngSubmit)="addclass()">
     <ion-item>
-      <ion-label>Class</ion-label>
-      <ion-select formControlName="_class">
+      <ion-label stacked class = "mylabels">Class</ion-label>
+      <ion-select formControlName="_class" class = "addinput">
         <ion-option value="1">1</ion-option>
         <ion-option value="2">2</ion-option>
         <ion-option value="3">3</ion-option>
@@ -32,9 +32,13 @@
       </ion-select>
     </ion-item>
     <ion-item>
-      <ion-label floating>Stream Name</ion-label>
-      <ion-input type="text" formControlName="class_name"></ion-input>
+      <ion-label stacked class = "mylabels">Stream Name</ion-label>
+      <ion-input type="text" formControlName="class_name" class = "addinput"></ion-input>
     </ion-item>
+    <!--<p>
+       {{classform.get("_class").value}} {{classform.get("class_name").value}} 
+    </p>-->
+
     <!--<ion-item>
       <ion-label floating>Middle Name</ion-label>
       <ion-input formControlName="midname"></ion-input>
@@ -48,7 +52,7 @@
       <ion-label floating>Class</ion-label>
       <ion-input formControlName="class_id"></ion-input>
     </ion-item>-->
-     <button ion-button full type="submit" [disabled]="!classform.valid || load"> <span *ngIf="type">{{load?'Loading ...':type}}</span></button>
+    <button ion-button full type="submit" [disabled]="!classform.valid || load"> <span *ngIf="type">{{load?'Loading ...':type}}</span></button>
     <!--<button ion-button full type="submit" [disabled]="!classform.valid"> <span *ngIf="type">{{type}}</span></button>-->
   </form>
   <!--<button ion-button (click)="dismiss()">Close</button>-->

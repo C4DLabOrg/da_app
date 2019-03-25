@@ -30,7 +30,7 @@ export class AttendancePage implements OnInit {
   toast: any
   confirm: any
   attendancetaken: boolean = false
-  mindate: string = this.addDays(new Date(), 14)
+  mindate: string = this.addDays(new Date(), 30)
   maxdate: string = this.addDays(new Date(), -1)
   constructor(public navCtrl: NavController,
     private popoverCtrl: PopoverController,

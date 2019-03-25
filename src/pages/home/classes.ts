@@ -6,18 +6,30 @@ export class Classes{
     students:Student[]
     school:number
     selected:boolean
-    
-
+    next_class:any
     
 }
 
+export class PromoteStream{
+    id:number
+    next_class:number
+    prev_class:number
+    completed:boolean
+    promote_school:number
+}
 export class Student{
     emis_code:number
     id:number
     fstname:string
     lstname:string
+    mode_of_transport:string
+    time_to_school:string
+    stay_with:string
+    meals_per_day:number
+    household:number
     midname:string
     class_id:number
+    date_of_birth:string
     gender:string
     student_name:string
     student_id:number
@@ -30,6 +42,7 @@ export class Student{
 }
 export class Teacher{
     id:number
+  
     user:number
     fstname:string
     name:string

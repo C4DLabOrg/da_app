@@ -1,15 +1,16 @@
 import { NgModule } from '@angular/core';
 import { IonicModule } from 'ionic-angular';
-import { HelpPage } from './help';
+// import { GraduatePage } from './graduate';
 
 @NgModule({
   declarations: [
-    // HelpPage,
+    // GraduatePage,
   ],
   imports: [
+    
   ],
   exports: [
-    // HelpPage
+    // GraduatePage
   ]
 })
-export class HelpPageModule {}
+export class GraduatePageModule {}

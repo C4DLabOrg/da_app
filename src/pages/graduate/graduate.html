@@ -1,0 +1,112 @@
+<!--
+  Generated template for the GraduatePage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+      <ion-navbar color="primary">
+            <ion-title>Promote Students</ion-title>
+            <!--
+            <ion-buttons end>
+                  <button ion-button>
+        <ion-icon name="more"></ion-icon>
+        </button>
+            </ion-buttons>-->
+
+      </ion-navbar>
+
+</ion-header>
+
+
+<ion-content color="primary">
+
+      <div class="spacer" style="height: 2px;"></div>
+      <ion-list>
+            <ion-item-divider color="primary">Classes Details </ion-item-divider>
+            <div class="spacer" style="height: 10px;"></div>
+
+            <ion-item *ngFor="let cl of classes;let i=index">
+                  <ion-label>
+                        <ion-badge item-right>{{i+1}}</ion-badge>{{cl.class_name}}
+                        <div class="spacer" style="height: 4px;"></div>
+
+                        <p style="font-size: 13px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {{cl.students.length}} <span *ngIf="promote_school && promote_school.completed" >New</span> Students</p>
+
+                  </ion-label>
+
+                  <a ion-button small item-right outline (click)="showCheckbox(i)">
+                        <ion-icon *ngIf="(cl.next_class || cl._class =='8')&& !(promote_school && promote_school.completed)" name="checkmark"></ion-icon>
+                        <ion-icon color="green" *ngIf="promote_school && promote_school.completed" name="checkmark-circle"></ion-icon>
+                       &nbsp; &nbsp;<span *ngIf="cl._class !== '8'"> Promote<span *ngIf="promote_school && promote_school.completed">d</span> to   </span>&nbsp;&nbsp; <span *ngIf="cl.next_class || cl._class == '8'"> {{ cl._class == '8' ?'Graduate Class': cl.next_class.next_class_name}}  </span></a>
+            </ion-item>
+
+            <!--<ion-item>
+                  <ion-label>
+                        <ion-badge item-right>2</ion-badge>Class 2
+                        <div class="spacer" style="height: 4px;"></div>
+
+                        <p style="font-size: 13px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 7 Students</p>
+
+                  </ion-label>
+
+                  <a ion-button small item-right outline (click)="showCheckbox()">Promote</a>
+
+            </ion-item>
+
+            <ion-item>
+                  <ion-label>
+                        <ion-badge item-right>3</ion-badge>Class 3
+                        <div class="spacer" style="height: 4px;"></div>
+
+                        <p style="font-size: 13px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 14 Students</p>
+
+                  </ion-label>
+
+                  <a ion-button small item-right outline (click)="showConfirm()">
+                        <ion-icon name="checkmark"></ion-icon>&nbsp; Promoted to Class 4</a>
+
+            </ion-item>
+
+
+            <ion-item>
+                  <ion-label>
+                        <ion-badge item-right>4</ion-badge>Class 4
+                        <div class="spacer" style="height: 4px;"></div>
+
+                        <p style="font-size: 13px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 12 Students</p>
+
+                  </ion-label>
+
+                  <a ion-button small item-right outline (click)="showCheckbox()">Promote</a>
+
+            </ion-item>
+
+            <ion-item>
+                  <ion-label>
+                        <ion-badge item-right>5</ion-badge>Class 5
+                        <div class="spacer" style="height: 4px;"></div>
+
+                        <p style="font-size: 13px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 3 Students</p>
+
+                  </ion-label>
+
+                  <a ion-button small item-right outline (click)="showCheckbox()">Promote</a>
+
+            </ion-item>-->
+
+
+      </ion-list>
+
+      <!-- <div class="spacer" style="height: 10px;"></div> -->
+
+      <button *ngIf="!promote_school" (click)="promote('new')" ion-button block>Confirm Promotion</button>
+   <!-- <button *ngIf="promote_school && !promote_school.completed" (click)="promote('update')" ion-button >Update Promotion</button> -->
+            <button *ngIf="promote_school && !promote_school.completed" (click)="promote('updateandcomplete')" ion-button block>Complete Promotion</button>
+            <button *ngIf="promote_school && promote_school.completed" (click)="completeConfirm('Undo')" ion-button block>Undo Promotion</button>
+
+
+
+
+</ion-content>

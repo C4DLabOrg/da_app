@@ -5,6 +5,8 @@ import { Storage } from '@ionic/storage';
 import { HDStudentPage } from '../students/students'
 import { HDClassesPage } from '../classes/classes'
 import { HDTeachersPage } from '../teachers/teachers'
+import { PromotePage } from '../promote/promote'
+import { GraduatePage } from './../../graduate/graduate';
 import { AboutPage } from '../../about/about'
 import {AccountService} from '../../login/account.services'
 
@@ -60,6 +62,11 @@ export class HDSchoolPage implements OnInit {
   goclasses() {
     this.navCtrl.push(HDClassesPage)
   }
-
+   movestudents() {
+    this.navCtrl.push(PromotePage)
+  }
+  promotestudents() {
+    this.navCtrl.push(GraduatePage)
+  }
 
 }

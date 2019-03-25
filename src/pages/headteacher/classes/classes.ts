@@ -71,6 +71,9 @@ export class HDClassesPage implements OnInit {
   datechange(value) {
     console.log(this.event)
   }
+  getstudentsnumber(students,gender){
+    return students.filter(st=>st.gender==gender).length
+  }
   //iouoioiu
   // presentModal(student, type) {
   //   // if (student == 'a') {

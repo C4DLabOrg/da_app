@@ -4,8 +4,8 @@
             <ion-title>Mark Attendance <small *ngIf="classes.length >0">( {{classes[index].class_name}})</small> </ion-title>
             </div>
 
-            <ion-buttons end>
-                  <button ion-button (click)="presentPopover($event)">
+            <ion-buttons (click)="presentPopover($event)" end>
+                  <button ion-button >
                   <ion-icon name="more"></ion-icon>
                   </button>
             </ion-buttons>
@@ -31,7 +31,7 @@
             <div *ngIf="classes.length>0">
             <ion-item   *ngFor="let stud of classes[index].students|orderBy:'gender':true;let i=index">
                   <ion-label>
-                        <ion-badge item-right>{{i+1}}</ion-badge>{{stud.student_name}}
+                        <div><ion-badge item-right>{{i+1}} <br></ion-badge>{{stud.student_name}} &nbsp;<ion-icon *ngIf="stud.is_oosc" name='person-add' style="color: #3f51b5;font-size:16px;"></ion-icon></div>             
                         <div class="spacer" style="height: 4px;"></div>
 
                         <p style="font-size: 13px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {{stud.student_id}}</p>
