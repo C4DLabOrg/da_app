@@ -32,7 +32,7 @@ And of course Digital Attendance itself is open source with a [public repository
 
 ### Installation
 
-Digital Attendance (w-app) requires [node.js](https://nodejs.org/en/) to run.
+Digital Attendance (m-app) requires [node.js](https://nodejs.org/en/) to run.
 
 Install the dependencies and devDependencies and start the server.
 
