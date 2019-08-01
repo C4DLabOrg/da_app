@@ -39,7 +39,7 @@ Install the dependencies and devDependencies and start the server.
 Clone the [public repo](https://github.com/C4DLabOrg/da_app.git)
 
 ```
-$ npm install -i
+$ npm install
 $ ionic serve
 ```
 
